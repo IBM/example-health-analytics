@@ -1,0 +1,16 @@
+---
+version: '3.3'
+
+services:
+  mongo:
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    image: mongo
+    restart: always
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
