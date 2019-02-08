@@ -35,27 +35,6 @@ function getTotalPopulation() {
 	})
 }
 
-function getCityInfo(city) {
-	return new Promise(function(resolve, reject) {
-		MongoClient.connect(url, function(err, db) {
-			if (err) resolve(-1);
-			console.log("Database connected");
-			var dbo = db.db("summithealth");
-			dbo.collection("analytics").findOne({}, function(e, result) {
-			    if (e) resolve(-1);
-
-			    for (var i = 0; i < result.cities.length; i++) {
-			    	if (result.cities[i].city == city) {
-			    		db.close();
-			    		resolve(result.cities[i]);
-			    	}
-			    }
-			    resolve(-1);
-			});
-		})
-	})
-}
-
 function getCityList() {
 	return new Promise(function(resolve, reject) {
 		MongoClient.connect(url, function(err, db) {
@@ -65,14 +44,8 @@ function getCityList() {
 			dbo.collection("analytics").findOne({}, function(e, result) {
 			    if (e) resolve(-1);
 
-			    cities = [];
-
-			    for (var i = 0; i < result.cities.length; i++) {
-			    	cities.push(result.cities[i].city);
-			    }
-			    
 			    db.close();
-			    resolve(cities);
+			    resolve(result.cities);
 			});
 		})
 	})
@@ -80,5 +53,4 @@ function getCityList() {
 
 module.exports.updateAnalytics = updateAnalytics;
 module.exports.getTotalPopulation = getTotalPopulation;
-module.exports.getCityInfo = getCityInfo;
 module.exports.getCityList = getCityList;
