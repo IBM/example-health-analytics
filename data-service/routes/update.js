@@ -8,7 +8,7 @@ var datalake = require('../service/datalake');
 router.put('/', function(req, res, next) {
 
 	var datalakeData = {
-		population: 1,
+		population: 10,
 		cities: [{
 			city: "Thousand Oaks",
 			population: 1,
@@ -16,6 +16,37 @@ router.put('/', function(req, res, next) {
 				allergy: "Dairy",
 				type: "Food",
 				developed: [1],
+				outgrown: []
+			}]
+		},{
+			city: "San Francisco",
+			population: 3,
+			allergies: [{
+				allergy: "Egg",
+				type: "Food",
+				developed: [2],
+				outgrown: [16]
+			},
+			{
+				allergy: "Fish",
+				type: "Food",
+				developed: [18],
+				outgrown: [21]
+			}]
+		},
+		{
+			city: "Los Angeles",
+			population: 6,
+			allergies: [{
+				allergy: "Dairy",
+				type: "Food",
+				developed: [1,5,16],
+				outgrown: [19, 23]
+			},
+			{
+				allergy: "Soy",
+				type: "Food",
+				developed: [9],
 				outgrown: []
 			}]
 		}]

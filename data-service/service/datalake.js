@@ -10,12 +10,16 @@ function updateAnalytics(newAnalytics) {
 		    if (err) resolve(false);
 		    console.log("Database connected!");
 		    var dbo = db.db("summithealth");
-		    dbo.collection("analytics").insertOne(newAnalytics, {upsert: true}, function(err, res) {
-		        if (err) resolve(false);
-		        console.log("1 document inserted");
-		        db.close();
-		        resolve(true);
-		    });
+		    dbo.collection("analytics").deleteOne({}, function(err, obj){
+		    	if (err) resolve(false);
+		    	console.log("1 document deleted");
+		    	dbo.collection("analytics").insertOne(newAnalytics, {upsert: true}, function(err, res) {
+			        if (err) resolve(false);
+			        console.log("1 document inserted");
+			        db.close();
+			        resolve(true);
+			    });
+		    })
 		});
 	})
 }
