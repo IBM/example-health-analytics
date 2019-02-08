@@ -3,7 +3,6 @@
 * [Update](#update)
 * [Population](#population)
 * [Cities](#cities)
-* [City](#city)
 
 
 # Update
@@ -50,7 +49,15 @@ This returns a list of cities where there are patients in a given state.
 
 ```
 {
-	"cities": [String]
+	"cities": [{
+		"city": String,
+		"population": Int,
+		"allergies": [{
+			"allergy": String,
+			"type": String,
+			"developed": [Int], //age
+			"outgrown": [Int] //age
+		}]
 }
 ```
 
@@ -58,35 +65,6 @@ __Command__
 
 ```
 curl http://localhost:3000/api/v1/cities -X GET
-```
-
-__Response__
-
-Success: The response is a 200 status code. The response body is a JSON object containing a success message.
-
-Internal Error: When there is an internal errror (ex. can't access database), the response is a 500 status code. The response body is a JSON object containing an error message.
-
-# City
-
-This returns information about a given city wehre there are patients in a given state.
-
-```
-{
-	"city": String,
-	"population": Int,
-	"allergies": [{
-		"allergy": String,
-		"type": String,
-		"developed": [Int], //age
-		"outgrown": [Int] //age
-	}]
-}
-```
-
-__Command__
-
-```
-curl http://localhost:3000/api/v1/cities/<city> -X GET
 ```
 
 __Response__
