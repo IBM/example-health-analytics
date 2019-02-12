@@ -3,15 +3,22 @@ var router = express.Router();
 
 var analytics = require('../service/analytics');
 
+const util = require('util')
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	
 	var getPopulationStats = analytics.getPopulationStats();
+	var getAllergyStats = analytics.getAllergyStats();
 
 	getPopulationStats.then(function(populationStats) {
-		console.log(populationStats);
+		//console.log(populationStats);
 
-		res.render('index', { title: 'Express' });
+		getAllergyStats.then(function(allergyStats) {
+			console.log(util.inspect(allergyStats, false, null, true /* enable colors */))
+
+			res.render('index', { title: 'Express' });
+		})
 	})
 });
 
