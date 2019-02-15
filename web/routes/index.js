@@ -3,7 +3,7 @@ var router = express.Router();
 
 var analytics = require('../service/analytics');
 
-const util = require('util')
+const util = require('util');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,12 +12,12 @@ router.get('/', function(req, res, next) {
 	var getAllergyStats = analytics.getAllergyStats();
 
 	getPopulationStats.then(function(populationStats) {
-		//console.log(populationStats);
+		console.log(util.inspect(populationStats, false, null, true /* enable colors */))
 
 		getAllergyStats.then(function(allergyStats) {
-			console.log(util.inspect(allergyStats, false, null, true /* enable colors */))
+			console.log(util.inspect(allergyStats, false, null, true /* enable colors */));
 
-			res.render('index', { title: 'Express' });
+			res.send({populationStats: populationStats, allergyStats: allergyStats});
 		})
 	})
 });
