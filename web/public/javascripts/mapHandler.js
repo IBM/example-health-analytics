@@ -28,6 +28,9 @@ getDataForMap = async(dataType, data, allergy) => {
 
     var accessToken = '';
 
+    var chartLabels = [];
+    var chartData = [];
+
     switch (dataType) {
         case "population":
             for (let i = 0; i < data.populationStats.cities.length; i++) {
@@ -46,9 +49,15 @@ getDataForMap = async(dataType, data, allergy) => {
                                     "coordinates": coordinateData.features[0].geometry.coordinates
                                 },
                                 "properties": {
-                                    "title": data.populationStats.cities[i].city + " (" + data.populationStats.cities[i].popPercentage +")"
+                                    "title": data.populationStats.cities[i].city + " (" + data.populationStats.cities[i].popPercentage*100 +"%)",
+                                    "percentage": data.populationStats.cities[i].popPercentage*100
                                 }
                             })
+                            chartLabels.push(data.populationStats.cities[i].city);
+                            chartData.push(data.populationStats.cities[i].popPercentage*100);
+                            if (i == data.populationStats.cities.length - 1) {
+                                updateGraph(chartLabels, chartData, "% of population");
+                            }
                         })
                     }
                 })
@@ -75,9 +84,12 @@ getDataForMap = async(dataType, data, allergy) => {
                                             "coordinates": coordinateData.features[0].geometry.coordinates
                                         },
                                         "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].developed +")"
+                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].developed*100 +"%)",
+                                            "percentage": data.allergyStats.cities[i].allergies[j].developed*100
                                         }
                                     })
+                                    chartLabels.push(data.allergyStats.cities[i].city);
+                                    chartData.push(data.allergyStats.cities[i].allergies[j].developed*100);
                                 }
                             }
 
@@ -89,9 +101,16 @@ getDataForMap = async(dataType, data, allergy) => {
                                         "coordinates": coordinateData.features[0].geometry.coordinates
                                     },
                                     "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0)"
+                                        "title": data.allergyStats.cities[i].city + " (0%)",
+                                        "percentage": 0
                                     }
                                 })
+                                chartLabels.push(data.allergyStats.cities[i].city);
+                                chartData.push(0);
+                            }
+
+                            if (i == data.allergyStats.cities.length - 1) {
+                                updateGraph(chartLabels, chartData, "% of " + allergy + " allergy");
                             }
                         })
                     }
@@ -119,9 +138,12 @@ getDataForMap = async(dataType, data, allergy) => {
                                             "coordinates": coordinateData.features[0].geometry.coordinates
                                         },
                                         "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].outgrown +")"
+                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].outgrown*100 +"%)",
+                                            "percentage": data.allergyStats.cities[i].allergies[j].outgrown*100
                                         }
                                     })
+                                    chartLabels.push(data.allergyStats.cities[i].city);
+                                    chartData.push(data.allergyStats.cities[i].allergies[j].outgrown*100);
                                 }
                             }
 
@@ -133,9 +155,17 @@ getDataForMap = async(dataType, data, allergy) => {
                                         "coordinates": coordinateData.features[0].geometry.coordinates
                                     },
                                     "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0)"
+                                        "title": data.allergyStats.cities[i].city + " (0%)",
+                                        "percentage": 0
+
                                     }
                                 })
+                                chartLabels.push(data.allergyStats.cities[i].city);
+                                chartData.push(0);
+                            }
+
+                            if (i == data.allergyStats.cities.length - 1) {
+                                updateGraph(chartLabels, chartData, "% of outgrowing " + allergy + " allergy");
                             }
                         })
                     }
@@ -171,13 +201,68 @@ function load() {
 
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/light-v9',
+        style: 'mapbox://styles/mapbox/dark-v9',
         center: [-119.4179, 36.7783],
         maxBounds: bounds
     });
 
     getData(map, dataType, allergy).then(mapData => {
         map.on('load', function () {
+
+            map.addLayer({
+                "id": "heat",
+                "type": "heatmap",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": mapData
+                    }
+                },
+                "maxzoom": 9,
+                "paint": {
+                // Increase the heatmap weight based on frequency and property magnitude
+                "heatmap-weight": [
+                "interpolate",
+                ["linear"],
+                ["get", "percentage"],
+                0, 0,
+                6, 1
+                ],
+                // Increase the heatmap color weight weight by zoom level
+                // heatmap-intensity is a multiplier on top of heatmap-weight
+                "heatmap-intensity": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                0, 1,
+                9, 3
+                ],
+                // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                // Begin color ramp at 0-stop with a 0-transparancy color
+                // to create a blur-like effect.
+                "heatmap-color": [
+                "interpolate",
+                ["linear"],
+                ["heatmap-density"],
+                0, "rgba(33,102,172,0)",
+                0.2, "rgb(103,169,207)",
+                0.4, "rgb(209,229,240)",
+                0.6, "rgb(253,219,199)",
+                0.8, "rgb(239,138,98)",
+                1, "rgb(178,24,43)"
+                ],
+                // Adjust the heatmap radius by zoom level
+                "heatmap-radius": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                0, 2,
+                9, 100
+                ],
+                }
+                }, 'waterway-label');
+
             map.addLayer({
                 "id": "points",
                 "type": "symbol",
@@ -192,8 +277,48 @@ function load() {
                     "text-field": "{title}",
                     "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
                     "text-anchor": "top"
+                },
+                "paint": {
+                    "icon-opacity": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        7, 0,
+                        8, 1
+                        ]
                 }
             });
         });
+    });
+}
+
+function updateGraph(chartLabels, chartData, dataLabel) {
+    document.getElementById("myChart").remove();
+    var chartDiv = document.getElementById("chart");
+    var newCanvas = document.createElement('canvas');
+    newCanvas.setAttribute('id','myChart');
+    newCanvas.setAttribute('width','500px');
+    newCanvas.setAttribute('height','500px');
+    chartDiv.appendChild(newCanvas);
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: dataLabel,
+                data: chartData,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
     });
 }
