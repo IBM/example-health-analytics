@@ -1,5 +1,5 @@
 
-getData = async(map, dataType, allergy) => { 
+getData = async(map, dataType, allergy, dataValueType) => { 
 
     return new Promise(function(resolve, reject) {
         var url = "./data";
@@ -13,7 +13,8 @@ getData = async(map, dataType, allergy) => {
             if(http.readyState == 4 && http.status == 200) {
                 var data = JSON.parse(http.responseText);
 
-                getDataForMap(dataType, data, allergy).then(mapData => {
+                getDataForMap(dataType, data, allergy, dataValueType).then(mapData => {
+                    updateStats(dataType, data, allergy, dataValueType);
                     resolve(mapData);
                 })
             }
@@ -22,7 +23,7 @@ getData = async(map, dataType, allergy) => {
     })
 }
 
-getDataForMap = async(dataType, data, allergy) => {
+getDataForMap = async(dataType, data, allergy, dataValueType) => {
 
     mapData = [];
 
@@ -42,21 +43,44 @@ getDataForMap = async(dataType, data, allergy) => {
                 fetch(url+accessToken).then(response => {
                     if (response.ok) {
                         response.json().then(coordinateData => {
-                            mapData.push({
-                                "type": "Feature",
-                                "geometry": {
-                                    "type": "Point",
-                                    "coordinates": coordinateData.features[0].geometry.coordinates
-                                },
-                                "properties": {
-                                    "title": data.populationStats.cities[i].city + " (" + data.populationStats.cities[i].popPercentage*100 +"%)",
-                                    "percentage": data.populationStats.cities[i].popPercentage*100
-                                }
-                            })
-                            chartLabels.push(data.populationStats.cities[i].city);
-                            chartData.push(data.populationStats.cities[i].popPercentage*100);
-                            if (i == data.populationStats.cities.length - 1) {
-                                updateGraph(chartLabels, chartData, "% of population");
+                            switch (dataValueType) {
+                                case "total":
+                                    mapData.push({
+                                        "type": "Feature",
+                                        "geometry": {
+                                            "type": "Point",
+                                            "coordinates": coordinateData.features[0].geometry.coordinates
+                                        },
+                                        "properties": {
+                                            "title": data.populationStats.cities[i].city + " (" + data.populationStats.cities[i].population + ")",
+                                            "data": data.populationStats.cities[i].population
+                                        }
+                                    })
+                                    chartLabels.push(data.populationStats.cities[i].city);
+                                    chartData.push(data.populationStats.cities[i].population);
+                                    if (i == data.populationStats.cities.length - 1) {
+                                        updateGraph(chartLabels, chartData, "population");
+                                    }
+                                    break;
+                                case "percentage":
+                                    mapData.push({
+                                        "type": "Feature",
+                                        "geometry": {
+                                            "type": "Point",
+                                            "coordinates": coordinateData.features[0].geometry.coordinates
+                                        },
+                                        "properties": {
+                                            "title": data.populationStats.cities[i].city + " (" + data.populationStats.cities[i].percentage*100 + "%)",
+                                            "data": data.populationStats.cities[i].percentage*100
+                                        }
+                                    })
+                                    chartLabels.push(data.populationStats.cities[i].city);
+                                    chartData.push(data.populationStats.cities[i].percentage*100);
+                                    if (i == data.populationStats.cities.length - 1) {
+                                        updateGraph(chartLabels, chartData, "% of population");
+                                    }
+                                    break;
+                                default:
                             }
                         })
                     }
@@ -180,6 +204,9 @@ getDataForMap = async(dataType, data, allergy) => {
 
 function load() {
 
+    var dataValueTypeElement = document.getElementById("dataValueType");
+    var dataValueType = dataValueTypeElement.options[dataValueTypeElement.selectedIndex].value;
+
     var dataTypeElement = document.getElementById("data");
     var dataType = dataTypeElement.options[dataTypeElement.selectedIndex].value;
 
@@ -206,7 +233,7 @@ function load() {
         maxBounds: bounds
     });
 
-    getData(map, dataType, allergy).then(mapData => {
+    getData(map, dataType, allergy, dataValueType).then(mapData => {
         map.on('load', function () {
 
             map.addLayer({
@@ -225,7 +252,7 @@ function load() {
                 "heatmap-weight": [
                 "interpolate",
                 ["linear"],
-                ["get", "percentage"],
+                ["get", "data"],
                 0, 0,
                 6, 1
                 ],
@@ -289,36 +316,5 @@ function load() {
                 }
             });
         });
-    });
-}
-
-function updateGraph(chartLabels, chartData, dataLabel) {
-    document.getElementById("myChart").remove();
-    var chartDiv = document.getElementById("chart");
-    var newCanvas = document.createElement('canvas');
-    newCanvas.setAttribute('id','myChart');
-    newCanvas.setAttribute('width','500px');
-    newCanvas.setAttribute('height','500px');
-    chartDiv.appendChild(newCanvas);
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: chartLabels,
-            datasets: [{
-                label: dataLabel,
-                data: chartData,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
     });
 }

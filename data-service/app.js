@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 var updateRouter = require('./routes/update');
 var populationRouter = require('./routes/population');
 var citiesRouter = require('./routes/cities');
+var allergiesRouter = require('./routes/allergies');
 
 var app = express();
 
@@ -27,6 +28,8 @@ app.use('/users', usersRouter);
 app.use('/update', updateRouter);
 app.use('/population', populationRouter);
 app.use('/cities', citiesRouter);
+app.use('/allergies', allergiesRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

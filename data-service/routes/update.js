@@ -9,6 +9,7 @@ router.put('/', function(req, res, next) {
 
 	var datalakeData = {
 		population: 10,
+		allergies: ["Dairy","Egg","Fish","Soy","Bee Sting"],
 		cities: [{
 			city: "Thousand Oaks",
 			population: 1,
