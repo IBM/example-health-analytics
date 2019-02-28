@@ -55,6 +55,23 @@ function getCityList() {
 	})
 }
 
+function getAllergyList() {
+	return new Promise(function(resolve, reject) {
+		MongoClient.connect(url, function(err, db) {
+			if (err) resolve(-1);
+			console.log("Database connected");
+			var dbo = db.db("summithealth");
+			dbo.collection("analytics").findOne({}, function(e, result) {
+				if (e) resolve(-1);
+
+				db.close();
+				resolve(result.allergies);
+			})
+		})
+	})
+}
+
 module.exports.updateAnalytics = updateAnalytics;
 module.exports.getTotalPopulation = getTotalPopulation;
 module.exports.getCityList = getCityList;
+module.exports.getAllergyList = getAllergyList;

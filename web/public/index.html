@@ -5,6 +5,7 @@
     <title>Draw GeoJSON points</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src="javascripts/mapHandler.js"></script>
+    <script src="javascripts/chartHandler.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
     <script src="javascripts/Chart.js"></script>
@@ -44,11 +45,24 @@
                 <option value='Latex'>Latex</option>
             </select>
         </fieldset>
+        <fieldset>
+            <label>Data Value Type</label>
+            <select onchange="load()" id='dataValueType' name='dataValueType'>
+                <option value='total'>Total</option>
+                <option value='percentage'>Percentage</option>
+            </select>
+        </fieldset>
     </div>
     
     <div id='map' style="width:500px; height:500px; margin: 100px;"></div>
     <div id='chart' style="width:500px; height:500px; margin: 500px;">
         <canvas id="myChart" width="500px" height="500px"></canvas>
+    </div>
+    <div id='stats'>
+        <div id='statTitle'></div>
+        <div id='min'></div>
+        <div id='max'></div>
+        <div id='mean'></div>
     </div>
 
 
