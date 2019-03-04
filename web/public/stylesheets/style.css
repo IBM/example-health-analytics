@@ -1,8 +1,87 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
 }
 
 a {
   color: #00B7FF;
+}
+
+.control {
+  max-width: 1000px;
+  min-width: 1000px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  color: white;
+}
+
+.banner {
+  height: 60px;
+  width: 100%;
+  background: #00ABC0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  ;
+  align-content: center;
+}
+
+.brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  width: 40px;
+  margin: 10px;
+}
+
+.summit {
+  font-weight: medium;
+  font-size: 16px;
+  color: white;
+}
+
+.navbar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #f6f6f6;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.navbar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.navbar a:hover {
+  color: #00B7FF;
+}
+
+@media screen and (max-height: 450px) {
+  .navbar {padding-top: 15px;}
+  .navbar a {font-size: 18px;}
+}
+
+.main {
+  transition: margin-left .5s;
+  padding: 16px;
 }

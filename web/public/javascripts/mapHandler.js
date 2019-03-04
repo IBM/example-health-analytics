@@ -98,43 +98,89 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                     if (response.ok) {
                         response.json().then(coordinateData => {
                             var hasAllergy = false;
-                            for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
-                                if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
-                                    hasAllergy = true;
-                                    mapData.push({
-                                        "type": "Feature",
-                                        "geometry": {
-                                            "type": "Point",
-                                            "coordinates": coordinateData.features[0].geometry.coordinates
-                                        },
-                                        "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].developed*100 +"%)",
-                                            "percentage": data.allergyStats.cities[i].allergies[j].developed*100
+
+                            switch (dataValueType) {
+                                case "total":
+                                    for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
+                                        if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                                            hasAllergy = true;
+                                            mapData.push({
+                                                "type": "Feature",
+                                                "geometry": {
+                                                    "type": "Point",
+                                                    "coordinates": coordinateData.features[0].geometry.coordinates
+                                                },
+                                                "properties": {
+                                                    "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].developed.total +")",
+                                                    "data": data.allergyStats.cities[i].allergies[j].developed.total
+                                                }
+                                            })
+                                            chartLabels.push(data.allergyStats.cities[i].city);
+                                            chartData.push(data.allergyStats.cities[i].allergies[j].developed.total);
                                         }
-                                    })
-                                    chartLabels.push(data.allergyStats.cities[i].city);
-                                    chartData.push(data.allergyStats.cities[i].allergies[j].developed*100);
-                                }
-                            }
-
-                            if (!hasAllergy) {
-                                mapData.push({
-                                    "type": "Feature",
-                                    "geometry": {
-                                        "type": "Point",
-                                        "coordinates": coordinateData.features[0].geometry.coordinates
-                                    },
-                                    "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0%)",
-                                        "percentage": 0
                                     }
-                                })
-                                chartLabels.push(data.allergyStats.cities[i].city);
-                                chartData.push(0);
-                            }
-
-                            if (i == data.allergyStats.cities.length - 1) {
-                                updateGraph(chartLabels, chartData, "% of " + allergy + " allergy");
+        
+                                    if (!hasAllergy) {
+                                        mapData.push({
+                                            "type": "Feature",
+                                            "geometry": {
+                                                "type": "Point",
+                                                "coordinates": coordinateData.features[0].geometry.coordinates
+                                            },
+                                            "properties": {
+                                                "title": data.allergyStats.cities[i].city + " (0)",
+                                                "data": 0
+                                            }
+                                        })
+                                        chartLabels.push(data.allergyStats.cities[i].city);
+                                        chartData.push(0);
+                                    }
+        
+                                    if (i == data.allergyStats.cities.length - 1) {
+                                        updateGraph(chartLabels, chartData, "Total number of " + allergy + " allergy");
+                                    }
+                                    break;
+                                case "percentage":
+                                    for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
+                                        if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                                            hasAllergy = true;
+                                            mapData.push({
+                                                "type": "Feature",
+                                                "geometry": {
+                                                    "type": "Point",
+                                                    "coordinates": coordinateData.features[0].geometry.coordinates
+                                                },
+                                                "properties": {
+                                                    "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].developed.percentage*100 +"%)",
+                                                    "data": data.allergyStats.cities[i].allergies[j].developed.percentage*100
+                                                }
+                                            })
+                                            chartLabels.push(data.allergyStats.cities[i].city);
+                                            chartData.push(data.allergyStats.cities[i].allergies[j].developed.percentage*100);
+                                        }
+                                    }
+        
+                                    if (!hasAllergy) {
+                                        mapData.push({
+                                            "type": "Feature",
+                                            "geometry": {
+                                                "type": "Point",
+                                                "coordinates": coordinateData.features[0].geometry.coordinates
+                                            },
+                                            "properties": {
+                                                "title": data.allergyStats.cities[i].city + " (0%)",
+                                                "data": 0
+                                            }
+                                        })
+                                        chartLabels.push(data.allergyStats.cities[i].city);
+                                        chartData.push(0);
+                                    }
+        
+                                    if (i == data.allergyStats.cities.length - 1) {
+                                        updateGraph(chartLabels, chartData, "% of " + allergy + " allergy");
+                                    }
+                                    break;
+                                default:
                             }
                         })
                     }
@@ -152,44 +198,93 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                     if (response.ok) {
                         response.json().then(coordinateData => {
                             var hasOutgrown = false;
-                            for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
-                                if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
-                                    hasOutgrown = true;
-                                    mapData.push({
-                                        "type": "Feature",
-                                        "geometry": {
-                                            "type": "Point",
-                                            "coordinates": coordinateData.features[0].geometry.coordinates
-                                        },
-                                        "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].outgrown*100 +"%)",
-                                            "percentage": data.allergyStats.cities[i].allergies[j].outgrown*100
+
+                            switch (dataValueType) {
+                                case "total":
+                                    for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
+                                        if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                                            hasOutgrown = true;
+                                            mapData.push({
+                                                "type": "Feature",
+                                                "geometry": {
+                                                    "type": "Point",
+                                                    "coordinates": coordinateData.features[0].geometry.coordinates
+                                                },
+                                                "properties": {
+                                                    "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].outgrown.total +")",
+                                                    "data": data.allergyStats.cities[i].allergies[j].outgrown.total
+                                                }
+                                            })
+                                            chartLabels.push(data.allergyStats.cities[i].city);
+                                            chartData.push(data.allergyStats.cities[i].allergies[j].outgrown.total);
                                         }
-                                    })
-                                    chartLabels.push(data.allergyStats.cities[i].city);
-                                    chartData.push(data.allergyStats.cities[i].allergies[j].outgrown*100);
-                                }
-                            }
-
-                            if (!hasOutgrown) {
-                                mapData.push({
-                                    "type": "Feature",
-                                    "geometry": {
-                                        "type": "Point",
-                                        "coordinates": coordinateData.features[0].geometry.coordinates
-                                    },
-                                    "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0%)",
-                                        "percentage": 0
-
                                     }
-                                })
-                                chartLabels.push(data.allergyStats.cities[i].city);
-                                chartData.push(0);
-                            }
+        
+                                    if (!hasOutgrown) {
+                                        mapData.push({
+                                            "type": "Feature",
+                                            "geometry": {
+                                                "type": "Point",
+                                                "coordinates": coordinateData.features[0].geometry.coordinates
+                                            },
+                                            "properties": {
+                                                "title": data.allergyStats.cities[i].city + " (0)",
+                                                "data": 0
+        
+                                            }
+                                        })
+                                        chartLabels.push(data.allergyStats.cities[i].city);
+                                        chartData.push(0);
+                                    }
+        
+                                    if (i == data.allergyStats.cities.length - 1) {
+                                        updateGraph(chartLabels, chartData, "Total number of outgrowing " + allergy + " allergy");
+                                    }
 
-                            if (i == data.allergyStats.cities.length - 1) {
-                                updateGraph(chartLabels, chartData, "% of outgrowing " + allergy + " allergy");
+                                    break;
+                                case "percentage":
+                                    for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
+                                        if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                                            hasOutgrown = true;
+                                            mapData.push({
+                                                "type": "Feature",
+                                                "geometry": {
+                                                    "type": "Point",
+                                                    "coordinates": coordinateData.features[0].geometry.coordinates
+                                                },
+                                                "properties": {
+                                                    "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].outgrown.percentage*100 +"%)",
+                                                    "data": data.allergyStats.cities[i].allergies[j].outgrown.percentage*100
+                                                }
+                                            })
+                                            chartLabels.push(data.allergyStats.cities[i].city);
+                                            chartData.push(data.allergyStats.cities[i].allergies[j].outgrown.percentage*100);
+                                        }
+                                    }
+        
+                                    if (!hasOutgrown) {
+                                        mapData.push({
+                                            "type": "Feature",
+                                            "geometry": {
+                                                "type": "Point",
+                                                "coordinates": coordinateData.features[0].geometry.coordinates
+                                            },
+                                            "properties": {
+                                                "title": data.allergyStats.cities[i].city + " (0%)",
+                                                "data": 0
+        
+                                            }
+                                        })
+                                        chartLabels.push(data.allergyStats.cities[i].city);
+                                        chartData.push(0);
+                                    }
+        
+                                    if (i == data.allergyStats.cities.length - 1) {
+                                        updateGraph(chartLabels, chartData, "% of outgrowing " + allergy + " allergy");
+                                    }
+
+                                    break;
+                                default:
                             }
                         })
                     }
@@ -204,11 +299,14 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
 
 function load() {
 
+    if (!sessionStorage.getItem("dataType")) {
+        sessionStorage.setItem("dataType", "population"); // Default
+    }
+
+    var dataType = sessionStorage.getItem("dataType");
+
     var dataValueTypeElement = document.getElementById("dataValueType");
     var dataValueType = dataValueTypeElement.options[dataValueTypeElement.selectedIndex].value;
-
-    var dataTypeElement = document.getElementById("data");
-    var dataType = dataTypeElement.options[dataTypeElement.selectedIndex].value;
 
     var allergyElement = document.getElementById("allergy");
     var allergy = allergyElement.options[allergyElement.selectedIndex].value;

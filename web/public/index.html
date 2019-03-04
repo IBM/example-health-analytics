@@ -4,8 +4,12 @@
     <meta charset='utf-8' />
     <title>Draw GeoJSON points</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="stylesheets/style.css?v=1.0">
     <script src="javascripts/mapHandler.js"></script>
     <script src="javascripts/chartHandler.js"></script>
+    <script src="javascripts/navbarHandler.js"></script>
+    <script src="javascripts/dataHandler.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
     <script src="javascripts/Chart.js"></script>
@@ -16,53 +20,74 @@
 </head>
 <body onload="load()">
 
-    <div class='settings'>
-        <fieldset>
-            <label>Select Data</label>
-            <select onchange="load()" id='data' name='data'>
-                <option value='population'>Population</option>
-                <option value='type'>Allergy Type</option>
-                <option value='outgrown'>Allergy Outgrown</option>
-            </select>
-        </fieldset>
-        <fieldset style='visibility:hidden;'>
-            <label>Select Allergy</label>
-            <select onchange="load()" id='allergy' name='allergy'>
-                <option value='Peanut'>Peanuts</option>
-                <option value='Tree nut'>Tree nuts</option>
-                <option value='Fish'>Fish</option>
-                <option value='Shellfish'>Shellfish</option>
-                <option value='Wheat'>Wheat</option>
-                <option value='Egg'>Egg</option>
-                <option value='Soy'>Soy</option>
-                <option value='Dairy'>Dairy</option>
-                <option value='Tree Pollen'>Tree Pollen</option>
-                <option value='Grass Pollen'>Grass Pollen</option>
-                <option value='Pet Dander'>Pet Dander</option>
-                <option value='Dust Mite'>Dust Mite</option>
-                <option value='Mold'>Mold</option>
-                <option value='Bee Sting'>Bee Sting</option>
-                <option value='Latex'>Latex</option>
-            </select>
-        </fieldset>
-        <fieldset>
-            <label>Data Value Type</label>
-            <select onchange="load()" id='dataValueType' name='dataValueType'>
-                <option value='total'>Total</option>
-                <option value='percentage'>Percentage</option>
-            </select>
-        </fieldset>
+    <div class="banner">
+        <div class="sidebarHandler">
+            <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776;</span>
+        </div>
+        <div class="control">
+          <div class="brand">
+            <img class="logo" src="/images/logo.svg" alt="summit health logo">
+            <div class="summit">Summit Health Analytics</div>
+          </div>
+        </div>
     </div>
-    
-    <div id='map' style="width:500px; height:500px; margin: 100px;"></div>
-    <div id='chart' style="width:500px; height:500px; margin: 500px;">
-        <canvas id="myChart" width="500px" height="500px"></canvas>
+
+    <div id="navbar" class="navbar">
+        <div class="navbarItem">
+            <img class="logo" src="/images/experts.svg">
+            <a onclick="updateDataType('population')" href="#">Population</a>
+        </div>
+        <div class="navbarItem">
+            <img class="logo" src="/images/medication.svg">
+            <a onclick="updateDataType('type')" href="#">Allery Development</a>
+        </div>
+        <div class="navbarItem">
+            <img class="logo" src="/images/stethascope.svg">
+            <a onclick="updateDataType('outgrown')" href="#">Allergy Outgrowing</a>
+        </div>
     </div>
-    <div id='stats'>
-        <div id='statTitle'></div>
-        <div id='min'></div>
-        <div id='max'></div>
-        <div id='mean'></div>
+
+    <div id="main" class="main">
+        <div class='settings'>
+            <fieldset style='visibility:hidden;'>
+                <label>Select Allergy</label>
+                <select onchange="load()" id='allergy' name='allergy'>
+                    <option value='Peanut'>Peanuts</option>
+                    <option value='Tree nut'>Tree nuts</option>
+                    <option value='Fish'>Fish</option>
+                    <option value='Shellfish'>Shellfish</option>
+                    <option value='Wheat'>Wheat</option>
+                    <option value='Egg'>Egg</option>
+                    <option value='Soy'>Soy</option>
+                    <option value='Dairy'>Dairy</option>
+                    <option value='Tree Pollen'>Tree Pollen</option>
+                    <option value='Grass Pollen'>Grass Pollen</option>
+                    <option value='Pet Dander'>Pet Dander</option>
+                    <option value='Dust Mite'>Dust Mite</option>
+                    <option value='Mold'>Mold</option>
+                    <option value='Bee Sting'>Bee Sting</option>
+                    <option value='Latex'>Latex</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label>Data Value Type</label>
+                <select onchange="load()" id='dataValueType' name='dataValueType'>
+                    <option value='total'>Total</option>
+                    <option value='percentage'>Percentage</option>
+                </select>
+            </fieldset>
+        </div>
+        
+        <div id='map' style="width:1200px; height:500px; margin: 200px;"></div>
+        <div id='chart' style="width:500px; height:500px; margin: 600px;">
+            <canvas id="myChart" width="500px" height="500px"></canvas>
+        </div>
+        <div id='stats'>
+            <div id='statTitle'></div>
+            <div id='min'></div>
+            <div id='max'></div>
+            <div id='mean'></div>
+        </div>
     </div>
 
 
