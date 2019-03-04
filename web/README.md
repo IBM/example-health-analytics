@@ -1,4 +1,4 @@
-### Analytics Front End
+### Summit Health Analytics Front End
 
 * [About](#about)
 * [Analytics](#analytics)
