@@ -1,13 +1,13 @@
 
-function updateGraph(chartLabels, chartData, dataLabel) {
-    document.getElementById("myChart").remove();
+function updateMapGraph(chartLabels, chartData, dataLabel) {
+    document.getElementById("mapChart").remove();
     var chartDiv = document.getElementById("chart");
     var newCanvas = document.createElement('canvas');
-    newCanvas.setAttribute('id','myChart');
+    newCanvas.setAttribute('id','mapChart');
     newCanvas.setAttribute('width','500px');
     newCanvas.setAttribute('height','500px');
     chartDiv.appendChild(newCanvas);
-    var ctx = document.getElementById("myChart").getContext('2d');
+    var ctx = document.getElementById("mapChart").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -29,6 +29,64 @@ function updateGraph(chartLabels, chartData, dataLabel) {
             }
         }
     });
+}
+
+function updateAgeGraph(chartData, dataLabel) {
+    removeAgeGraph();
+    var result = getAgeGraphData(chartData);
+    var chartLabels = result[0];
+    chartData = result[1];
+    var chartDiv = document.getElementById("chart");
+    var newCanvas = document.createElement('canvas');
+    newCanvas.setAttribute('id','ageChart');
+    newCanvas.setAttribute('width','300px');
+    newCanvas.setAttribute('height','300px');
+    chartDiv.appendChild(newCanvas);
+    var ctx = document.getElementById("ageChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [{
+                label: dataLabel,
+                data: chartData,
+                borderWidth: 1,
+                backgroundColor: '#00ABC0'
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+}
+
+function removeAgeGraph() {
+    document.getElementById("ageChart").remove();
+}
+
+function getAgeGraphData(chartData) {
+    var labels = []
+    var data = []
+    var prev;
+    
+    chartData.sort((a, b) => a - b);
+    for ( var i = 0; i < chartData.length; i++ ) {
+        if ( chartData[i] !== prev ) {
+            labels.push(chartData[i]);
+            data.push(1);
+        } else {
+            data[data.length-1]++;
+        }
+        prev = chartData[i];
+    }
+    
+    return [labels, data];
 }
 
 function updateStats(dataType, data, allergy, dataValueType) {
