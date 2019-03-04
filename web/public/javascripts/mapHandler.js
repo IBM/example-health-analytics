@@ -334,6 +334,24 @@ function load() {
     getData(map, dataType, allergy, dataValueType).then(mapData => {
         map.on('load', function () {
 
+            var heatmapMin = 1;
+            var heatmapMax = 1;
+
+            switch (dataValueType) {
+                case "total":
+                    for (var i = 0; i < mapData.length; i++) {
+                        if (heatmapMax < mapData[i].properties.data) {
+                            heatmapMax = mapData[i].properties.data;
+                        }
+                    }
+
+                    break;
+                case "percentage":
+                    heatmapMax = 100;
+                    break;
+                default:
+            }
+
             map.addLayer({
                 "id": "heat",
                 "type": "heatmap",
@@ -352,7 +370,7 @@ function load() {
                 ["linear"],
                 ["get", "data"],
                 0, 0,
-                6, 1
+                heatmapMax, heatmapMin
                 ],
                 // Increase the heatmap color weight weight by zoom level
                 // heatmap-intensity is a multiplier on top of heatmap-weight
