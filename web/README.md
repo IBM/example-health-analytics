@@ -71,11 +71,13 @@ __Data Structure__
             type: String,
             outgrown: {
                 total: Int,
-                percentage: Float
+                percentage: Float,
+                ages: [Int]
             },
             developed: {
                 total: Int,
-                percentage: Float
+                percentage: Float,
+                ages: [Int]
             }
         }]
     }],
@@ -208,9 +210,11 @@ __Data Structure__
         * **outgrown**: City population that have outgrown an allergy that includes:
             * **total**: The total city population that has outgrown an allergy
             * **percentage**: The percentage of a city population that has an allergy that outgrew the allergy
+            * **ages**: A list of the ages of a city population that outgrew an allergy
         * **developed**: City population that have developed an allergy that includes:
             * **total**: The total city population that has developed an allergy
             * **percentage**: The percentage of a city population that has developed an allergy
+            * **ages**: A list of the ages of a city population that has developed an allergy
 * **stats**: Minimum, maximum, and Mean stats for the following:
     > NOTE: Stats are broken down by total and percentage, because they may not both refer to the same city
 

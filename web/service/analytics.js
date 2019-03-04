@@ -144,9 +144,11 @@ function getAllergyStats() {
 							allergy: cities[i].allergies[j].allergy,
 							type: cities[i].allergies[j].type,
 							outgrown: {total: cities[i].allergies[j].outgrown.length,
-										percentage: cities[i].allergies[j].outgrown.length / cities[i].allergies[j].developed.length},
+										percentage: cities[i].allergies[j].outgrown.length / cities[i].allergies[j].developed.length,
+										ages: cities[i].allergies[j].outgrown},
 							developed: {total: cities[i].allergies[j].developed.length,
-										percentage: cities[i].allergies[j].developed.length / cities[i].population}
+										percentage: cities[i].allergies[j].developed.length / cities[i].population,
+										ages: cities[i].allergies[j].developed}
 						});
 
 					}
