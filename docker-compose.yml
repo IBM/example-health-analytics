@@ -14,3 +14,21 @@ services:
     restart: always
     ports:
       - "8081:8081"
+
+  data:
+    container_name: summithealthdata
+    build: data-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
+  web:
+    container_name: summithealthweb
+    build: web
+    ports:
+      - "4000:4000"
+    depends_on:
+      - data
+    environment:
+      - DATA_SERVER=http://summithealthdata:3000

@@ -1,0 +1,33 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dataservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: dataservice-deployment
+        version: v1
+    spec:
+      containers:
+        - name: dataservice
+          image: maxshapiro32/summithealthanalyticsdata
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dataservice-service
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 32000
+      name: http
+  type: NodePort
+  selector:
+    name: dataservice-deployment
