@@ -60,6 +60,7 @@ function getPopulationStats() {
 				for (var i = 0; i < cities.length; i++) {
 
 					populationStats.cities.push({city: cities[i].city,
+						state: cities[i].state,
 						percentage: cities[i].population/population,
 						population: cities[i].population});
 
@@ -108,6 +109,7 @@ function getAllergyStats() {
 
 					var currentCity = {
 						city: cities[i].city,
+						state: cities[i].state,
 						total: {total:0},
 						type: [],
 						allergies: []
