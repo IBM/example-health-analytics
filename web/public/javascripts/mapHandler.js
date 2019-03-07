@@ -35,7 +35,7 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
         case "population":
             for (let i = 0; i < data.populationStats.cities.length; i++) {
 
-                getCoordinates(data.allergyStats.cities[i].city, data.allergyStats.cities[i].state).then(coordinateData => {
+                getCoordinates(data.populationStats.cities[i].city, data.populationStats.cities[i].state).then(coordinateData => {
                     switch (dataValueType) {
                         case "total":
                             mapData.push({
