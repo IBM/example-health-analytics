@@ -2,7 +2,7 @@
 
 ## About
 
-This is an alternative to populate Summit Health Analytics with patient and allergy data as opposed to getting data from a Z system. The script works by cloning [Synthea](https://github.com/synthetichealth/synthea), running Synthea to generate data, converting the Synthea data output to a JSON file, and sending the `apidata.json` JSON file to the data service of Summit Health Analytics where it is processed and stored in the datalake.
+This is an alternative to populate Summit Health Analytics with patient and allergy data as opposed to getting data from a Z system. The bash script works by cloning [Synthea](https://github.com/synthetichealth/synthea), running Synthea to generate data, converting the Synthea data output to a JSON file, and sending the `apidata.json` JSON file to the data service of Summit Health Analytics where it is processed and stored in the datalake.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ This is an alternative to populate Summit Health Analytics with patient and alle
     * Install [here](https://www.npmjs.com/get-npm)
 * CsvToJson
     * ```bash 
-    npm i -g csvtojson
+        npm i -g csvtojson
     ```
 * Java 1.8 or above
     * Install [here](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
