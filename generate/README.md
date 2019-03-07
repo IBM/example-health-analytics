@@ -6,14 +6,9 @@ This is an alternative to populate Summit Health Analytics with patient and alle
 
 ## Prerequisites
 
-* NPM
-    * Install [here](https://www.npmjs.com/get-npm)
-* CsvToJson
-    * ```bash 
-        npm i -g csvtojson
-    ```
-* Java 1.8 or above
-    * Install [here](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* NPM: Install [here](https://www.npmjs.com/get-npm)
+* CsvToJson: Install by running `npm i -g csvtojson`
+* Java 1.8 or above: Install [here](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
 ## Running
 
