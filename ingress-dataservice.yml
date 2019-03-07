@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   annotations:
     ingress.bluemix.net/redirect-to-https: "True"
-  name: ingress2
+  name: ingress-dataservice
 spec:
   tls:
     - hosts:
