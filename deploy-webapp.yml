@@ -1,0 +1,36 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: webapp-deployment
+        version: v1
+    spec:
+      containers:
+        - name: webapp
+          image: maxshapiro32/summithealthanalyticsweb
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+          env:
+            - name: DATA_SERVER
+              value: https://api.<INGRESS_SUBDOMAIN>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  ports:
+    - port: 4000
+      targetPort: 4000
+      nodePort: 32001
+      name: http
+  type: NodePort
+  selector:
+    name: webapp-deployment

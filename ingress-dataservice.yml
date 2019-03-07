@@ -1,0 +1,23 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.bluemix.net/redirect-to-https: "True"
+  name: ingress2
+spec:
+  tls:
+    - hosts:
+        - api.<INGRESS_SUBDOMAIN>
+      secretName: <INGRESS_SECRET>
+  backend:
+    serviceName: dataservice-service
+    servicePort: 3000
+  rules:
+    - host: api.<INGRESS_SUBDOMAIN>
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: dataservice-service
+              servicePort: 3000

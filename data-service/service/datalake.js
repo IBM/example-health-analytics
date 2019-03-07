@@ -1,7 +1,7 @@
 var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 
-var url = "mongodb://localhost:27017/summithealth"
+var url = "mongodb://mongo:27017/summithealth"
 
 
 function updateAnalytics(newAnalytics) {
