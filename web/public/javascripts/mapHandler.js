@@ -35,7 +35,7 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
         case "population":
             for (let i = 0; i < data.populationStats.cities.length; i++) {
 
-                getCoordinates(data.allergyStats.cities[i].city).then(coordinateData => {
+                getCoordinates(data.allergyStats.cities[i].city, data.allergyStats.cities[i].state).then(coordinateData => {
                     switch (dataValueType) {
                         case "total":
                             mapData.push({
@@ -83,7 +83,7 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
         case "developed":
             for (let i = 0; i < data.allergyStats.cities.length; i++) {
 
-                getCoordinates(data.allergyStats.cities[i].city).then(coordinateData => {
+                getCoordinates(data.allergyStats.cities[i].city, data.allergyStats.cities[i].state).then(coordinateData => {
                     var hasAllergy = false;
 
                     switch (dataValueType) {
@@ -179,7 +179,7 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
         case "outgrown":
             for (let i = 0; i < data.allergyStats.cities.length; i++) {
 
-                getCoordinates(data.allergyStats.cities[i].city).then(coordinateData => {
+                getCoordinates(data.allergyStats.cities[i].city, data.allergyStats.cities[i].state).then(coordinateData => {
                     var hasOutgrown = false;
 
                     switch (dataValueType) {
@@ -282,13 +282,13 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
     return mapData;
 }
 
-getCoordinates = async(city) => {
+getCoordinates = async(city, state) => {
     return new Promise(function(resolve, reject) {
         if (getSessionStorage(city)) {
             var coordinateArray = getSessionStorage(city).split(",");
             resolve(coordinateArray);
         } else {
-            var updatedCity = city + " California";
+            var updatedCity = city + " " + state;
 
             var accessToken = '';
             var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + updatedCity.replace(/ /g, "%20") + ".json?access_token=";
@@ -327,16 +327,12 @@ function load() {
 
     mapboxgl.accessToken = '';
 
-    var bounds = [
-        [-125.284370, 31.842101],
-        [-114.091281, 42.484264],
-    ]
-
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/dark-v9',
-        center: [-119.4179, 36.7783],
-        maxBounds: bounds
+        center: [-100.5467, 46.0731],
+        zoom: 2,
+        minZoom: 2
     });
 
     getData(map, dataType, allergy, dataValueType).then(mapData => {

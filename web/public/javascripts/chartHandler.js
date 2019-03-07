@@ -67,7 +67,10 @@ function updateAgeGraph(chartData, dataLabel) {
 }
 
 function removeAgeGraph() {
-    document.getElementById("ageChart").remove();
+    var ageChart = document.getElementById("ageChart");
+    if (ageChart) {
+        ageChart.remove();
+    }
 }
 
 function getAgeGraphData(chartData) {
@@ -113,7 +116,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                 default:
             }
             break;
-        case "type":
+        case "developed":
             titleDiv.innerHTML = "Allergy stats for cities with " + allergy + " allergy";
 
             switch (dataValueType) {
