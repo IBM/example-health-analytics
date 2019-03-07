@@ -12,6 +12,7 @@ router.put('/', function(req, res, next) {
 		allergies: ["Dairy","Egg","Fish","Soy","Bee Sting"],
 		cities: [{
 			city: "Thousand Oaks",
+			state: "California",
 			population: 1,
 			allergies: [{
 				allergy: "Dairy",
@@ -21,6 +22,7 @@ router.put('/', function(req, res, next) {
 			}]
 		},{
 			city: "San Francisco",
+			state: "California",
 			population: 3,
 			allergies: [{
 				allergy: "Egg",
@@ -37,6 +39,7 @@ router.put('/', function(req, res, next) {
 		},
 		{
 			city: "Los Angeles",
+			state: "California",
 			population: 6,
 			allergies: [{
 				allergy: "Dairy",
