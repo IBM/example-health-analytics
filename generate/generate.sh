@@ -30,5 +30,4 @@ rm -rf allergies.csv
 rm -rf allergies.json
 rm -rf patients.csv
 rm -rf patients.json
-data=$(cat apidata.json)
-curl "$url/generate" -H "Content-Type: application/json" -X PUT -d "$data"
+curl "$url/generate" -H "Content-Type: application/json" -X PUT -d "@apidata.json"
