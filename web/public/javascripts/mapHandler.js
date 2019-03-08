@@ -10,7 +10,7 @@ getData = async(map, dataType, allergy, dataValueType) => {
 
         http.onreadystatechange = function()
         {
-            if(http.readyState == 4 && http.status == 200) {
+            if(http.readyState == 4 && (http.status == 200 || http.status == 304)) {
                 var data = JSON.parse(http.responseText);
 
                 getDataForMap(dataType, data, allergy, dataValueType).then(mapData => {

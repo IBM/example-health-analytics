@@ -4,7 +4,7 @@ function updateMapGraph(chartLabels, chartData, dataLabel) {
     var chartDiv = document.getElementById("chart");
     var newCanvas = document.createElement('canvas');
     newCanvas.setAttribute('id','mapChart');
-    newCanvas.setAttribute('width','500px');
+    newCanvas.setAttribute('width','1000px');
     newCanvas.setAttribute('height','500px');
     chartDiv.appendChild(newCanvas);
     var ctx = document.getElementById("mapChart").getContext('2d');
