@@ -1,6 +1,13 @@
-var request = require('request');
-var API_URL = process.env.DATA_SERVER; // Include API URL
+/**
+ * Gets data from datalake using the data-service APIs and calculates analytics on the data
+ */
 
+var request = require('request');
+var API_URL = process.env.DATA_SERVER || "http://localhost:3000";
+
+/**
+ * Gets the population of total patients
+ */
 function getPopulation() {
 	return new Promise(function(resolve, reject) {
 		request(API_URL + "/population", function (error, response, body) {
@@ -15,6 +22,9 @@ function getPopulation() {
 	})
 }
 
+/**
+ * Gets the city allergy data of patients
+ */
 function getCities() {
 	return new Promise(function(resolve, reject) {
 		request(API_URL + "/cities", function (error, response, body) {
@@ -29,6 +39,9 @@ function getCities() {
 	})
 }
 
+/**
+ * Gets the list of allergies found in the cities
+ */
 function getAllergies() {
 	return new Promise(function(resolve, reject) {
 		request(API_URL + "/allergies", function (error, response, body) {
@@ -43,6 +56,10 @@ function getAllergies() {
 	})
 }
 
+/**
+ * Creates JSON object for city population data and calculates min, max, and mean cities for population
+ * See README.md for more information on structure of JSON object created
+ */
 function getPopulationStats() {
 	return new Promise(function(resolve, reject) {
 
@@ -57,25 +74,25 @@ function getPopulationStats() {
 					mean: 0
 				}
 
-				for (var i = 0; i < cities.length; i++) {
+				for (var city = 0; city < cities.length; city++) {
 
-					populationStats.cities.push({city: cities[i].city,
-						state: cities[i].state,
-						percentage: cities[i].population/population,
-						population: cities[i].population});
+					populationStats.cities.push({city: cities[city].city,
+						state: cities[city].state,
+						percentage: cities[city].population/population,
+						population: cities[city].population});
 
-					if (!populationStats.min.population || populationStats.min.population > cities[i].population) {
-						populationStats.min = {city: cities[i].city,
-							percentage: cities[i].population/population,
-							population: cities[i].population};
+					if (!populationStats.min.population || populationStats.min.population > cities[city].population) {
+						populationStats.min = {city: cities[city].city,
+							percentage: cities[city].population/population,
+							population: cities[city].population};
 					}
 
-					if (!populationStats.max.population || populationStats.max.population < cities[i].population) {
-						populationStats.max = {city: cities[i].city,
-							percentage: cities[i].population/population,
-							population: cities[i].population};
+					if (!populationStats.max.population || populationStats.max.population < cities[city].population) {
+						populationStats.max = {city: cities[city].city,
+							percentage: cities[city].population/population,
+							population: cities[city].population};
 					}
-					populationStats.mean = populationStats.mean + cities[i].population;
+					populationStats.mean = populationStats.mean + cities[city].population;
 				}
 
 				populationStats.mean = populationStats.mean / cities.length;
@@ -86,6 +103,10 @@ function getPopulationStats() {
 	})
 }
 
+/**
+ * Creates JSON object for city allergy data and calculates min, max, and mean cities for total allergies, allergy types, developed allergies, and allergies outgrown
+ * See README.md for more information on structure of JSON object created
+ */
 function getAllergyStats() {
 	return new Promise(function(resolve, reject) {
 
@@ -105,59 +126,59 @@ function getAllergyStats() {
 
 				var allergyCityTotals = [];
 
-				for (var i = 0; i < cities.length; i++) {
+				for (var city = 0; city < cities.length; city++) {
 
 					var currentCity = {
-						city: cities[i].city,
-						state: cities[i].state,
+						city: cities[city].city,
+						state: cities[city].state,
 						total: {total:0},
 						type: [],
 						allergies: []
 					};
 
 
-					for (var j = 0; j < cities[i].allergies.length; j++) {
+					for (var allergy = 0; allergy < cities[city].allergies.length; allergy++) {
 
 						// TOTAL
 
-						currentCity.total = {total: currentCity.total.total + cities[i].allergies[j].developed.length};
+						currentCity.total = {total: currentCity.total.total + cities[city].allergies[allergy].developed.length};
 
 						// TYPE
 					
 						var typeInCurrentCityList = false;
 
-						for (var t = 0; t < currentCity.type.length; t++) {
-							if (currentCity.type[t].type == cities[i].allergies[j].type) {
-								currentCity.type[t].total = currentCity.type[t].total + cities[i].allergies[j].developed.length;
-								currentCity.type[t].percentage = currentCity.type[t].percentage + cities[i].allergies[j].developed.length;
+						for (var type = 0; type < currentCity.type.length; type++) {
+							if (currentCity.type[type].type == cities[city].allergies[allergy].type) {
+								currentCity.type[type].total = currentCity.type[type].total + cities[city].allergies[allergy].developed.length;
+								currentCity.type[type].percentage = currentCity.type[type].percentage + cities[city].allergies[allergy].developed.length;
 								typeInCurrentCityList = true;
 							}
 						}
 
 						if (!typeInCurrentCityList) {
-							currentCity.type.push({type: cities[i].allergies[j].type,
-													total: cities[i].allergies[j].developed.length,
-													percentage: cities[i].allergies[j].developed.length});
+							currentCity.type.push({type: cities[city].allergies[allergy].type,
+													total: cities[city].allergies[allergy].developed.length,
+													percentage: cities[city].allergies[allergy].developed.length});
 						}
 
 						// DEVELOPED & OUTGROWN
 
 						currentCity.allergies.push({
-							allergy: cities[i].allergies[j].allergy,
-							type: cities[i].allergies[j].type,
-							outgrown: {total: cities[i].allergies[j].outgrown.length,
-										percentage: cities[i].allergies[j].outgrown.length / cities[i].allergies[j].developed.length,
-										ages: cities[i].allergies[j].outgrown},
-							developed: {total: cities[i].allergies[j].developed.length,
-										percentage: cities[i].allergies[j].developed.length / cities[i].population,
-										ages: cities[i].allergies[j].developed}
+							allergy: cities[city].allergies[allergy].allergy,
+							type: cities[city].allergies[allergy].type,
+							outgrown: {total: cities[city].allergies[allergy].outgrown.length,
+										percentage: cities[city].allergies[allergy].outgrown.length / cities[city].allergies[allergy].developed.length,
+										ages: cities[city].allergies[allergy].outgrown},
+							developed: {total: cities[city].allergies[allergy].developed.length,
+										percentage: cities[city].allergies[allergy].developed.length / cities[city].population,
+										ages: cities[city].allergies[allergy].developed}
 						});
 
 					}
 
 					// TOTAL
 
-					currentCity.total.percentage = currentCity.total.total / cities[i].population;
+					currentCity.total.percentage = currentCity.total.total / cities[city].population;
 
 					if (!allergyStats.stats.total.min) {
 						allergyStats.stats.total.min = {};
@@ -204,46 +225,46 @@ function getAllergyStats() {
 
 					// TYPE
 
-					for (var t = 0; t < currentCity.type.length; t++) {
-						currentCity.type[t].percentage = currentCity.type[t].percentage / cities[i].population;
+					for (var type = 0; type < currentCity.type.length; type++) {
+						currentCity.type[type].percentage = currentCity.type[type].percentage / cities[city].population;
 
 						var typeInStatsList = false;
 
-						for (var s = 0; s < allergyStats.stats.type.length; s++) {
-							if (allergyStats.stats.type[s].type == currentCity.type[t].type) {
+						for (var statType = 0; statType < allergyStats.stats.type.length; statType++) {
+							if (allergyStats.stats.type[statType].type == currentCity.type[type].type) {
 								typeInStatsList = true;
 
-								if (allergyStats.stats.type[s].min.total.min > currentCity.type[t].total) {
-									allergyStats.stats.type[s].min.total = {city: currentCity.city,
-																		min: currentCity.type[t].total};
+								if (allergyStats.stats.type[statType].min.total.min > currentCity.type[type].total) {
+									allergyStats.stats.type[statType].min.total = {city: currentCity.city,
+																		min: currentCity.type[type].total};
 								}
 
-								if (allergyStats.stats.type[s].min.percentage.min > currentCity.type[t].percentage) {
-									allergyStats.stats.type[s].min.percentage = {city: currentCity.city,
-																		min: currentCity.type[t].percentage};
+								if (allergyStats.stats.type[statType].min.percentage.min > currentCity.type[type].percentage) {
+									allergyStats.stats.type[statType].min.percentage = {city: currentCity.city,
+																		min: currentCity.type[type].percentage};
 								}
 
-								if (allergyStats.stats.type[s].max.total.max < currentCity.type[t].total) {
-									allergyStats.stats.type[s].max.total = {city: currentCity.city,
-																		max: currentCity.type[t].total};
+								if (allergyStats.stats.type[statType].max.total.max < currentCity.type[type].total) {
+									allergyStats.stats.type[statType].max.total = {city: currentCity.city,
+																		max: currentCity.type[type].total};
 								}
 
-								if (allergyStats.stats.type[s].max.percentage.max < currentCity.type[t].percentage) {
-									allergyStats.stats.type[s].max.percentage = {city: currentCity.city,
-																		max: currentCity.type[t].percentage};
+								if (allergyStats.stats.type[statType].max.percentage.max < currentCity.type[type].percentage) {
+									allergyStats.stats.type[statType].max.percentage = {city: currentCity.city,
+																		max: currentCity.type[type].percentage};
 								}
 
-								allergyStats.stats.type[s].mean.total = allergyStats.stats.type[s].mean.total + currentCity.type[t].total;
-								allergyStats.stats.type[s].mean.percentage = allergyStats.stats.type[s].mean.percentage + currentCity.type[t].percentage;
+								allergyStats.stats.type[statType].mean.total = allergyStats.stats.type[statType].mean.total + currentCity.type[type].total;
+								allergyStats.stats.type[statType].mean.percentage = allergyStats.stats.type[statType].mean.percentage + currentCity.type[type].percentage;
 							}
 						}
 
 						if (!typeInStatsList) {
 							allergyStats.stats.type.push({
-								type: currentCity.type[t].type,
-								min: {total: {city: currentCity.city, min: currentCity.type[t].total}, percentage: {city: currentCity.city, min: currentCity.type[t].percentage}},
-								max: {total: {city: currentCity.city, max: currentCity.type[t].total}, percentage: {city: currentCity.city, max: currentCity.type[t].percentage}},
-								mean: {total: currentCity.type[t].total, percentage: currentCity.type[t].percentage}
+								type: currentCity.type[type].type,
+								min: {total: {city: currentCity.city, min: currentCity.type[type].total}, percentage: {city: currentCity.city, min: currentCity.type[type].percentage}},
+								max: {total: {city: currentCity.city, max: currentCity.type[type].total}, percentage: {city: currentCity.city, max: currentCity.type[type].percentage}},
+								mean: {total: currentCity.type[type].total, percentage: currentCity.type[type].percentage}
 							});
 						}
 					}
@@ -291,6 +312,7 @@ function getAllergyStats() {
 
 							allergyStats.stats.developed[statAllergy].mean.total = allergyStats.stats.developed[statAllergy].mean.total + currentCity.allergies[cityAllergy].developed.total;
 							allergyStats.stats.developed[statAllergy].mean.percentage = allergyStats.stats.developed[statAllergy].mean.percentage + currentCity.allergies[cityAllergy].developed.percentage;
+						
 						} else if (allergyInCity) {
 							allergyStats.stats.developed.push({
 								allergy: currentCity.allergies[cityAllergy].allergy,
@@ -300,6 +322,7 @@ function getAllergyStats() {
 									percentage: {city: currentCity.city, max: currentCity.allergies[cityAllergy].developed.percentage}},
 								mean: {total: currentCity.allergies[cityAllergy].developed.total, percentage: currentCity.allergies[cityAllergy].developed.percentage}
 							});
+
 						} else if (allergyInStats) {
 							allergyStats.stats.developed[statAllergy].min.total = {city: currentCity.city, min: 0};
 							allergyStats.stats.developed[statAllergy].min.percentage = {city: currentCity.city, min: 0};
@@ -351,6 +374,7 @@ function getAllergyStats() {
 							allergyStats.stats.outgrown[statAllergy].mean.percentage = allergyStats.stats.outgrown[statAllergy].mean.percentage + currentCity.allergies[cityAllergy].outgrown.percentage;
 
 							allergyCityTotals[statAllergy] = allergyCityTotals[statAllergy] + 1;
+						
 						} else if (allergyInCity) {
 							allergyStats.stats.outgrown.push({
 								allergy: currentCity.allergies[cityAllergy].allergy,
@@ -371,19 +395,19 @@ function getAllergyStats() {
 				allergyStats.stats.total.mean.total = allergyStats.stats.total.mean.total / cities.length;
 				allergyStats.stats.total.mean.percentage = allergyStats.stats.total.mean.percentage / cities.length;
 
-				for (var t = 0; t < allergyStats.stats.type.length; t++) {
-					allergyStats.stats.type[t].mean.total = allergyStats.stats.type[t].mean.total / cities.length;
-					allergyStats.stats.type[t].mean.percentage = allergyStats.stats.type[t].mean.percentage / cities.length;
+				for (var type = 0; type < allergyStats.stats.type.length; type++) {
+					allergyStats.stats.type[type].mean.total = allergyStats.stats.type[type].mean.total / cities.length;
+					allergyStats.stats.type[type].mean.percentage = allergyStats.stats.type[type].mean.percentage / cities.length;
 				}
 
-				for (var t = 0; t < allergyStats.stats.developed.length; t++) {
-					allergyStats.stats.developed[t].mean.total = allergyStats.stats.developed[t].mean.total / cities.length;
-					allergyStats.stats.developed[t].mean.percentage = allergyStats.stats.developed[t].mean.percentage / cities.length;
+				for (var allergy = 0; allergy < allergyStats.stats.developed.length; allergy++) {
+					allergyStats.stats.developed[allergy].mean.total = allergyStats.stats.developed[allergy].mean.total / cities.length;
+					allergyStats.stats.developed[allergy].mean.percentage = allergyStats.stats.developed[allergy].mean.percentage / cities.length;
 				}
 
-				for (var t = 0; t < allergyStats.stats.outgrown.length; t++) {
-					allergyStats.stats.outgrown[t].mean.total = allergyStats.stats.outgrown[t].mean.total / allergyCityTotals[t];
-					allergyStats.stats.outgrown[t].mean.percentage = allergyStats.stats.outgrown[t].mean.percentage / allergyCityTotals[t];
+				for (var allergy = 0; allergy < allergyStats.stats.outgrown.length; allergy++) {
+					allergyStats.stats.outgrown[allergy].mean.total = allergyStats.stats.outgrown[allergy].mean.total / allergyCityTotals[allergy];
+					allergyStats.stats.outgrown[allergy].mean.percentage = allergyStats.stats.outgrown[allergy].mean.percentage / allergyCityTotals[allergy];
 				}
 
 				resolve(allergyStats);

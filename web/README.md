@@ -22,6 +22,7 @@ __Data Structure__
 {
     cities: [{
         city: String,
+        state: String,
         percentage: Float,
         population: Int
     }],
@@ -40,7 +41,8 @@ __Data Structure__
 ```
 
 * **cities**: A list of cities where each city includes:
-    * **city**: The name of the city
+    * **city**: The name of a city
+    * **state**: The name of a state a city is in
     * **percentage**: The percentage of the state's population that represents a city's population
     * **population**: The total population for a city
 * **min**: The city with the minimum population
@@ -57,6 +59,7 @@ __Data Structure__
 {
     cities: [{
         city: String,
+        state: String,
         total: {
             total: Int,
             percentage: Float
@@ -195,6 +198,7 @@ __Data Structure__
 
 * **cities**: A list of cities where each city includes:
     * **city**: The name of a city
+    * **state**: The name of a state a city is in
     * **total**: Total allergies for a city that includes: 
         > NOTE: Currently incorrect and will need more data to fix
 
