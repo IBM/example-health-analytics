@@ -1,6 +1,17 @@
+/**
+ * Manages and updates Chart.js charts with data from the datalake
+ */
 
-function updateMapGraph(chartLabels, chartData, dataLabel) {
+/**
+ * Updates Bar Chart with the data that is associated with the map
+ * 
+ * @param {[String]} chartLabels 
+ * @param {[Number]} chartData 
+ * @param {String} dataLabel 
+ */
+function updateMapChart(chartLabels, chartData, dataLabel) {
     document.getElementById("mapChart").remove();
+
     var chartDiv = document.getElementById("chart");
     var newCanvas = document.createElement('canvas');
     newCanvas.setAttribute('id','mapChart');
@@ -31,11 +42,19 @@ function updateMapGraph(chartLabels, chartData, dataLabel) {
     });
 }
 
-function updateAgeGraph(chartData, dataLabel) {
-    removeAgeGraph();
-    var result = getAgeGraphData(chartData);
+/**
+ * Updates bar chart for age of developing/outgrowing allergies data
+ * 
+ * @param {[Number]} chartData 
+ * @param {String} dataLabel 
+ */
+function updateAgeChart(chartData, dataLabel) {
+    removeAgeChart();
+
+    var result = getAgeChartData(chartData);
     var chartLabels = result[0];
     chartData = result[1];
+
     var chartDiv = document.getElementById("chart");
     var newCanvas = document.createElement('canvas');
     newCanvas.setAttribute('id','ageChart');
@@ -66,20 +85,28 @@ function updateAgeGraph(chartData, dataLabel) {
     });
 }
 
-function removeAgeGraph() {
+/**
+ * Removes age chart from web page
+ */
+function removeAgeChart() {
     var ageChart = document.getElementById("ageChart");
     if (ageChart) {
         ageChart.remove();
     }
 }
 
-function getAgeGraphData(chartData) {
+/**
+ * Gets frequency of ages from the data
+ * 
+ * @param {[Number]} chartData 
+ */
+function getAgeChartData(chartData) {
     var labels = []
     var data = []
     var prev;
     
     chartData.sort((a, b) => a - b);
-    for ( var i = 0; i < chartData.length; i++ ) {
+    for (var i = 0; i < chartData.length; i++ ) {
         if ( chartData[i] !== prev ) {
             labels.push(chartData[i]);
             data.push(1);
@@ -92,6 +119,14 @@ function getAgeGraphData(chartData) {
     return [labels, data];
 }
 
+/**
+ * Updates statistics that are associated with the data from the map
+ * 
+ * @param {String} dataType 
+ * @param {Object} data 
+ * @param {String} allergy 
+ * @param {String} dataValueType 
+ */
 function updateStats(dataType, data, allergy, dataValueType) {
     var titleDiv = document.getElementById('statTitle');
     var minDiv = document.getElementById('min');
@@ -107,14 +142,17 @@ function updateStats(dataType, data, allergy, dataValueType) {
                     minDiv.innerHTML = "Min: " + data.populationStats.min.population + " (" + data.populationStats.min.city + ")";
                     maxDiv.innerHTML = "Max: " + data.populationStats.max.population + " (" + data.populationStats.max.city + ")";
                     meanDiv.innerHTML = "Mean: " + data.populationStats.mean;
+
                     break;
                 case "percentage":
                     minDiv.innerHTML = "Min: " + data.populationStats.min.percentage*100 + "% (" + data.populationStats.min.city + ")";
                     maxDiv.innerHTML = "Max: " + data.populationStats.max.percentage*100 + "% (" + data.populationStats.max.city + ")";
                     meanDiv.innerHTML = "Mean: " + (1/data.populationStats.cities.length)*100 + "%";
+
                     break;
                 default:
             }
+
             break;
         case "developed":
             titleDiv.innerHTML = "Allergy stats for cities with " + allergy + " allergy";
@@ -128,6 +166,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                             meanDiv.innerHTML = "Mean: " + data.allergyStats.stats.developed[i].mean.total;
                         }
                     }
+
                     break;
                 case "percentage":
                     for (let i = 0; i < data.allergyStats.stats.developed.length; i++) {
@@ -137,6 +176,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                             meanDiv.innerHTML = "Mean: " + data.allergyStats.stats.developed[i].mean.percentage*100 + "%";
                         }
                     }
+
                     break;
                 default:
             }
@@ -154,6 +194,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                             meanDiv.innerHTML = "Mean: " + data.allergyStats.stats.outgrown[i].mean.total;
                         }
                     }
+
                     break;
                 case "percentage":
                     for (let i = 0; i < data.allergyStats.stats.outgrown.length; i++) {
@@ -163,6 +204,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                             meanDiv.innerHTML = "Mean: " + data.allergyStats.stats.outgrown[i].mean.percentage*100 + "%";
                         }
                     }
+
                     break;
                 default:
             }

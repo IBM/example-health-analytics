@@ -1,3 +1,7 @@
+/**
+ * Router for home page
+ */
+
 var express = require('express');
 var router = express.Router();
 
@@ -5,7 +9,6 @@ var analytics = require('../service/analytics');
 
 const util = require('util');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
 	
 	var getPopulationStats = analytics.getPopulationStats();

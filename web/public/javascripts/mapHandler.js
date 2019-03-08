@@ -1,29 +1,16 @@
+/**
+ * Manages and updates Mapbox map with data from the datalake
+ */
 
-getData = async(map, dataType, allergy, dataValueType) => { 
-
-    return new Promise(function(resolve, reject) {
-        var url = "./data";
-
-        var http = new XMLHttpRequest();
-
-        http.open("GET", url, true);
-
-        http.onreadystatechange = function()
-        {
-            if(http.readyState == 4 && (http.status == 200 || http.status == 304)) {
-                var data = JSON.parse(http.responseText);
-
-                getDataForMap(dataType, data, allergy, dataValueType).then(mapData => {
-                    updateStats(dataType, data, allergy, dataValueType);
-                    resolve(mapData);
-                })
-            }
-        }
-        http.send(null);
-    })
-}
-
-getDataForMap = async(dataType, data, allergy, dataValueType) => {
+ /**
+  * Processes analytics data for mapbox map and updates charts with processed data
+  * 
+  * @param {Stirng} dataType
+  * @param {Stirng} data
+  * @param {Stirng} allergy
+  * @param {Stirng} dataValueType
+  */
+processDataForMap = async(dataType, data, allergy, dataValueType) => {
 
     mapData = [];
 
@@ -33,9 +20,9 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
 
     switch (dataType) {
         case "population":
-            for (let i = 0; i < data.populationStats.cities.length; i++) {
+            for (let city = 0; city < data.populationStats.cities.length; city++) {
 
-                getCoordinates(data.populationStats.cities[i].city, data.populationStats.cities[i].state).then(coordinateData => {
+                getCoordinates(data.populationStats.cities[city].city, data.populationStats.cities[city].state).then(coordinateData => {
                     switch (dataValueType) {
                         case "total":
                             mapData.push({
@@ -45,16 +32,19 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                     "coordinates": coordinateData
                                 },
                                 "properties": {
-                                    "title": data.populationStats.cities[i].city + " (" + data.populationStats.cities[i].population + ")",
-                                    "data": data.populationStats.cities[i].population
+                                    "title": data.populationStats.cities[city].city + " (" + data.populationStats.cities[city].population + ")",
+                                    "data": data.populationStats.cities[city].population
                                 }
                             })
-                            mapChartLabels.push(data.populationStats.cities[i].city);
-                            mapChartData.push(data.populationStats.cities[i].population);
-                            if (i == data.populationStats.cities.length - 1) {
-                                updateMapGraph(mapChartLabels, mapChartData, "population");
-                                removeAgeGraph();
+
+                            mapChartLabels.push(data.populationStats.cities[city].city);
+                            mapChartData.push(data.populationStats.cities[city].population);
+
+                            if (city == data.populationStats.cities.length - 1) {
+                                updateMapChart(mapChartLabels, mapChartData, "population");
+                                removeAgeChart();
                             }
+
                             break;
                         case "percentage":
                             mapData.push({
@@ -64,16 +54,19 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                     "coordinates": coordinateData
                                 },
                                 "properties": {
-                                    "title": data.populationStats.cities[i].city + " (" + data.populationStats.cities[i].percentage*100 + "%)",
-                                    "data": data.populationStats.cities[i].percentage*100
+                                    "title": data.populationStats.cities[city].city + " (" + data.populationStats.cities[city].percentage*100 + "%)",
+                                    "data": data.populationStats.cities[city].percentage*100
                                 }
                             })
-                            mapChartLabels.push(data.populationStats.cities[i].city);
-                            mapChartData.push(data.populationStats.cities[i].percentage*100);
-                            if (i == data.populationStats.cities.length - 1) {
-                                updateMapGraph(mapChartLabels, mapChartData, "% of population");
-                                removeAgeGraph();
+
+                            mapChartLabels.push(data.populationStats.cities[city].city);
+                            mapChartData.push(data.populationStats.cities[city].percentage*100);
+
+                            if (city == data.populationStats.cities.length - 1) {
+                                updateMapChart(mapChartLabels, mapChartData, "% of population");
+                                removeAgeChart();
                             }
+
                             break;
                         default:
                     }
@@ -81,16 +74,17 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
             }
             break;
         case "developed":
-            for (let i = 0; i < data.allergyStats.cities.length; i++) {
+            for (let city = 0; city < data.allergyStats.cities.length; city++) {
 
-                getCoordinates(data.allergyStats.cities[i].city, data.allergyStats.cities[i].state).then(coordinateData => {
+                getCoordinates(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
                     var hasAllergy = false;
 
                     switch (dataValueType) {
                         case "total":
-                            for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
-                                if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                            for (let allergyIndex = 0; allergyIndex < data.allergyStats.cities[city].allergies.length; allergyIndex++) {
+                                if (allergy == data.allergyStats.cities[city].allergies[allergyIndex].allergy) {
                                     hasAllergy = true;
+
                                     mapData.push({
                                         "type": "Feature",
                                         "geometry": {
@@ -98,13 +92,14 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                             "coordinates": coordinateData
                                         },
                                         "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].developed.total +")",
-                                            "data": data.allergyStats.cities[i].allergies[j].developed.total
+                                            "title": data.allergyStats.cities[city].city + " (" + data.allergyStats.cities[city].allergies[allergyIndex].developed.total +")",
+                                            "data": data.allergyStats.cities[city].allergies[allergyIndex].developed.total
                                         }
                                     })
-                                    mapChartLabels.push(data.allergyStats.cities[i].city);
-                                    mapChartData.push(data.allergyStats.cities[i].allergies[j].developed.total);
-                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[i].allergies[j].developed.ages);
+
+                                    mapChartLabels.push(data.allergyStats.cities[city].city);
+                                    mapChartData.push(data.allergyStats.cities[city].allergies[allergyIndex].developed.total);
+                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].developed.ages);
                                 }
                             }
         
@@ -116,23 +111,26 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                         "coordinates": coordinateData
                                     },
                                     "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0)",
+                                        "title": data.allergyStats.cities[city].city + " (0)",
                                         "data": 0
                                     }
                                 })
-                                mapChartLabels.push(data.allergyStats.cities[i].city);
+
+                                mapChartLabels.push(data.allergyStats.cities[city].city);
                                 mapChartData.push(0);
                             }
         
-                            if (i == data.allergyStats.cities.length - 1) {
-                                updateMapGraph(mapChartLabels, mapChartData, "Total number of " + allergy + " allergy");
-                                updateAgeGraph(ageChartData, "Frequency of age developed " + allergy + " allergy");
+                            if (city == data.allergyStats.cities.length - 1) {
+                                updateMapChart(mapChartLabels, mapChartData, "Total number of " + allergy + " allergy");
+                                updateAgeChart(ageChartData, "Frequency of age developed " + allergy + " allergy");
                             }
+
                             break;
                         case "percentage":
-                            for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
-                                if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                            for (let allergyIndex = 0; allergyIndex < data.allergyStats.cities[city].allergies.length; allergyIndex++) {
+                                if (allergy == data.allergyStats.cities[city].allergies[allergyIndex].allergy) {
                                     hasAllergy = true;
+
                                     mapData.push({
                                         "type": "Feature",
                                         "geometry": {
@@ -140,13 +138,14 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                             "coordinates": coordinateData
                                         },
                                         "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].developed.percentage*100 +"%)",
-                                            "data": data.allergyStats.cities[i].allergies[j].developed.percentage*100
+                                            "title": data.allergyStats.cities[city].city + " (" + data.allergyStats.cities[city].allergies[allergyIndex].developed.percentage*100 +"%)",
+                                            "data": data.allergyStats.cities[city].allergies[allergyIndex].developed.percentage*100
                                         }
                                     })
-                                    mapChartLabels.push(data.allergyStats.cities[i].city);
-                                    mapChartData.push(data.allergyStats.cities[i].allergies[j].developed.percentage*100);
-                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[i].allergies[j].developed.ages);
+
+                                    mapChartLabels.push(data.allergyStats.cities[city].city);
+                                    mapChartData.push(data.allergyStats.cities[city].allergies[allergyIndex].developed.percentage*100);
+                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].developed.ages);
                                 }
                             }
         
@@ -158,18 +157,20 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                         "coordinates": coordinateData
                                     },
                                     "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0%)",
+                                        "title": data.allergyStats.cities[city].city + " (0%)",
                                         "data": 0
                                     }
                                 })
-                                mapChartLabels.push(data.allergyStats.cities[i].city);
+
+                                mapChartLabels.push(data.allergyStats.cities[city].city);
                                 mapChartData.push(0);
                             }
         
-                            if (i == data.allergyStats.cities.length - 1) {
-                                updateMapGraph(mapChartLabels, mapChartData, "% of " + allergy + " allergy");
-                                updateAgeGraph(ageChartData, "Frequency of age developed " + allergy + " allergy");
+                            if (city == data.allergyStats.cities.length - 1) {
+                                updateMapChart(mapChartLabels, mapChartData, "% of " + allergy + " allergy");
+                                updateAgeChart(ageChartData, "Frequency of age developed " + allergy + " allergy");
                             }
+
                             break;
                         default:
                     }
@@ -177,16 +178,17 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
             }
             break;
         case "outgrown":
-            for (let i = 0; i < data.allergyStats.cities.length; i++) {
+            for (let city = 0; city < data.allergyStats.cities.length; city++) {
 
-                getCoordinates(data.allergyStats.cities[i].city, data.allergyStats.cities[i].state).then(coordinateData => {
+                getCoordinates(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
                     var hasOutgrown = false;
 
                     switch (dataValueType) {
                         case "total":
-                            for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
-                                if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                            for (let allergyIndex = 0; allergyIndex < data.allergyStats.cities[city].allergies.length; allergyIndex++) {
+                                if (allergy == data.allergyStats.cities[city].allergies[allergyIndex].allergy) {
                                     hasOutgrown = true;
+
                                     mapData.push({
                                         "type": "Feature",
                                         "geometry": {
@@ -194,13 +196,14 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                             "coordinates": coordinateData
                                         },
                                         "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].outgrown.total +")",
-                                            "data": data.allergyStats.cities[i].allergies[j].outgrown.total
+                                            "title": data.allergyStats.cities[city].city + " (" + data.allergyStats.cities[city].allergies[allergyIndex].outgrown.total +")",
+                                            "data": data.allergyStats.cities[city].allergies[allergyIndex].outgrown.total
                                         }
                                     })
-                                    mapChartLabels.push(data.allergyStats.cities[i].city);
-                                    mapChartData.push(data.allergyStats.cities[i].allergies[j].outgrown.total);
-                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[i].allergies[j].outgrown.ages);
+
+                                    mapChartLabels.push(data.allergyStats.cities[city].city);
+                                    mapChartData.push(data.allergyStats.cities[city].allergies[allergyIndex].outgrown.total);
+                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].outgrown.ages);
                                 }
                             }
         
@@ -212,25 +215,27 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                         "coordinates": coordinateData
                                     },
                                     "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0)",
+                                        "title": data.allergyStats.cities[city].city + " (0)",
                                         "data": 0
         
                                     }
                                 })
-                                mapChartLabels.push(data.allergyStats.cities[i].city);
+
+                                mapChartLabels.push(data.allergyStats.cities[city].city);
                                 mapChartData.push(0);
                             }
         
-                            if (i == data.allergyStats.cities.length - 1) {
-                                updateMapGraph(mapChartLabels, mapChartData, "Total number of outgrowing " + allergy + " allergy");
-                                updateAgeGraph(ageChartData, "Frequency of age outgrowing " + allergy + " allergy");
+                            if (city == data.allergyStats.cities.length - 1) {
+                                updateMapChart(mapChartLabels, mapChartData, "Total number of outgrowing " + allergy + " allergy");
+                                updateAgeChart(ageChartData, "Frequency of age outgrowing " + allergy + " allergy");
                             }
 
                             break;
                         case "percentage":
-                            for (let j = 0; j < data.allergyStats.cities[i].allergies.length; j++) {
-                                if (allergy == data.allergyStats.cities[i].allergies[j].allergy) {
+                            for (let allergyIndex = 0; allergyIndex < data.allergyStats.cities[city].allergies.length; allergyIndex++) {
+                                if (allergy == data.allergyStats.cities[city].allergies[allergyIndex].allergy) {
                                     hasOutgrown = true;
+
                                     mapData.push({
                                         "type": "Feature",
                                         "geometry": {
@@ -238,13 +243,14 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                             "coordinates": coordinateData
                                         },
                                         "properties": {
-                                            "title": data.allergyStats.cities[i].city + " (" + data.allergyStats.cities[i].allergies[j].outgrown.percentage*100 +"%)",
-                                            "data": data.allergyStats.cities[i].allergies[j].outgrown.percentage*100
+                                            "title": data.allergyStats.cities[city].city + " (" + data.allergyStats.cities[city].allergies[allergyIndex].outgrown.percentage*100 +"%)",
+                                            "data": data.allergyStats.cities[city].allergies[allergyIndex].outgrown.percentage*100
                                         }
                                     })
-                                    mapChartLabels.push(data.allergyStats.cities[i].city);
-                                    mapChartData.push(data.allergyStats.cities[i].allergies[j].outgrown.percentage*100);
-                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[i].allergies[j].outgrown.ages);
+
+                                    mapChartLabels.push(data.allergyStats.cities[city].city);
+                                    mapChartData.push(data.allergyStats.cities[city].allergies[allergyIndex].outgrown.percentage*100);
+                                    ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].outgrown.ages);
                                 }
                             }
         
@@ -256,18 +262,19 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                                         "coordinates": coordinateData
                                     },
                                     "properties": {
-                                        "title": data.allergyStats.cities[i].city + " (0%)",
+                                        "title": data.allergyStats.cities[city].city + " (0%)",
                                         "data": 0
         
                                     }
                                 })
-                                mapChartLabels.push(data.allergyStats.cities[i].city);
+
+                                mapChartLabels.push(data.allergyStats.cities[city].city);
                                 mapChartData.push(0);
                             }
         
-                            if (i == data.allergyStats.cities.length - 1) {
-                                updateMapGraph(mapChartLabels, mapmapChartData, "% of outgrowing " + allergy + " allergy");
-                                updateAgeGraph(ageChartData, "Frequency of age outgrowing " + allergy + " allergy");
+                            if (city == data.allergyStats.cities.length - 1) {
+                                updateMapChart(mapChartLabels, mapmapChartData, "% of outgrowing " + allergy + " allergy");
+                                updateAgeChart(ageChartData, "Frequency of age outgrowing " + allergy + " allergy");
                             }
 
                             break;
@@ -275,6 +282,7 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
                     }
                 })
             }
+
             break;
         default:
     }
@@ -282,6 +290,12 @@ getDataForMap = async(dataType, data, allergy, dataValueType) => {
     return mapData;
 }
 
+/**
+ * Gets longitude,latitude coordinates for a city
+ * 
+ * @param {Stirng} city
+ * @param {Stirng} state
+ */
 getCoordinates = async(city, state) => {
     return new Promise(function(resolve, reject) {
         if (getSessionStorage(city)) {
@@ -305,25 +319,14 @@ getCoordinates = async(city, state) => {
     })
 }
 
-function load() {
-
-    if (!sessionStorage.getItem("dataType")) {
-        sessionStorage.setItem("dataType", "population"); // Default
-    }
-
-    var dataType = sessionStorage.getItem("dataType");
-
-    var dataValueTypeElement = document.getElementById("dataValueType");
-    var dataValueType = dataValueTypeElement.options[dataValueTypeElement.selectedIndex].value;
-
-    var allergyElement = document.getElementById("allergy");
-    var allergy = allergyElement.options[allergyElement.selectedIndex].value;
-
-    if (dataType == "population") {
-        allergyElement.style.visibility = "hidden";
-    } else {
-        allergyElement.style.visibility = "visible";
-    }
+/**
+ * Updates map with data based on parameters
+ * 
+ * @param {String} dataType 
+ * @param {String} allergy 
+ * @param {String} dataValueType 
+ */
+function updateMap(dataType, allergy, dataValueType) {
 
     mapboxgl.accessToken = '';
 
@@ -343,9 +346,9 @@ function load() {
 
             switch (dataValueType) {
                 case "total":
-                    for (var i = 0; i < mapData.length; i++) {
-                        if (heatmapMax < mapData[i].properties.data) {
-                            heatmapMax = mapData[i].properties.data;
+                    for (var data = 0; data < mapData.length; data++) {
+                        if (heatmapMax < mapData[data].properties.data) {
+                            heatmapMax = mapData[data].properties.data;
                         }
                     }
 
