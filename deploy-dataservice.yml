@@ -17,6 +17,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+          env:
+            - name: HOST_IP
+              value: api.<INGRESS_SUBDOMAIN>
 ---
 apiVersion: v1
 kind: Service

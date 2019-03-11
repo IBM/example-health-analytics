@@ -1,3 +1,7 @@
+/**
+ * Router for population
+ */
+
 var express = require('express');
 var router = express.Router();
 
@@ -9,11 +13,10 @@ router.get('/', function(req, res, next) {
   var getTotalPopulation = datalake.getTotalPopulation();
   
  	getTotalPopulation.then(function(population) {
- 		if (population < 0) {
- 			res.sendStatus(500);
- 		}
-    	res.send({population:population});
-    })
+ 		res.send({population:population});
+  }).catch(function(err) {
+		res.send(500);
+	})
 });
 
 module.exports = router;

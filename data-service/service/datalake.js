@@ -1,72 +1,86 @@
+/**
+ * Service for interacting with MongoDB data lake
+ */
+
 var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 
 var url = "mongodb://mongo:27017/summithealth"
 
-
+/**
+ * Updates and replaces analytics data in data lake
+ * See README.md for more information on structure of analytics object for data lake
+ * 
+ * @param {Object} newAnalytics 
+ */
 function updateAnalytics(newAnalytics) {
 	return new Promise(function(resolve, reject) {
-		MongoClient.connect(url, function(err, db) {
-		    if (err) resolve(false);
-		    console.log("Database connected!");
+		MongoClient.connect(url).then(function(db) {
 		    var dbo = db.db("summithealth");
 		    dbo.collection("analytics").deleteOne({}, function(err, obj){
-		    	if (err) resolve(false);
-		    	console.log("1 document deleted");
+		    	if (err) reject(err);
 		    	dbo.collection("analytics").insertOne(newAnalytics, {upsert: true}, function(err, res) {
-			        if (err) resolve(false);
-			        console.log("1 document inserted");
+			        if (err) reject(err);
 			        db.close();
 			        resolve(true);
 			    });
 		    })
+		}).catch(function(err) {
+			reject(err);
 		});
 	})
 }
 
+/**
+ * Gets the total population from data lake
+ */
 function getTotalPopulation() {
 	return new Promise(function(resolve, reject) {
-		MongoClient.connect(url, function(err, db) {
-			if (err) resolve(-1);
-			console.log("Database connected");
+		MongoClient.connect(url).then(function(db) {
 			var dbo = db.db("summithealth");
 			dbo.collection("analytics").findOne({}, function(e, result) {
-			    if (e) resolve(-1);
+			    if (e) reject(e);
 			    db.close();
 			    resolve(result.population);
 			});
+		}).catch(function(err) {
+			reject(err);
 		})
 	})
 }
 
+/**
+ * Gets cities data from data lake that contains each city's respective allergy analytics data
+ */
 function getCityList() {
 	return new Promise(function(resolve, reject) {
-		MongoClient.connect(url, function(err, db) {
-			if (err) resolve(-1);
-			console.log("Database connected");
+		MongoClient.connect(url).then(function(db) {
 			var dbo = db.db("summithealth");
 			dbo.collection("analytics").findOne({}, function(e, result) {
-			    if (e) resolve(-1);
-
+			    if (e) reject(e);
 			    db.close();
 			    resolve(result.cities);
 			});
+		}).catch(function(err) {
+			reject(err);
 		})
 	})
 }
 
+/**
+ * Gets a list of all allergies included in the data lake
+ */
 function getAllergyList() {
 	return new Promise(function(resolve, reject) {
-		MongoClient.connect(url, function(err, db) {
-			if (err) resolve(-1);
-			console.log("Database connected");
+		MongoClient.connect(url).then(function(db) {
 			var dbo = db.db("summithealth");
 			dbo.collection("analytics").findOne({}, function(e, result) {
-				if (e) resolve(-1);
-
+				if (e) reject(e);
 				db.close();
 				resolve(result.allergies);
 			})
+		}).catch(function(err) {
+			reject(err);
 		})
 	})
 }

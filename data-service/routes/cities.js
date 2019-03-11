@@ -1,3 +1,7 @@
+/**
+ * Router for cities
+ */
+
 var express = require('express');
 var router = express.Router();
 
@@ -9,11 +13,10 @@ router.get('/', function(req, res, next) {
   var getCityList = datalake.getCityList();
   
  	getCityList.then(function(cities) {
-    	if (cities < 0) {
- 			res.sendStatus(500);
- 		}
-    	res.send({cities:cities});
-    })
+  	res.send({cities:cities});
+  }).catch(function(err) {
+		res.sendStatus(500);
+	})
 });
 
 module.exports = router;

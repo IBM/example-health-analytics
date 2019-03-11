@@ -1,0 +1,179 @@
+swagger: '2.0'
+info:
+  description: >-
+    This is a data service that handles analytics data for Summit Health
+    Analytics
+  version: 1.0.0
+  title: Summit Health Analytics Data Service
+  contact:
+    email: maxshapiro32@ibm.com
+  license:
+    name: Apache 2.0
+    url: 'https://github.com/IBM/summit-health-analytics/blob/master/LICENSE'
+host: 'localhost:3000'
+basePath: /api/v1
+tags:
+  - name: Update
+    description: Operations associated with interacting with zOS system
+  - name: Generate
+    description: Operations associated with generated synthea data
+  - name: Population
+    description: Operations associated with population
+  - name: Cities
+    description: Operations associated with cities
+  - name: Allergies
+    description: Operations associated with allergies
+schemes:
+  - https
+paths:
+  /update:
+    put:
+      tags:
+        - Update
+      summary: Update data lake data from zOS system
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: data
+          description: Raw data from zOS System
+          required: true
+      responses:
+        '200':
+          description: Successfully updated data lake
+        '500':
+          description: Internal Server Error
+  /generate:
+    put:
+      tags:
+        - Generate
+      summary: Update data lake data from generated synthea data
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: data
+          description: Raw data from generated synthea data
+          required: true
+          schema:
+            $ref: '#/definitions/Synthea'
+      responses:
+        '200':
+          description: Successfully updated data lake
+        '500':
+          description: Internal Server Error
+  /population:
+    get:
+      tags:
+        - Population
+      summary: Gets total population from data lake
+      description: ''
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successfully got total population from data lake
+        '500':
+          description: Internal Server Error
+  /cities:
+    get:
+      tags:
+        - Cities
+      summary: Gets list of cities from data lake
+      description: ''
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successfully got cities data from data lake
+        '500':
+          description: Internal Server Error
+  /allergies:
+    get:
+      tags:
+        - Allergies
+      summary: Gets list of allergies from data lake
+      description: ''
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successfully got allergies from data lake
+        '500':
+          description: Internal Server Error
+definitions:
+  Synthea:
+    type: object
+    properties:
+      allergies:
+        type: array
+        items:
+          $ref: '#/definitions/SyntheaAllergy'
+      patients:
+        type: array
+        items:
+          $ref: '#/definitions/SyntheaPatients'
+  SyntheaAllergy:
+    type: object
+    properties:
+      START:
+        type: string
+      STOP:
+        type: string
+      PATIENT:
+        type: string
+      ENCOUNTER:
+        type: string
+      CODE:
+        type: string
+      DESCRIPTION:
+        type: string
+  SyntheaPatients:
+    type: object
+    properties:
+      Id:
+        type: string
+      BIRTHDATE:
+        type: string
+      DEATHDATE:
+        type: string
+      SSN:
+        type: string
+      DRIVERS:
+        type: string
+      PASSPORT:
+        type: string
+      PREFIX:
+        type: string
+      FIRST:
+        type: string
+      LAST:
+        type: string
+      SUFFIX:
+        type: string
+      MAIDEN:
+        type: string
+      MARITAL:
+        type: string
+      Race:
+        type: string
+      ETHNICITY:
+        type: string
+      GENDER:
+        type: string
+      BIRTHPLACE:
+        type: string
+      ADDRESS:
+        type: string
+      CITY:
+        type: string
+      STATE:
+        type: string
+      ZIP:
+        type: string

@@ -10,7 +10,7 @@ var API_URL = process.env.DATA_SERVER || "http://localhost:3000";
  */
 function getPopulation() {
 	return new Promise(function(resolve, reject) {
-		request(API_URL + "/population", function (error, response, body) {
+		request(API_URL + "/api/v1/population", function (error, response, body) {
 	 		if (!error && response.statusCode == 200) {
 	 			body = JSON.parse(body);
 	    		var population = body["population"];
@@ -27,7 +27,7 @@ function getPopulation() {
  */
 function getCities() {
 	return new Promise(function(resolve, reject) {
-		request(API_URL + "/cities", function (error, response, body) {
+		request(API_URL + "/api/v1/cities", function (error, response, body) {
 	 		if (!error && response.statusCode == 200) {
 	 			body = JSON.parse(body);
 	    		var cities = body["cities"];
@@ -44,7 +44,7 @@ function getCities() {
  */
 function getAllergies() {
 	return new Promise(function(resolve, reject) {
-		request(API_URL + "/allergies", function (error, response, body) {
+		request(API_URL + "/api/v1/allergies", function (error, response, body) {
 	 		if (!error && response.statusCode == 200) {
 	 			body = JSON.parse(body);
 	    		var allergies = body["allergies"];
