@@ -6,11 +6,11 @@
 
 # About
 
-This part of Summit Health Analytics is responsible for calculating and displaying analytics on the paitent/allergy data stored in the MongoDB datalake.
+This part of Summit Health Analytics is responsible for calculating and displaying analytics on the paitent/allergy data stored in the MongoDB data lake.
 
 # Analytics
 
-There are two main groups of analytics being calculated from the datalake: Population and Allergy statistics.
+There are two main groups of analytics being calculated from the data lake: Population and Allergy statistics.
 
 ## Population
 

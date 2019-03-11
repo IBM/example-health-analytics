@@ -1,12 +1,16 @@
+/**
+ * Main app.js file for data service of Summit Health Analytics
+ */
+
 var createError = require('http-errors');
 var express = require('express');
 var bodyParser = require('body-parser');
-var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var swaggerUi = require('swagger-ui-express');
+var YAML = require('yamljs');
+var swaggerDocument = YAML.load('swagger.yaml');
+swaggerDocument.host = process.env.HOST_IP || "localhost:3000";
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var updateRouter = require('./routes/update');
 var populationRouter = require('./routes/population');
 var citiesRouter = require('./routes/cities');
@@ -14,25 +18,19 @@ var allergiesRouter = require('./routes/allergies');
 var generateRouter = require('./routes/generate');
 
 var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+var api = "/api/v1";
 
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '25mb'}));
 app.use(bodyParser.urlencoded({limit: '25mb', extended: true}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/update', updateRouter);
-app.use('/population', populationRouter);
-app.use('/cities', citiesRouter);
-app.use('/allergies', allergiesRouter);
-app.use('/generate', generateRouter);
+app.use(api + '/update', updateRouter);
+app.use(api + '/population', populationRouter);
+app.use(api + '/cities', citiesRouter);
+app.use(api + '/allergies', allergiesRouter);
+app.use(api + '/generate', generateRouter);
 
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -45,9 +43,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;

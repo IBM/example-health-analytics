@@ -1,3 +1,6 @@
+/**
+ * Service for converting generated synthea data into data lake data
+ */
 
 var allergyTypes = [
 	{synthea: "Allergy to peanuts",
@@ -47,6 +50,11 @@ var allergyTypes = [
 		type: "Other"}
 ]
 
+/**
+ * Converts generated synthea data into data lake data
+ * 
+ * @param {Object} syntheaData 
+ */
 function generateFromSynthea(syntheaData) {
 	var datalakeData = {
 		population: syntheaData.patients.length,

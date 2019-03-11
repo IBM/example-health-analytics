@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
 /**
+ * Server Initialization
+ */
+
+/**
  * Module dependencies.
  */
 

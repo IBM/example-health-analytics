@@ -1,3 +1,7 @@
+/**
+ * Router for updating data lake from zOS system
+ */
+
 var express = require('express');
 var router = express.Router();
 
@@ -59,12 +63,10 @@ router.put('/', function(req, res, next) {
 	var updateAnalytics = datalake.updateAnalytics(datalakeData);
 
 	updateAnalytics.then(function(success) {
-      	if (success) {
-      		res.sendStatus(200);
-      	} else {
-      		res.sendStatus(500);
-      	}
-      })
+    	res.sendStatus(200);
+    }).catch(function (err) {
+		res.sendStatus(500);
+	});
 
 	/*var getPatientCount = zsystem.getPatientsCount();
 	var getCities = zsystem.getCities();

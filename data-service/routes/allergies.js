@@ -1,19 +1,22 @@
+/**
+ * Router for allergies
+ */
+
 var express = require('express');
 var router = express.Router();
 
 var datalake = require('../service/datalake');
 
-/* GET list of cities from Data Lake. */
+/* GET list of allergies from Data Lake. */
 router.get('/', function(req, res, next) {
 
   var getAllergyList = datalake.getAllergyList();
   
  	getAllergyList.then(function(allergies) {
-    	if (allergies < 0) {
- 			res.sendStatus(500);
- 		}
-    	res.send({allergies:allergies});
-    })
+    res.send({allergies:allergies});
+  }).catch(function(err) {
+		res.sendStatus(500);
+	})
 });
 
 module.exports = router;
