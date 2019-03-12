@@ -8,10 +8,13 @@ main(){
     if ! docker-compose ps; then
         test_failed "$0"
     fi
-    if ! cd generate && ./generate.sh; then
+    if ! cd generate; then
         test_failed "$0"
     fi
-    
+    if ! ./generate.sh; then
+    	test_failed "$0"
+    fi
+
     test_passed "$0"
 }
 main "$@" 
