@@ -1,4 +1,4 @@
-### Summit Health Analytics Data Service
+# Summit Health Analytics Data Service
 
 * [About](#about)
 * [Datalake](#datalake)
