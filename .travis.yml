@@ -2,6 +2,7 @@
 dist: trusty
 cache: pip
 sudo: required
+language: java
 services:
   - docker
 before_install:
