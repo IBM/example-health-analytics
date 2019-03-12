@@ -23,7 +23,7 @@ rm -rf synthea
 csvtojson allergies.csv > allergies.json
 csvtojson patients.csv > patients.json
 sed -e '1s/^/{"allergies":/' allergies.json > apidata.json
-echo ',"patients":' >> apidata.json
+{ echo ',"patients":'; } >> apidata.json
 cat patients.json >> apidata.json
 echo "}" >> apidata.json
 rm -rf allergies.csv
