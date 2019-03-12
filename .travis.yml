@@ -9,7 +9,8 @@ before_install:
   - sudo apt-get install shellcheck
   - sudo pip install yamllint
   - git clone https://github.com/IBM/pattern-ci
-  - sudo nvm install 10
+  - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+  - sudo nvm install node
   - sudo npm i -g csvtojson
 before_script:
   - "./pattern-ci/tests/shellcheck-lint.sh"
