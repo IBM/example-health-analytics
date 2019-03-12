@@ -12,10 +12,10 @@ while getopts p:s:u: option
 		esac
 done
 git clone https://github.com/synthetichealth/synthea.git
-sed -e 's/^\(exporter.years_of_history =\).*/\1 0/' -e 's/^\(exporter.csv.export =\).*/\1 true/' synthea/src/main/resources/synthea.properties > synthea/src/main/resources/synthea.properties.new
-mv synthea/src/main/resources/synthea.properties.new synthea/src/main/resources/synthea.properties
-cd synthea
-./run_synthea -s 32 -p $population $state
+cd synthea || exit 1
+sed -e 's/^\(exporter.years_of_history =\).*/\1 0/' -e 's/^\(exporter.csv.export =\).*/\1 true/' src/main/resources/synthea.properties > src/main/resources/synthea.properties.new
+mv src/main/resources/synthea.properties.new src/main/resources/synthea.properties
+./run_synthea -s 32 -p "$population" "$state"
 mv output/csv/allergies.csv ../allergies.csv
 mv output/csv/patients.csv ../patients.csv
 cd ..
@@ -25,7 +25,7 @@ csvtojson patients.csv > patients.json
 sed -e '1s/^/{"allergies":/' allergies.json > apidata.json
 echo ',"patients":' >> apidata.json
 cat patients.json >> apidata.json
-echo } >> apidata.json
+echo "}" >> apidata.json
 rm -rf allergies.csv
 rm -rf allergies.json
 rm -rf patients.csv
