@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/IBM/summit-health-analytics.svg?branch=master)](https://travis-ci.com/IBM/summit-health-analytics)
+
 # Summit Health Analytics
 
 This project is a conceptual Node.JS analytics web application for a health records system, designed to showcase best in class integration of modern cloud technology, in collaboration with legacy mainframe code.
