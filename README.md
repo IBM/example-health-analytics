@@ -10,7 +10,7 @@ Summit Health is a conceptual healthcare/insurance type company. It has been aro
 
 Summit's health records look very similar to the health records of most insurance companies.
 
-Here's a view a data analyst might see when they inteact with the Summit Health Analytics Application:
+Here's a view a data analyst might see when they interact with the Summit Health Analytics Application:
 
 <!--Diagram-->
 
