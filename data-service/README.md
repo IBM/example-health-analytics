@@ -6,7 +6,7 @@
 # About
 
 This part of Summit Health Analytics is responsible for using APIs to:
-* Act as a data pipeline between the data warehouse (either zOS System or generated Synthea data) and the MongoDB data lake 
+* Act as a data pipeline between the data warehouse (either zOS Mainframe or generated Synthea data) and the MongoDB data lake 
 * Retrieve data from MongoDB data lake to be used for analytical analysis
 
 # Datalake

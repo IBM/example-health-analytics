@@ -2,7 +2,7 @@
 
 ## About
 
-This is an alternative to populate Summit Health Analytics with patient and allergy data as opposed to getting data from a Z system. The bash script works by cloning [Synthea](https://github.com/synthetichealth/synthea), running Synthea to generate data, converting the Synthea data output to a JSON file, and sending the `apidata.json` JSON file to the data service of Summit Health Analytics where it is processed and stored in the datalake.
+This is an alternative to populate Summit Health Analytics with patient and allergy data as opposed to getting data from a zOS Mainframe. The bash script works by cloning [Synthea](https://github.com/synthetichealth/synthea), running Synthea to generate data, converting the Synthea data output to a JSON file, and sending the `apidata.json` JSON file to the data service of Summit Health Analytics where it is processed and stored in the datalake.
 
 ## Prerequisites
 
