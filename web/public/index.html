@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>Draw GeoJSON points</title>
+    <title>Summit Health Analytics</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/style.css?v=1.0">
@@ -10,84 +10,69 @@
     <script src="javascripts/chartHandler.js"></script>
     <script src="javascripts/navbarHandler.js"></script>
     <script src="javascripts/dataHandler.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
     <script src="javascripts/Chart.js"></script>
-    <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
-    </style>
 </head>
-<body onload="load()">
+<body onload="updateDataType('population')">
 
     <div class="banner">
-        <div class="sidebarHandler">
-            <span style="font-size:30px;cursor:pointer" onclick="toggleNav()">&#9776;</span>
-        </div>
         <div class="control">
           <div class="brand">
             <img class="logo" src="/images/logo.svg" alt="summit health logo">
-            <div class="summit">Summit Health Analytics</div>
+            <div class="summit"><b>Summit Health Analytics</b></div>
+          </div>
+          <div class="menu">
+            <div class="menuItem" id="population" style="font-weight:normal;" onclick="updateDataType('population')">Population</div>
+            <div class="menuItem" id="developed" style="font-weight:normal;" onclick="updateDataType('developed')">Developing Allergies</div>
+            <div class="menuItem" id="outgrown" style="font-weight:normal;" onclick="updateDataType('outgrown')">Outgrowing Allergies</div>
           </div>
         </div>
     </div>
 
-    <div id="navbar" class="navbar">
-        <div class="navbarItem">
-            <img class="logo" src="/images/experts.svg">
-            <a onclick="updateDataType('population')" href="#">Population</a>
-        </div>
-        <div class="navbarItem">
-            <img class="logo" src="/images/medication.svg">
-            <a onclick="updateDataType('developed')" href="#">Allergy Development</a>
-        </div>
-        <div class="navbarItem">
-            <img class="logo" src="/images/stethascope.svg">
-            <a onclick="updateDataType('outgrown')" href="#">Allergy Outgrowing</a>
-        </div>
-    </div>
-
     <div id="main" class="main">
-        <div class='settings'>
-            <fieldset style='visibility:hidden;'>
-                <label>Select Allergy</label>
-                <select onchange="load()" id='allergy' name='allergy'>
-                    <option value='Peanut'>Peanuts</option>
-                    <option value='Tree nut'>Tree nuts</option>
-                    <option value='Fish'>Fish</option>
-                    <option value='Shellfish'>Shellfish</option>
-                    <option value='Wheat'>Wheat</option>
-                    <option value='Egg'>Egg</option>
-                    <option value='Soy'>Soy</option>
-                    <option value='Dairy'>Dairy</option>
-                    <option value='Tree Pollen'>Tree Pollen</option>
-                    <option value='Grass Pollen'>Grass Pollen</option>
-                    <option value='Pet Dander'>Pet Dander</option>
-                    <option value='Dust Mite'>Dust Mite</option>
-                    <option value='Mold'>Mold</option>
-                    <option value='Bee Sting'>Bee Sting</option>
-                    <option value='Latex'>Latex</option>
-                </select>
-            </fieldset>
-            <fieldset>
-                <label>Data Value Type</label>
-                <select onchange="load()" id='dataValueType' name='dataValueType'>
-                    <option value='total'>Total</option>
-                    <option value='percentage'>Percentage</option>
-                </select>
-            </fieldset>
-        </div>
-        
-        <div id='map' style="width:1200px; height:500px; margin: 200px;"></div>
-        <div id='chart' style="width:1000px; height:500px; margin: 600px;">
-            <canvas id="mapChart" width="1000px" height="500px"></canvas>
-            <canvas id="ageChart" width="300px" height="300px"></canvas>
-        </div>
-        <div id='stats'>
-            <div id='statTitle'></div>
-            <div id='min'></div>
-            <div id='max'></div>
-            <div id='mean'></div>
+        <div id='map'></div>
+        <div class='other'>
+            <div class='settings'>
+                <div>
+                    <label>Total</label>
+                    <label class="switch">
+                        <input type="checkbox" onchange="load()" id='dataValueType' name='dataValueType'>
+                        <span class="slider round"></span>
+                    </label>
+                    <label>Percentage</label>
+                </div>
+                <div id='allergySelect' style='visibility:hidden;'>
+                    <select onchange="load()" id='allergy' name='allergy'>
+                        <option value='Peanut'>Peanuts</option>
+                        <option value='Tree nut'>Tree nuts</option>
+                        <option value='Fish'>Fish</option>
+                        <option value='Shellfish'>Shellfish</option>
+                        <option value='Wheat'>Wheat</option>
+                        <option value='Egg'>Egg</option>
+                        <option value='Soy'>Soy</option>
+                        <option value='Dairy'>Dairy</option>
+                        <option value='Tree Pollen'>Tree Pollen</option>
+                        <option value='Grass Pollen'>Grass Pollen</option>
+                        <option value='Pet Dander'>Pet Dander</option>
+                        <option value='Dust Mite'>Dust Mite</option>
+                        <option value='Mold'>Mold</option>
+                        <option value='Bee Sting'>Bee Sting</option>
+                        <option value='Latex'>Latex</option>
+                    </select>
+                </div>
+            </div>
+            <div id='stats'>
+                <b><div id='statTitle'></div></b>
+                <div id='min'></div>
+                <div id='max'></div>
+                <div id='mean'></div>
+            </div>
+            <div id='chart'>
+                <div id="mapChart"></div>
+                <canvas id="ageChart"></canvas>
+            </div>
         </div>
     </div>
 
