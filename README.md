@@ -10,9 +10,9 @@ Summit Health is a conceptual healthcare/insurance type company. It has been aro
 
 Summit's health records look very similar to the health records of most insurance companies.
 
-Here's a view a data analyst might see when they inteact with the Summit Health Analytics Application:
+Here's a view a data analyst might see when they interact with the Summit Health Analytics Application:
 
-<!--Diagram-->
+![](readme_images/screenshot.png)
 
 Summit has recently started understanding how data science/analytics on some of the patient records, might surface interesting insights. There is lots of talk about this among some of the big data companies.
 
@@ -41,8 +41,9 @@ Follow these steps to setup and run this code pattern locally and on the Cloud. 
 
 1. [Prerequisites](#1-prerequisites)
 2. [Clone the repo](#2-clone-the-repo)
-3. [Run the application](#3-run-the-application)
-4. [Deploy to IBM Cloud](#4-deploy-to-ibm-cloud)
+3. [Get Mapbox Access Token](#3-get-mapbox-access-token)
+4. [Run the application](#4-run-the-application)
+5. [Deploy to IBM Cloud](#5-deploy-to-ibm-cloud)
 
 ## 1. Prerequisites
 
@@ -65,14 +66,19 @@ $ git clone https://github.com/IBM/summit-health-analytics
 $ cd summit-health-analytics
 ```
 
-## 3. Run the application
+## 3. Get Mapbox Access Token
+
+1. In order to make API calls to help in populating the Mapbox map used, a [Mapbox access token](https://www.mapbox.com/account/access-tokens) will be needed.
+2. Assign the access token to the `mapboxgl.accessToken` variable in `web/public/javascripts/mapHandler.js` and to the `accessToken` variable in `web/public/javascripts/dataHandler.js`.
+
+## 4. Run the application
 
 1. Start the application by running `docker-compose up --build` in this repo's root directory.
 2. Once the containers are created and the application is running, use the Open API Doc (Swagger) at `http://localhost:3000` and [API.md](data-service/API.md) for instructions on how to use the APIs.
 3. Use the provided `generate/generate.sh` script to generate and populate data. Use [README.md](generate/README.md) for instructions on how to use the script.
 4. Once the data has been populated in the data lake, use `http://localhost:4000` to access the Summit Health Analytics UI.
 
-## 4. Deploy to IBM Cloud
+## 5. Deploy to IBM Cloud
 
 1. To allow changes to the Data Service or the UI, create a repo on [Docker Cloud](https://cloud.docker.com/) where the new modified containers will be pushed to. 
 > NOTE: If a new repo is used for the Docker containers, the container `image` will need to be modified to the name of the new repo used in [deploy-dataservice.yml](deploy-dataservice.yml) and/or [deploy-webapp.yml](deploy-webapp.yml).

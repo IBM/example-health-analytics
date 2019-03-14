@@ -1,45 +1,84 @@
 /**
- * Manages and updates Chart.js charts with data from the datalake
+ * Manages and updates Chart.js and Google charts with data from the datalake
  */
 
 /**
- * Updates Bar Chart with the data that is associated with the map
+ * Updates Tree Chart with the data that is associated with the map
  * 
  * @param {[String]} chartLabels 
- * @param {[Number]} chartData 
- * @param {String} dataLabel 
+ * @param {[[String,String,String,Number]]} chartData
+ * @param {String} dataValueType
  */
-function updateMapChart(chartLabels, chartData, dataLabel) {
-    document.getElementById("mapChart").remove();
+function updateMapChart(chartLabels, chartData, dataValueType) {
+    google.charts.load("current", {"packages":["treemap"]});
+    google.charts.setOnLoadCallback(drawChart);
 
-    var chartDiv = document.getElementById("chart");
-    var newCanvas = document.createElement('canvas');
-    newCanvas.setAttribute('id','mapChart');
-    newCanvas.setAttribute('width','1000px');
-    newCanvas.setAttribute('height','500px');
-    chartDiv.appendChild(newCanvas);
-    var ctx = document.getElementById("mapChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: chartLabels,
-            datasets: [{
-                label: dataLabel,
-                data: chartData,
-                borderWidth: 1,
-                backgroundColor: '#00ABC0'
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
+    function drawChart() {
+
+        var dataForDataTable = [chartLabels,["United States",null,0]];
+        var countiesInData = [];
+        var statesInData = [];
+
+        for (var city = 0; city < chartData.length; city++) {
+            if (!statesInData.includes(chartData[city][2])) {
+                statesInData.push(chartData[city][2]);
+                dataForDataTable.push([chartData[city][2],"United States",0]);
+            }
+
+            if (!countiesInData.includes(chartData[city][1])) {
+                countiesInData.push(chartData[city][1]);
+
+                if (chartData[city][1] == chartData[city][0]) {
+                    dataForDataTable.push([chartData[city][1],chartData[city][2],chartData[city][3]]);
+                } else {
+                    dataForDataTable.push([chartData[city][1],chartData[city][2],0]);
+                }
+            }
+
+            if (chartData[city][1] != chartData[city][0]) {
+                dataForDataTable.push([chartData[city][0],chartData[city][1],chartData[city][3]]);
             }
         }
-    });
+
+        var data = google.visualization.arrayToDataTable(dataForDataTable);
+
+        tree = new google.visualization.TreeMap(document.getElementById("mapChart"));
+
+        tree.draw(data, {
+            minColor: "rgb(209,229,240)",
+            midColor: "rgb(239,138,98)",
+            maxColor: "rgb(178,24,43)",
+            headerHeight: 15,
+            fontColor: "black",
+            showScale: true,
+            generateTooltip: showFullTooltip
+        });
+
+        function showFullTooltip(row, size, value) {
+            switch (dataValueType) {
+                case "total":
+                    return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
+                        "<b>" + data.getValue(row, 0) + "</b><br>" + 
+                        data.getColumnLabel(2) + ": " + size + "</div>";
+
+                    break;
+                case "percentage":
+                    if (data.getValue(row, 1) && data.getValue(row, 1).includes("County")) {
+                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
+                        "<b>" + data.getValue(row, 0) + "</b><br>" + 
+                        data.getColumnLabel(2) + ": " + size + "</div>";
+                    } else {
+                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
+                        "<b>" + data.getValue(row, 0) + "</b>";
+                    }
+
+                    break;
+                default:
+            }
+        }
+
+    }
+
 }
 
 /**
@@ -58,8 +97,6 @@ function updateAgeChart(chartData, dataLabel) {
     var chartDiv = document.getElementById("chart");
     var newCanvas = document.createElement('canvas');
     newCanvas.setAttribute('id','ageChart');
-    newCanvas.setAttribute('width','300px');
-    newCanvas.setAttribute('height','300px');
     chartDiv.appendChild(newCanvas);
     var ctx = document.getElementById("ageChart").getContext('2d');
     var myChart = new Chart(ctx, {
@@ -78,6 +115,16 @@ function updateAgeChart(chartData, dataLabel) {
                 yAxes: [{
                     ticks: {
                         beginAtZero:true
+                    }
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Age'
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 10
                     }
                 }]
             }

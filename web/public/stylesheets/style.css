@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -11,8 +11,6 @@ a {
 }
 
 .control {
-  max-width: 1000px;
-  min-width: 1000px;
   justify-content: space-between;
   align-items: center;
   display: flex;
@@ -27,8 +25,6 @@ a {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  ;
   align-content: center;
 }
 
@@ -36,6 +32,7 @@ a {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-right: 15em;
 }
 
 .logo {
@@ -50,38 +47,101 @@ a {
   color: white;
 }
 
-.navbar {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #f6f6f6;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
+.menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  float: right;
 }
 
-.navbar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-.navbar a:hover {
-  color: #00B7FF;
-}
-
-@media screen and (max-height: 450px) {
-  .navbar {padding-top: 15px;}
-  .navbar a {font-size: 18px;}
+.menuItem {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  margin-right: 10em;
 }
 
 .main {
-  transition: margin-left .5s;
-  padding: 16px;
+  height: 100%;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+#map {
+  position: relative;
+  display: flex;
+  width:60%;
+  height:850px;
+}
+
+.other {
+  width: 40%;
+  height:850px;
+  margin-left: 1em;
+}
+
+.settings {
+  margin-top: 1em;
+  width: 100%;
+  display: flex;
+  margin-bottom: 2em;
+}
+
+#allergySelect {
+  margin-left: 8%;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 20px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #00ABC0;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
