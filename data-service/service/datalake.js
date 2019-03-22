@@ -5,7 +5,7 @@
 var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 
-var url = "mongodb://mongo:27017/summithealth"
+var url = process.env.MONGODB || "mongodb://mongo:27017/summithealth";
 
 /**
  * Updates and replaces analytics data in data lake

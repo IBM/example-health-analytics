@@ -1,0 +1,13 @@
+---
+applications:
+- name: <DATA-SERVICE-NAME>
+  path: ./data-service
+  env:
+    HOST_IP: <DATA-SERVICE-HOST-NAME>.<DATA-SERVICE-DOMAIN>
+    MONGODB: <MONGODB-HTTPS-CONNECTION-STRING>
+  services:
+    - <MONGODB-NAME>
+- name: <WEB-NAME>
+  path: ./web
+  env:
+    DATA_SERVER: https://<DATA-SERVICE-HOST-NAME>.<DATA-SERVICE-DOMAIN>
