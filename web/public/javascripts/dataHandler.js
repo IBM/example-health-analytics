@@ -42,12 +42,11 @@ function setSessionStorage(key,value) {
 /**
   * Gets analytics data to be processed by front end
   * 
-  * @param {mapboxgl.Map} map
   * @param {String} dataType
   * @param {String} allergy
   * @param {String} dataValueType
   */
- getData = async(map, dataType, allergy, dataValueType) => { 
+ getData = async(dataType, allergy, dataValueType) => { 
 
     return new Promise(function(resolve, reject) {
         var url = "./data";
@@ -80,7 +79,7 @@ function setSessionStorage(key,value) {
   * @param {Stirng} dataValueType
   */
  processData = async(dataType, data, allergy, dataValueType) => {
-
+    
     mapData = [];
 
     var mapChartLabels = ['Location', 'Parent'];

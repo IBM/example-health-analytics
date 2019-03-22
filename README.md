@@ -24,14 +24,20 @@ Their CTO sees an architecture for Summit Health like this:
 
 # Architecture
 
-![](readme_images/architecture.png)
+## Using Kubernetes
+
+![](readme_images/kubernetes_architecture.png)
+
+## Using Cloud Foundry
+
+![](readme_images/cloudfoundry_architecture.png)
 
 1. Data Service API acts as a data pipeline and is triggered for updating data lake with updated health records data by calling API Connect APIs associated with the zOS Mainframe.
 2. API Connect APIs process relevant health records data from zOS Mainframe data warehouse and send the data through the data pipeline.
 3. The Data Service data pipeline processes zOS Mainframe data warehouse data and updates MongoDB data lake.
 4. User interacts with the UI to view and analyze analytics.
 5. The functionality of the App UI that the User interacts with is handled by Node.JS. Node.JS is where the API calls are initialized.
-6. The API calls are processed in the Node.JS data service on Kubernetes and are handled accordingly.
+6. The API calls are processed in the Node.JS data service and are handled accordingly.
 7. The data is gathered from the MongoDB data lake from API calls.
 8. The responses from the API calls are handled accordingly by the App UI.
 
@@ -48,7 +54,8 @@ Follow these steps to setup and run this code pattern locally and on the Cloud. 
 ## 1. Prerequisites
 
 * [Docker](https://www.docker.com/products/docker-desktop)
-* [IBM Cloud Kubernetes Service Provisioned](https://www.ibm.com/cloud/container-service)
+* [IBM Cloud account](https://cloud.ibm.com/registration)
+* [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-ibmcloud-cli&locale=en-US#overview)
 
 For running these services locally without Docker containers, the following will be needed:
 
@@ -80,6 +87,11 @@ $ cd summit-health-analytics
 
 ## 5. Deploy to IBM Cloud
 
+* [Kubernetes](#kubernetes)
+* [Cloud Foundry](#cloud-foundry)
+
+### Kubernetes
+
 1. To allow changes to the Data Service or the UI, create a repo on [Docker Cloud](https://cloud.docker.com/) where the new modified containers will be pushed to. 
 > NOTE: If a new repo is used for the Docker containers, the container `image` will need to be modified to the name of the new repo used in [deploy-dataservice.yml](deploy-dataservice.yml) and/or [deploy-webapp.yml](deploy-webapp.yml).
 
@@ -95,9 +107,9 @@ $ docker push $DOCKERHUB_USERNAME/summithealthanalyticsdata:latest
 $ docker push $DOCKERHUB_USERNAME/summithealthanalyticsweb:latest
 ```
 
-2. Provision the [IBM Cloud Kubernetes Service](https://www.ibm.com/cloud/container-service) and follow the set of instructions for creating a Container and Cluster based on your cluster type, `Standard` vs `Lite`.
+2. Provision the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/kubernetes/catalog/cluster) and follow the set of instructions for creating a Container and Cluster based on your cluster type, `Standard` vs `Lite`.
 
-### Lite Cluster Instructions
+#### Lite Cluster Instructions
 
 3. Run `bx cs workers mycluster` and locate the `Public IP`. This IP is used to access the worklog API and UI (Flask Application). Update the `env` values in both [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml) to the `Public IP`.
 
@@ -114,7 +126,7 @@ $ kubectl get pods
 
 5. Use `https://PUBLIC_IP:32001` to access the UI and the Open API Doc (Swagger) at `https://PUBLIC_IP:32000` for instructions on how to make API calls.
 
-### Standard Cluster Instructions
+#### Standard Cluster Instructions
 
 3. Run `bx cs cluster-get <CLUSTER_NAME>` and locate the `Ingress Subdomain` and `Ingress Secret`. This is the domain of the URL that is to be used to access the Data Service and UI on the Cloud. Update the `env` values in both [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml) to the `Ingress Subdomain`. In addition, update the `host` and `secretName` in [ingress-dataservice.yml](ingress-dataservice.yml) and [ingress-webapp.yml](ingress-webapp.yml) to `Ingress Subdomain` and `Ingress Secret`.
 
@@ -134,6 +146,23 @@ $ kubectl apply -f ingress-webapp.yml
 ```
 
 5. Use `https://<INGRESS_SUBDOMAIN>` to access the UI and the Open API Doc (Swagger) at `https://api.<INGRESS_SUBDOMAIN>` for instructions on how to make API calls.
+
+### Cloud Foundry
+
+1. Provision two [SDK for Node.js](https://cloud.ibm.com/catalog/starters/sdk-for-nodejs) applications. One will be for `./data-service` and the other will be for `./web`.
+
+2. Provision [Compose for MongoDB](https://cloud.ibm.com/catalog/services/compose-for-mongodb).
+
+3. Update the following in the [manifest.yml](manifest.yml) file:
+
+* `name` for both Cloud Foundry application names provisioned from Step 1.
+* `services` with the name of the MongoDB service provisioned from Step 2.
+* `HOST_IP` and `DATA_SERVER` with the host name and domain of the `data-service` from Step 1.
+* `MONGODB` with the HTTPS Connection String of the MongoDB provisioned from Step 2. This can be found under *Manage > Overview* of the database dashboard.
+
+4. To deploy the services to IBM Cloud Foundry, go to one of the dashboards of the apps provisioned from Step 1 and follow the *Getting Started* instructions for connecting and logging in to IBM Cloud from the console. Once logged in, run `ibmcloud app push` from the root directory.
+
+5. Use `https://<WEB-HOST-NAME>.<WEB-DOMAIN>` to access the UI and the Open API Doc (Swagger) at `https://<DATA-SERVICE-HOST-NAME>.<DATA-SERVICE-DOMAIN>` for instructions on how to make API calls.
 
 # License
 

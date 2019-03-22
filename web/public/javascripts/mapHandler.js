@@ -13,15 +13,16 @@ function updateMap(dataType, allergy, dataValueType) {
 
     mapboxgl.accessToken = '';
 
-    var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/dark-v9',
-        center: [-100.5467, 46.0731],
-        zoom: 2,
-        minZoom: 2
-    });
+    getData(dataType, allergy, dataValueType).then(mapData => {
 
-    getData(map, dataType, allergy, dataValueType).then(mapData => {
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v9',
+            center: [-100.5467, 46.0731],
+            zoom: 2,
+            minZoom: 2
+        });
+
         map.on('load', function () {
 
             var heatmapMin = 1;
