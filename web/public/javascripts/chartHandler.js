@@ -4,8 +4,8 @@
 
 /**
  * Updates Tree Chart with the data that is associated with the map
- * 
- * @param {[String]} chartLabels 
+ *
+ * @param {[String]} chartLabels
  * @param {[[String,String,String,Number]]} chartData
  * @param {String} dataValueType
  */
@@ -45,9 +45,10 @@ function updateMapChart(chartLabels, chartData, dataValueType) {
         tree = new google.visualization.TreeMap(document.getElementById("mapChart"));
 
         tree.draw(data, {
-            minColor: "rgb(209,229,240)",
-            midColor: "rgb(239,138,98)",
-            maxColor: "rgb(178,24,43)",
+
+            minColor: '#CCEEF2',
+        midColor: '#00ABC0',
+        maxColor: '#F88F58',
             headerHeight: 15,
             fontColor: "black",
             showScale: true,
@@ -57,18 +58,18 @@ function updateMapChart(chartLabels, chartData, dataValueType) {
         function showFullTooltip(row, size, value) {
             switch (dataValueType) {
                 case "total":
-                    return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
-                        "<b>" + data.getValue(row, 0) + "</b><br>" + 
+                    return "<div style='background:#fd9; padding:10px; border-style:solid'>" +
+                        "<b>" + data.getValue(row, 0) + "</b><br>" +
                         data.getColumnLabel(2) + ": " + size + "</div>";
 
                     break;
                 case "percentage":
                     if (data.getValue(row, 1) && data.getValue(row, 1).includes("County")) {
-                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
-                        "<b>" + data.getValue(row, 0) + "</b><br>" + 
+                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" +
+                        "<b>" + data.getValue(row, 0) + "</b><br>" +
                         data.getColumnLabel(2) + ": " + size + "</div>";
                     } else {
-                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
+                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" +
                         "<b>" + data.getValue(row, 0) + "</b>";
                     }
 
@@ -83,9 +84,9 @@ function updateMapChart(chartLabels, chartData, dataValueType) {
 
 /**
  * Updates bar chart for age of developing/outgrowing allergies data
- * 
- * @param {[Number]} chartData 
- * @param {String} dataLabel 
+ *
+ * @param {[Number]} chartData
+ * @param {String} dataLabel
  */
 function updateAgeChart(chartData, dataLabel) {
     removeAgeChart();
@@ -144,14 +145,14 @@ function removeAgeChart() {
 
 /**
  * Gets frequency of ages from the data
- * 
- * @param {[Number]} chartData 
+ *
+ * @param {[Number]} chartData
  */
 function getAgeChartData(chartData) {
     var labels = []
     var data = []
     var prev;
-    
+
     chartData.sort((a, b) => a - b);
     for (var i = 0; i < chartData.length; i++ ) {
         if ( chartData[i] !== prev ) {
@@ -162,17 +163,17 @@ function getAgeChartData(chartData) {
         }
         prev = chartData[i];
     }
-    
+
     return [labels, data];
 }
 
 /**
  * Updates statistics that are associated with the data from the map
- * 
- * @param {String} dataType 
- * @param {Object} data 
- * @param {String} allergy 
- * @param {String} dataValueType 
+ *
+ * @param {String} dataType
+ * @param {Object} data
+ * @param {String} allergy
+ * @param {String} dataValueType
  */
 function updateStats(dataType, data, allergy, dataValueType) {
     var titleDiv = document.getElementById('statTitle');
@@ -185,7 +186,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
             titleDiv.innerHTML = "Population stats";
 
             switch (dataValueType) {
-                case "total":  
+                case "total":
                     minDiv.innerHTML = "Min: " + data.populationStats.min.population + " (" + data.populationStats.min.city + ")";
                     maxDiv.innerHTML = "Max: " + data.populationStats.max.population + " (" + data.populationStats.max.city + ")";
                     meanDiv.innerHTML = "Mean: " + data.populationStats.mean;
@@ -231,7 +232,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
             break;
         case "outgrown":
             titleDiv.innerHTML = "Outgrowing allergy stats for cities with " + allergy + " allergy";
-            
+
             switch (dataValueType) {
                 case "total":
                     for (let i = 0; i < data.allergyStats.stats.outgrown.length; i++) {
