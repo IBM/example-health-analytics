@@ -1,81 +1,98 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset='utf-8' />
-    <title>Summit Health Analytics</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheets/style.css?v=1.0">
-    <script src="javascripts/mapHandler.js"></script>
-    <script src="javascripts/chartHandler.js"></script>
-    <script src="javascripts/navbarHandler.js"></script>
-    <script src="javascripts/dataHandler.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
-    <script src="javascripts/Chart.js"></script>
+  <meta charset='utf-8' />
+  <title>Summit Health Analytics</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="stylesheets/style.css?v=1.0">
+  <script src="javascripts/mapHandler.js"></script>
+  <script src="javascripts/chartHandler.js"></script>
+  <script src="javascripts/navbarHandler.js"></script>
+  <script src="javascripts/dataHandler.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+  <script src="javascripts/Chart.js"></script>
 </head>
+
 <body onload="updateDataType('population')">
 
-    <div class="banner">
-        <div class="control">
-          <div class="brand">
-            <img class="logo" src="/images/logo.svg" alt="summit health logo">
-            <div class="summit"><b>Summit Health Analytics</b></div>
-          </div>
-          <div class="menu">
-            <div class="menuItem" id="population" style="font-weight:normal;" onclick="updateDataType('population')">Population</div>
-            <div class="menuItem" id="developed" style="font-weight:normal;" onclick="updateDataType('developed')">Developing Allergies</div>
-            <div class="menuItem" id="outgrown" style="font-weight:normal;" onclick="updateDataType('outgrown')">Outgrowing Allergies</div>
-          </div>
-        </div>
+  <div class="banner">
+    <div class="control">
+      <div class="brand">
+        <img class="logo" src="/images/logo.svg" alt="summit health logo">
+        <div class="summit"><b>Summit Health - Allergy Analytics Study</b></div>
+      </div>
+      <div class="menu" style="visibility:hidden;">
+        <div class="menuItem" id="population" style="font-weight:normal;" onclick="updateDataType('population')">Population</div>
+        <div class="menuItem" id="developed" style="font-weight:normal;" onclick="updateDataType('developed')">Developing Allergies</div>
+        <div class="menuItem" id="outgrown" style="font-weight:normal;" onclick="updateDataType('outgrown')">Outgrowing Allergies</div>
+      </div>
     </div>
+  </div>
 
-    <div id="main" class="main">
-        <div id='map'></div>
-        <div class='other'>
-            <div class='settings'>
-                <div>
-                    <label>Total</label>
-                    <label class="switch">
-                        <input type="checkbox" onchange="load()" id='dataValueType' name='dataValueType'>
-                        <span class="slider round"></span>
-                    </label>
-                    <label>Percentage</label>
-                </div>
-                <div id='allergySelect' style='visibility:hidden;'>
-                    <select onchange="load()" id='allergy' name='allergy'>
-                        <option value='Peanut'>Peanuts</option>
-                        <option value='Tree nut'>Tree nuts</option>
-                        <option value='Fish'>Fish</option>
-                        <option value='Shellfish'>Shellfish</option>
-                        <option value='Wheat'>Wheat</option>
-                        <option value='Egg'>Egg</option>
-                        <option value='Soy'>Soy</option>
-                        <option value='Dairy'>Dairy</option>
-                        <option value='Tree Pollen'>Tree Pollen</option>
-                        <option value='Grass Pollen'>Grass Pollen</option>
-                        <option value='Pet Dander'>Pet Dander</option>
-                        <option value='Dust Mite'>Dust Mite</option>
-                        <option value='Mold'>Mold</option>
-                        <option value='Bee Sting'>Bee Sting</option>
-                        <option value='Latex'>Latex</option>
-                    </select>
-                </div>
-            </div>
-            <div id='stats'>
-                <b><div id='statTitle'></div></b>
-                <div id='min'></div>
-                <div id='max'></div>
-                <div id='mean'></div>
-            </div>
-            <div id='chart'>
-                <div id="mapChart"></div>
-                <canvas id="ageChart"></canvas>
-            </div>
+  <div id="main" class="main">
+    <div id='map'></div>
+    <div class='other'>
+      <div class='dataselection'>
+        <div class='datalabel'>Data Source</div>
+
+        <div class='datasource'>
+          <select class="datasourcelist" class="allergyCombo" onchange="changeDataSource(this)" id='datasource' name='allergy'>
+            <option value='Peanut'>General Population Density</option>
+            <option value='Tree nut'>Patients Developing Allergies</option>
+            <option value='Fish'>Patients Outgrowing Allergies</option>
+
+          </select>
         </div>
+      </div>
+      <div class='settings'>
+        <div class="valuetoggle">
+          <label>Total</label>
+          <label class="switch">
+            <input type="checkbox" onchange="load()" id='dataValueType' name='dataValueType'>
+            <span class="slider round"></span>
+          </label>
+          <label>Percentage</label>
+        </div>
+        <div id='allergySelect' class="allergySelect" style='visibility:hidden;'>
+          <select class="allergylist" class="allergyCombo" onchange="load()" id='allergy' name='allergy'>
+            <option value='Peanut'>Peanuts</option>
+            <option value='Tree nut'>Tree nuts</option>
+            <option value='Fish'>Fish</option>
+            <option value='Shellfish'>Shellfish</option>
+            <option value='Wheat'>Wheat</option>
+            <option value='Egg'>Egg</option>
+            <option value='Soy'>Soy</option>
+            <option value='Dairy'>Dairy</option>
+            <option value='Tree Pollen'>Tree Pollen</option>
+            <option value='Grass Pollen'>Grass Pollen</option>
+            <option value='Pet Dander'>Pet Dander</option>
+            <option value='Dust Mite'>Dust Mite</option>
+            <option value='Mold'>Mold</option>
+            <option value='Bee Sting'>Bee Sting</option>
+            <option value='Latex'>Latex</option>
+          </select>
+        </div>
+      </div>
+      <div id='stats' class="stats">
+        <b>
+          <div class="statTitle" id='statTitle'></div>
+        </b>
+        <div id='min'></div>
+        <div id='max'></div>
+        <div id='mean'></div>
+      </div>
+      <div id='chart' class="ageChart">
+        <div id="mapChart" class="maptchart"></div>
+        <canvas id="ageChart"></canvas>
+      </div>
     </div>
+  </div>
 
 
 </body>
+
 </html>
