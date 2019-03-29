@@ -4,149 +4,152 @@
 
 /**
  * Updates Tree Chart with the data that is associated with the map
- * 
- * @param {[String]} chartLabels 
+ *
+ * @param {[String]} chartLabels
  * @param {[[String,String,String,Number]]} chartData
  * @param {String} dataValueType
  */
 function updateMapChart(chartLabels, chartData, dataValueType) {
-    google.charts.load("current", {"packages":["treemap"]});
-    google.charts.setOnLoadCallback(drawChart);
+  google.charts.load("current", {
+    "packages": ["treemap"]
+  });
+  google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
+  function drawChart() {
 
-        var dataForDataTable = [chartLabels,["United States",null,0]];
-        var countiesInData = [];
-        var statesInData = [];
+    var dataForDataTable = [chartLabels, ["United States", null, 0]];
+    var countiesInData = [];
+    var statesInData = [];
 
-        for (var city = 0; city < chartData.length; city++) {
-            if (!statesInData.includes(chartData[city][2])) {
-                statesInData.push(chartData[city][2]);
-                dataForDataTable.push([chartData[city][2],"United States",0]);
-            }
+    for (var city = 0; city < chartData.length; city++) {
+      if (!statesInData.includes(chartData[city][2])) {
+        statesInData.push(chartData[city][2]);
+        dataForDataTable.push([chartData[city][2], "United States", 0]);
+      }
 
-            if (!countiesInData.includes(chartData[city][1])) {
-                countiesInData.push(chartData[city][1]);
+      if (!countiesInData.includes(chartData[city][1])) {
+        countiesInData.push(chartData[city][1]);
 
-                if (chartData[city][1] == chartData[city][0]) {
-                    dataForDataTable.push([chartData[city][1],chartData[city][2],chartData[city][3]]);
-                } else {
-                    dataForDataTable.push([chartData[city][1],chartData[city][2],0]);
-                }
-            }
-
-            if (chartData[city][1] != chartData[city][0]) {
-                dataForDataTable.push([chartData[city][0],chartData[city][1],chartData[city][3]]);
-            }
+        if (chartData[city][1] == chartData[city][0]) {
+          dataForDataTable.push([chartData[city][1], chartData[city][2], chartData[city][3]]);
+        } else {
+          dataForDataTable.push([chartData[city][1], chartData[city][2], 0]);
         }
+      }
 
-        if (statesInData.length == 1) {
-            dataForDataTable.splice(1,1);
-            dataForDataTable[1][1] = null;
-        }
-
-        var data = google.visualization.arrayToDataTable(dataForDataTable);
-
-        tree = new google.visualization.TreeMap(document.getElementById("mapChart"));
-
-        tree.draw(data, {
-            minColor: "rgb(209,229,240)",
-            midColor: "rgb(239,138,98)",
-            maxColor: "rgb(178,24,43)",
-            headerHeight: 15,
-            fontColor: "black",
-            showScale: true,
-            generateTooltip: showFullTooltip
-        });
-
-        function showFullTooltip(row, size, value) {
-            switch (dataValueType) {
-                case "total":
-                    return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
-                        "<b>" + data.getValue(row, 0) + "</b><br>" + 
-                        data.getColumnLabel(2) + ": " + size + "</div>";
-
-                    break;
-                case "percentage":
-                    if (data.getValue(row, 1) && data.getValue(row, 1).includes("County")) {
-                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
-                        "<b>" + data.getValue(row, 0) + "</b><br>" + 
-                        data.getColumnLabel(2) + ": " + size + "</div>";
-                    } else {
-                        return "<div style='background:#fd9; padding:10px; border-style:solid'>" + 
-                        "<b>" + data.getValue(row, 0) + "</b>";
-                    }
-
-                    break;
-                default:
-            }
-        }
-
+      if (chartData[city][1] != chartData[city][0]) {
+        dataForDataTable.push([chartData[city][0], chartData[city][1], chartData[city][3]]);
+      }
     }
+
+    if (statesInData.length == 1) {
+        dataForDataTable.splice(1,1);
+        dataForDataTable[1][1] = null;
+    }
+
+    var data = google.visualization.arrayToDataTable(dataForDataTable);
+
+    tree = new google.visualization.TreeMap(document.getElementById("mapChart"));
+
+    tree.draw(data, {
+
+      minColor: '#CCEEF2',
+      midColor: '#00ABC0',
+      maxColor: '#F88F58',
+      headerHeight: 15,
+      fontColor: "black",
+      showScale: true,
+      generateTooltip: showFullTooltip
+    });
+
+    function showFullTooltip(row, size, value) {
+      switch (dataValueType) {
+        case "total":
+          return "<div style='background:#fd9; padding:10px; border-style:solid'>" +
+            "<b>" + data.getValue(row, 0) + "</b><br>" +
+            data.getColumnLabel(2) + ": " + size + "</div>";
+
+          break;
+        case "percentage":
+          if (data.getValue(row, 1) && data.getValue(row, 1).includes("County")) {
+            return "<div style='background:#fd9; padding:10px; border-style:solid'>" +
+              "<b>" + data.getValue(row, 0) + "</b><br>" +
+              data.getColumnLabel(2) + ": " + size + "</div>";
+          } else {
+            return "<div style='background:#fd9; padding:10px; border-style:solid'>" +
+              "<b>" + data.getValue(row, 0) + "</b>";
+          }
+
+          break;
+        default:
+      }
+    }
+
+  }
 
 }
 
 /**
  * Updates bar chart for age of developing/outgrowing allergies data
- * 
- * @param {[Number]} chartData 
- * @param {String} dataLabel 
+ *
+ * @param {[Number]} chartData
+ * @param {String} dataLabel
  */
 function updateAgeChart(chartData, dataLabel) {
-    removeAgeChart();
+  removeAgeChart();
 
-    var result = getAgeChartData(chartData);
-    var chartLabels = result[0];
-    chartData = result[1];
+  var result = getAgeChartData(chartData);
+  var chartLabels = result[0];
+  chartData = result[1];
 
-    var chartDiv = document.getElementById("chart");
-    var newCanvas = document.createElement('canvas');
-    newCanvas.setAttribute('id','ageChart');
-    chartDiv.appendChild(newCanvas);
-    var ctx = document.getElementById("ageChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: chartLabels,
-            datasets: [{
-                label: dataLabel,
-                data: chartData,
-                borderWidth: 1,
-                backgroundColor: '#00ABC0'
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }],
-                xAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Ages'
-                    }
-                }]
-            }
-        }
-    });
+  var chartDiv = document.getElementById("chart");
+  var newCanvas = document.createElement('canvas');
+  newCanvas.setAttribute('id', 'ageChart');
+  chartDiv.appendChild(newCanvas);
+  var ctx = document.getElementById("ageChart").getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: dataLabel,
+        data: chartData,
+        borderWidth: 1,
+        backgroundColor: '#95D6C6'
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Age'
+          }
+        }]
+      }
+    }
+  });
 }
 
 /**
  * Removes age chart from web page
  */
 function removeAgeChart() {
-    var ageChart = document.getElementById("ageChart");
-    if (ageChart) {
-        ageChart.remove();
-    }
+  var ageChart = document.getElementById("ageChart");
+  if (ageChart) {
+    ageChart.remove();
+  }
 }
 
 /**
  * Gets frequency of ages from the data
- * 
- * @param {[Number]} chartData 
+ *
+ * @param {[Number]} chartData
  */
 function getAgeChartData(chartData) {
 
@@ -159,9 +162,7 @@ function getAgeChartData(chartData) {
     }
     
     for (var age = 0; age < chartData.length; age++) {
-        console.log(chartData[age]);
         var index = Math.floor(chartData[age] / 5);
-        console.log(index);
         data[index] = data[index] + 1;
     }
 
@@ -175,17 +176,19 @@ function getAgeChartData(chartData) {
         labels.splice(index+1, 28 - index);
         data.splice(index+1, 28 - index);
     }
-    
-    return [labels, data];
+    prev = chartData[i];
+  }
+
+  return [labels, data];
 }
 
 /**
  * Updates statistics that are associated with the data from the map
- * 
- * @param {String} dataType 
- * @param {Object} data 
- * @param {String} allergy 
- * @param {String} dataValueType 
+ *
+ * @param {String} dataType
+ * @param {Object} data
+ * @param {String} allergy
+ * @param {String} dataValueType
  */
 function updateStats(dataType, data, allergy, dataValueType) {
     var titleDiv = document.getElementById('statTitle');
@@ -248,6 +251,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                     break;
                 default:
             }
+          }
 
             break;
         case "outgrown":
@@ -280,8 +284,13 @@ function updateStats(dataType, data, allergy, dataValueType) {
                     break;
                 default:
             }
+          }
 
-            break;
+          break;
         default:
-    }
+      }
+
+      break;
+    default:
+  }
 }

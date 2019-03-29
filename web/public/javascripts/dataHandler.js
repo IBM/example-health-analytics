@@ -4,8 +4,8 @@
 
  /**
   * Updates data type in storage and reloads map/charts with data based on the data type
-  * 
-  * @param {String} newDataType 
+  *
+  * @param {String} newDataType
   */
 function updateDataType(newDataType) {
     if (getSessionStorage("dataType")) {
@@ -20,10 +20,15 @@ function updateDataType(newDataType) {
     load();
 }
 
+function changeDataSource(dataSelection) {
+  var dataSources = ["population", "developed", "outgrown"]
+  updateDataType(dataSources[dataSelection.selectedIndex]);
+}
+
 /**
  * Wrapper for getting session storage value
- * 
- * @param {String} key 
+ *
+ * @param {String} key
  */
 function getSessionStorage(key) {
     return sessionStorage.getItem(key);
@@ -31,9 +36,9 @@ function getSessionStorage(key) {
 
 /**
  * Wrapper for setting session storage key/value pair
- * 
- * @param {String} key 
- * @param {*} value 
+ *
+ * @param {String} key
+ * @param {*} value
  */
 function setSessionStorage(key,value) {
     sessionStorage.setItem(key, value);
@@ -41,12 +46,12 @@ function setSessionStorage(key,value) {
 
 /**
   * Gets analytics data to be processed by front end
-  * 
+  *
   * @param {String} dataType
   * @param {String} allergy
   * @param {String} dataValueType
   */
- getData = async(dataType, allergy, dataValueType) => { 
+ getData = async(dataType, allergy, dataValueType) => {
 
     return new Promise(function(resolve, reject) {
         var url = "./data";
@@ -72,14 +77,14 @@ function setSessionStorage(key,value) {
 
 /**
   * Processes analytics data for mapbox map and updates charts with processed data
-  * 
+  *
   * @param {Stirng} dataType
   * @param {Stirng} data
   * @param {Stirng} allergy
   * @param {Stirng} dataValueType
   */
  processData = async(dataType, data, allergy, dataValueType) => {
-    
+
     mapData = [];
 
     var mapChartLabels = ['Location', 'Parent'];
@@ -118,7 +123,7 @@ function setSessionStorage(key,value) {
                                     updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     removeAgeChart();
                                 }
-    
+
                                 break;
                             case "percentage":
                                 var percentageToRound = data.populationStats.cities[city].percentage*100;
@@ -135,7 +140,7 @@ function setSessionStorage(key,value) {
                                         "data": roundedPercentage
                                     }
                                 })
-    
+
                                 mapChartData.push([data.populationStats.cities[city].city,
                                                     county,
                                                     data.populationStats.cities[city].state,
@@ -147,7 +152,7 @@ function setSessionStorage(key,value) {
                                     updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     removeAgeChart();
                                 }
-    
+
                                 break;
                             default:
                         }
@@ -188,7 +193,7 @@ function setSessionStorage(key,value) {
                                         ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].developed.ages);
                                     }
                                 }
-            
+
                                 if (!hasAllergy) {
                                     mapData.push({
                                         "type": "Feature",
@@ -243,7 +248,7 @@ function setSessionStorage(key,value) {
                                         ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].developed.ages);
                                     }
                                 }
-            
+
                                 if (!hasAllergy) {
                                     mapData.push({
                                         "type": "Feature",
@@ -310,7 +315,7 @@ function setSessionStorage(key,value) {
                                         ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].outgrown.ages);
                                     }
                                 }
-            
+
                                 if (!hasOutgrown) {
                                     mapData.push({
                                         "type": "Feature",
@@ -321,7 +326,7 @@ function setSessionStorage(key,value) {
                                         "properties": {
                                             "title": data.allergyStats.cities[city].city + " (0)",
                                             "data": 0
-            
+
                                         }
                                     })
 
@@ -366,7 +371,7 @@ function setSessionStorage(key,value) {
                                         ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].outgrown.ages);
                                     }
                                 }
-            
+
                                 if (!hasOutgrown) {
                                     mapData.push({
                                         "type": "Feature",
@@ -377,7 +382,7 @@ function setSessionStorage(key,value) {
                                         "properties": {
                                             "title": data.allergyStats.cities[city].city + " (0%)",
                                             "data": 0
-            
+
                                         }
                                     })
 
@@ -410,7 +415,7 @@ function setSessionStorage(key,value) {
 
 /**
  * Gets longitude,latitude coordinates for a city
- * 
+ *
  * @param {Stirng} city
  * @param {Stirng} state
  */
@@ -439,7 +444,7 @@ getCoordinates = async(city, state) => {
 
 /**
  * Gets county for a city
- * 
+ *
  * @param {Stirng} city
  * @param {[Number,Number]} coordinateData
  */
