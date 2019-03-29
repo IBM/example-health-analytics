@@ -52,12 +52,20 @@
       </div>
       <div class='settings'>
         <div class="valuetoggle">
-          <label>Total</label>
+          <label>Total
+              <div class="tooltip">&#9432;
+                <span id="totalTooltiptext" class="tooltiptext"></span>
+              </div>
+          </label>
           <label class="switch">
             <input type="checkbox" onchange="load()" id='dataValueType' name='dataValueType'>
             <span class="slider round"></span>
           </label>
-          <label>Percentage</label>
+          <label>Percentage
+            <div class="tooltip">&#9432;
+                <span id="percentageTooltiptext" class="tooltiptext"></span>
+            </div>
+          </label>
         </div>
         <div id='allergySelect' class="allergySelect" style='visibility:hidden;'>
           <select class="allergylist" class="allergyCombo" onchange="load()" id='allergy' name='allergy'>

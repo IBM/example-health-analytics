@@ -147,7 +147,7 @@ function removeAgeChart() {
 }
 
 /**
- * Gets frequency of ages from the data
+ * Gets frequency of ages from the data by age ranges
  *
  * @param {[Number]} chartData
  */
@@ -193,9 +193,13 @@ function updateStats(dataType, data, allergy, dataValueType) {
     var minDiv = document.getElementById('min');
     var maxDiv = document.getElementById('max');
     var meanDiv = document.getElementById('mean');
+    var totalTooltip = document.getElementById('totalTooltiptext');
+    var populationTooltip = document.getElementById('percentageTooltiptext');
 
     switch (dataType) {
         case "population":
+            totalTooltip.innerHTML = "Total population by city";
+            populationTooltip.innerHTML = "City's percentage of total population";
             titleDiv.innerHTML = "Population stats";
 
             switch (dataValueType) {
@@ -220,7 +224,9 @@ function updateStats(dataType, data, allergy, dataValueType) {
 
             break;
         case "developed":
-            titleDiv.innerHTML = "Allergy stats for cities with " + allergy + " allergy";
+            totalTooltip.innerHTML = "Population by city that developed " + allergy + " allergy";
+            populationTooltip.innerHTML = "Percentage of each city that developed " + allergy + " allergy";
+            titleDiv.innerHTML = "Developing allergy stats for cities with " + allergy + " allergy";
 
             switch (dataValueType) {
                 case "total":
@@ -252,6 +258,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
 
             break;
         case "outgrown":
+            totalTooltip.innerHTML = "Population by city that outgrew " + allergy + " allergy";
+            populationTooltip.innerHTML = "Percentage of each city outgrew " + allergy + " allergy";
             titleDiv.innerHTML = "Outgrowing allergy stats for cities with " + allergy + " allergy";
             
             switch (dataValueType) {
