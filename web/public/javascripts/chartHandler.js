@@ -115,7 +115,7 @@ function updateAgeChart(chartData, dataLabel) {
         label: dataLabel,
         data: chartData,
         borderWidth: 1,
-        backgroundColor: '#95D6C6'
+        backgroundColor: '#CCEEF2'
       }]
     },
     options: {
@@ -128,7 +128,7 @@ function updateAgeChart(chartData, dataLabel) {
         xAxes: [{
           scaleLabel: {
             display: true,
-            labelString: 'Age'
+            labelString: 'Ages'
           }
         }]
       }
@@ -176,8 +176,6 @@ function getAgeChartData(chartData) {
         labels.splice(index+1, 28 - index);
         data.splice(index+1, 28 - index);
     }
-    prev = chartData[i];
-  }
 
   return [labels, data];
 }
@@ -204,7 +202,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                 case "total":  
                     minDiv.innerHTML = "Min: " + data.populationStats.min.population + " (" + data.populationStats.min.city + ")";
                     maxDiv.innerHTML = "Max: " + data.populationStats.max.population + " (" + data.populationStats.max.city + ")";
-                    meanDiv.innerHTML = "Mean: " + data.populationStats.mean;
+                    meanDiv.innerHTML = "Mean: " + Math.round(data.populationStats.mean * 100) / 100;
 
                     break;
                 case "percentage":
@@ -230,7 +228,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                         if (allergy == data.allergyStats.stats.developed[i].allergy) {
                             minDiv.innerHTML = "Min: " + data.allergyStats.stats.developed[i].min.total.min + " (" + data.allergyStats.stats.developed[i].min.total.city + ")";
                             maxDiv.innerHTML = "Max: " + data.allergyStats.stats.developed[i].max.total.max + " (" + data.allergyStats.stats.developed[i].max.total.city + ")";
-                            meanDiv.innerHTML = "Mean: " + data.allergyStats.stats.developed[i].mean.total;
+                            meanDiv.innerHTML = "Mean: " + Math.round(data.allergyStats.stats.developed[i].mean.total * 100) / 100;
                         }
                     }
 
@@ -251,7 +249,6 @@ function updateStats(dataType, data, allergy, dataValueType) {
                     break;
                 default:
             }
-          }
 
             break;
         case "outgrown":
@@ -263,7 +260,7 @@ function updateStats(dataType, data, allergy, dataValueType) {
                         if (allergy == data.allergyStats.stats.outgrown[i].allergy) {
                             minDiv.innerHTML = "Min: " + data.allergyStats.stats.outgrown[i].min.total.min + " (" + data.allergyStats.stats.outgrown[i].min.total.city + ")";
                             maxDiv.innerHTML = "Max: " + data.allergyStats.stats.outgrown[i].max.total.max + " (" + data.allergyStats.stats.outgrown[i].max.total.city + ")";
-                            meanDiv.innerHTML = "Mean: " + data.allergyStats.stats.outgrown[i].mean.total;
+                            meanDiv.innerHTML = "Mean: " + Math.round(data.allergyStats.stats.outgrown[i].mean.total * 100) / 100;
                         }
                     }
 
@@ -284,13 +281,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
                     break;
                 default:
             }
-          }
 
           break;
         default:
-      }
-
-      break;
-    default:
-  }
+    }
 }
