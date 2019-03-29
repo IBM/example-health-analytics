@@ -22,3 +22,13 @@ services:
       - "3000:3000"
     depends_on:
       - mongo
+
+  web:
+    container_name: summithealthweb
+    build: web
+    ports:
+      - "4000:4000"
+    depends_on:
+      - data
+    environment:
+      - DATA_SERVER=http://summithealthdata:3000
