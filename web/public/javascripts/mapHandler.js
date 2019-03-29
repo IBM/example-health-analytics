@@ -18,9 +18,10 @@ function updateMap(dataType, allergy, dataValueType) {
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/antonmc/cjr27i9iw0wbq2rnwtvkrbgog',
-            center: [-119.7871, 36.7378],
-            zoom: 5,
-            minZoom: 5
+            center: [-100.5467, 46.0731],
+            zoom: 2.25,
+            minZoom: 2.25,
+            maxZoom: 12
         });
 
 
@@ -56,7 +57,6 @@ function updateMap(dataType, allergy, dataValueType) {
                         "features": mapData
                     }
                 },
-                "maxzoom": 9,
                 "paint": {
                 // Increase the heatmap weight based on frequency and property magnitude
                 "heatmap-weight": [
