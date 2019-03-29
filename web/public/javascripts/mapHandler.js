@@ -11,7 +11,7 @@
  */
 function updateMap(dataType, allergy, dataValueType) {
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYW50b25tYyIsImEiOiJjaW82am5xOGkwMmY0djRrcWtlajlnNWdwIn0.ZniLehzcno7t1dO__lhe5Q';
+    mapboxgl.accessToken = '';
 
     getData(dataType, allergy, dataValueType).then(mapData => {
 

@@ -412,7 +412,7 @@ getCoordinates = async(city, state) => {
         } else {
             var updatedCity = city + " " + state;
 
-            var accessToken = 'pk.eyJ1IjoiYW50b25tYyIsImEiOiJjaW82am5xOGkwMmY0djRrcWtlajlnNWdwIn0.ZniLehzcno7t1dO__lhe5Q';
+            var accessToken = '';
             var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + updatedCity.replace(/ /g, "%20") + ".json?access_token=";
 
             fetch(url+accessToken).then(response => {
