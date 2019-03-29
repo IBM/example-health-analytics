@@ -11,7 +11,7 @@
  */
 function updateMap(dataType, allergy, dataValueType) {
 
-    mapboxgl.accessToken = '';
+    mapboxgl.accessToken = properties.mapboxAccessToken;
 
     getData(dataType, allergy, dataValueType).then(mapData => {
 
