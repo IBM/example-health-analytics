@@ -468,6 +468,11 @@ getCounty = async(city, state, coordinateData) => {
     })
 }
 
+/**
+ * Modifies duplicate city names and cities with the same name as states
+ * 
+ * @param {[[String,String,String,Number]]} chartData 
+ */
 function fixDuplicates(chartData) {
     var states = [];
 

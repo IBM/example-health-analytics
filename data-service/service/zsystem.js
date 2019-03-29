@@ -52,6 +52,9 @@ var allergyTypes = [
 		type: "Other"}
 ]
 
+/**
+ * Gets the city population from zOS system API
+ */
 function getCityPopulation() {
 	return new Promise(function(resolve, reject) {
 		request(API_URL + "countCities/", function (error, response, body) {
@@ -66,6 +69,9 @@ function getCityPopulation() {
 	})
 }
 
+/**
+ * Gets the allergy data from zOS system API
+ */
 function getAllergies() {
 	return new Promise(function(resolve, reject) {
 		request.post(API_URL + "showAllergies/", function (error, response, body) {
@@ -80,6 +86,12 @@ function getAllergies() {
 	})
 }
 
+/**
+ * Gets the state for a city based on zip code
+ * 
+ * @param {String} zipcode 
+ * @param {Number} city 
+ */
 function getState(zipcode, city) {
 	return new Promise(function(resolve, reject) {
 		var accessToken = properties.get('main.mapbox.accessToken');;
@@ -96,6 +108,9 @@ function getState(zipcode, city) {
 	})
 }
 
+/**
+ * Processes and returns data from zOS system
+ */
 function getDataFromZSystem() {
 	
 	return new Promise(function(resolve, reject) {

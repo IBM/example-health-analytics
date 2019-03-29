@@ -18,9 +18,9 @@ function updateMap(dataType, allergy, dataValueType) {
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/antonmc/cjr27i9iw0wbq2rnwtvkrbgog',
-            center: [-100.5467, 46.0731],
-            zoom: 2.25,
-            minZoom: 2.25,
+            center: [-110.5467, 46.0731],
+            zoom: 2.5,
+            minZoom: 2.5,
             maxZoom: 12
         });
 
