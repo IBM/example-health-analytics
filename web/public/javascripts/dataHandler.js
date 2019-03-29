@@ -91,7 +91,7 @@ function setSessionStorage(key,value) {
             for (let city = 0; city < data.populationStats.cities.length; city++) {
 
                 getCoordinates(data.populationStats.cities[city].city, data.populationStats.cities[city].state).then(coordinateData => {
-                    getCounty(data.populationStats.cities[city].city, coordinateData).then(county => {
+                    getCounty(data.populationStats.cities[city].city, data.populationStats.cities[city].state, coordinateData).then(county => {
                         
                         switch (dataValueType) {
                             case "total":
@@ -106,20 +106,24 @@ function setSessionStorage(key,value) {
                                         "data": data.populationStats.cities[city].population
                                     }
                                 })
-    
+
                                 mapChartData.push([data.populationStats.cities[city].city,
                                                     county,
                                                     data.populationStats.cities[city].state,
                                                     data.populationStats.cities[city].population]);
     
-                                if (city == data.populationStats.cities.length - 1) {
+                                if (mapChartData.length == data.populationStats.cities.length) {
                                     mapChartLabels.push("population");
+                                    mapChartData = fixDuplicates(mapChartData);
                                     updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     removeAgeChart();
                                 }
     
                                 break;
                             case "percentage":
+                                var percentageToRound = data.populationStats.cities[city].percentage*100;
+                                var roundedPercentage = Math.round(percentageToRound * 100) / 100;
+
                                 mapData.push({
                                     "type": "Feature",
                                     "geometry": {
@@ -127,18 +131,19 @@ function setSessionStorage(key,value) {
                                         "coordinates": coordinateData
                                     },
                                     "properties": {
-                                        "title": data.populationStats.cities[city].city + " (" + data.populationStats.cities[city].percentage*100 + "%)",
-                                        "data": data.populationStats.cities[city].percentage*100
+                                        "title": data.populationStats.cities[city].city + " (" + roundedPercentage + "%)",
+                                        "data": roundedPercentage
                                     }
                                 })
     
                                 mapChartData.push([data.populationStats.cities[city].city,
                                                     county,
                                                     data.populationStats.cities[city].state,
-                                                    data.populationStats.cities[city].percentage*100]);
+                                                    roundedPercentage]);
     
-                                if (city == data.populationStats.cities.length - 1) {
+                                if (mapChartData.length == data.populationStats.cities.length) {
                                     mapChartLabels.push("% of population");
+                                    mapChartData = fixDuplicates(mapChartData);
                                     updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     removeAgeChart();
                                 }
@@ -154,7 +159,7 @@ function setSessionStorage(key,value) {
             for (let city = 0; city < data.allergyStats.cities.length; city++) {
 
                 getCoordinates(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
-                    getCounty(data.allergyStats.cities[city].city, coordinateData).then(county => {
+                    getCounty(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state, coordinateData).then(county => {
 
                         var hasAllergy = false;
 
@@ -203,8 +208,9 @@ function setSessionStorage(key,value) {
                                         0]);
                                 }
             
-                                if (city == data.allergyStats.cities.length - 1) {
+                                if (mapChartData.length == data.allergyStats.cities.length) {
                                     mapChartLabels.push("Total number of " + allergy + " allergy");
+                                    mapChartData = fixDuplicates(mapChartData);
                                     updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     updateAgeChart(ageChartData, "Frequency of age developed " + allergy + " allergy");
                                 }
@@ -215,6 +221,9 @@ function setSessionStorage(key,value) {
                                     if (allergy == data.allergyStats.cities[city].allergies[allergyIndex].allergy) {
                                         hasAllergy = true;
 
+                                        var percentageToRound = data.allergyStats.cities[city].allergies[allergyIndex].developed.percentage*100;
+                                        var roundedPercentage = Math.round(percentageToRound * 100) / 100;
+
                                         mapData.push({
                                             "type": "Feature",
                                             "geometry": {
@@ -222,15 +231,15 @@ function setSessionStorage(key,value) {
                                                 "coordinates": coordinateData
                                             },
                                             "properties": {
-                                                "title": data.allergyStats.cities[city].city + " (" + data.allergyStats.cities[city].allergies[allergyIndex].developed.percentage*100 +"%)",
-                                                "data": data.allergyStats.cities[city].allergies[allergyIndex].developed.percentage*100
+                                                "title": data.allergyStats.cities[city].city + " (" + roundedPercentage +"%)",
+                                                "data": roundedPercentage
                                             }
                                         })
 
                                         mapChartData.push([data.allergyStats.cities[city].city,
                                                             county,
                                                             data.allergyStats.cities[city].state,
-                                                            data.allergyStats.cities[city].allergies[allergyIndex].developed.percentage*100]);
+                                                            roundedPercentage]);
                                         ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].developed.ages);
                                     }
                                 }
@@ -254,8 +263,9 @@ function setSessionStorage(key,value) {
                                                         0]);
                                 }
             
-                                if (city == data.allergyStats.cities.length - 1) {
+                                if (mapChartData.length == data.allergyStats.cities.length) {
                                     mapChartLabels.push("% of " + allergy + " allergy");
+                                    mapChartData = fixDuplicates(mapChartData);
                                     updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     updateAgeChart(ageChartData, "Frequency of age developed " + allergy + " allergy");
                                 }
@@ -271,7 +281,7 @@ function setSessionStorage(key,value) {
             for (let city = 0; city < data.allergyStats.cities.length; city++) {
 
                 getCoordinates(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
-                    getCounty(data.allergyStats.cities[city].city, coordinateData).then(county => {
+                    getCounty(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state, coordinateData).then(county => {
 
                         var hasOutgrown = false;
 
@@ -321,8 +331,9 @@ function setSessionStorage(key,value) {
                                                         0]);
                                 }
             
-                                if (city == data.allergyStats.cities.length - 1) {
+                                if (mapChartData.length == data.allergyStats.cities.length) {
                                     mapChartLabels.push("Total number of outgrowing " + allergy + " allergy");
+                                    mapChartData = fixDuplicates(mapChartData);
                                     updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     updateAgeChart(ageChartData, "Frequency of age outgrowing " + allergy + " allergy");
                                 }
@@ -333,6 +344,9 @@ function setSessionStorage(key,value) {
                                     if (allergy == data.allergyStats.cities[city].allergies[allergyIndex].allergy) {
                                         hasOutgrown = true;
 
+                                        var percentageToRound = data.allergyStats.cities[city].allergies[allergyIndex].outgrown.percentage*100;
+                                        var roundedPercentage = Math.round(percentageToRound * 100) / 100;
+
                                         mapData.push({
                                             "type": "Feature",
                                             "geometry": {
@@ -340,15 +354,15 @@ function setSessionStorage(key,value) {
                                                 "coordinates": coordinateData
                                             },
                                             "properties": {
-                                                "title": data.allergyStats.cities[city].city + " (" + data.allergyStats.cities[city].allergies[allergyIndex].outgrown.percentage*100 +"%)",
-                                                "data": data.allergyStats.cities[city].allergies[allergyIndex].outgrown.percentage*100
+                                                "title": data.allergyStats.cities[city].city + " (" + roundedPercentage +"%)",
+                                                "data": roundedPercentage
                                             }
                                         })
 
                                         mapChartData.push([data.allergyStats.cities[city].city,
                                                             county,
                                                             data.allergyStats.cities[city].state,
-                                                            data.allergyStats.cities[city].allergies[allergyIndex].outgrown.percentage*100]);
+                                                            roundedPercentage]);
                                         ageChartData.push.apply(ageChartData,data.allergyStats.cities[city].allergies[allergyIndex].outgrown.ages);
                                     }
                                 }
@@ -373,9 +387,10 @@ function setSessionStorage(key,value) {
                                         0]);
                                 }
             
-                                if (city == data.allergyStats.cities.length - 1) {
+                                if (mapChartData.length == data.allergyStats.cities.length) {
                                     mapChartLabels.push("% of outgrowing " + allergy + " allergy");
-                                    updateMapChart(mapChartLabels, mapmapChartData, dataValueType);
+                                    mapChartData = fixDuplicates(mapChartData);
+                                    updateMapChart(mapChartLabels, mapChartData, dataValueType);
                                     updateAgeChart(ageChartData, "Frequency of age outgrowing " + allergy + " allergy");
                                 }
 
@@ -401,19 +416,19 @@ function setSessionStorage(key,value) {
  */
 getCoordinates = async(city, state) => {
     return new Promise(function(resolve, reject) {
-        if (getSessionStorage(city+"Coords")) {
-            var coordinateArray = getSessionStorage(city+"Coords").split(",");
+        if (getSessionStorage(city+"("+state+")Coords")) {
+            var coordinateArray = getSessionStorage(city+"("+state+")Coords").split(",");
             resolve(coordinateArray);
         } else {
             var updatedCity = city + " " + state;
 
-            var accessToken = '';
+            var accessToken = properties.mapboxAccessToken;
             var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + updatedCity.replace(/ /g, "%20") + ".json?access_token=";
 
             fetch(url+accessToken).then(response => {
                 if (response.ok) {
                     response.json().then(coordinateData => {
-                        setSessionStorage(city+"Coords",coordinateData.features[0].geometry.coordinates);
+                        setSessionStorage(city+"("+state+")Coords",coordinateData.features[0].geometry.coordinates);
                         resolve(coordinateData.features[0].geometry.coordinates);
                     })
                 }
@@ -428,10 +443,10 @@ getCoordinates = async(city, state) => {
  * @param {Stirng} city
  * @param {[Number,Number]} coordinateData
  */
-getCounty = async(city, coordinateData) => {
+getCounty = async(city, state, coordinateData) => {
     return new Promise(function(resolve,reject) {
-        if (getSessionStorage(city+"County")) {
-            var county = getSessionStorage(city+"County");
+        if (getSessionStorage(city+"("+state+")County")) {
+            var county = getSessionStorage(city+"("+state+")County");
             resolve(county);
         } else {
             var url = "https://geo.fcc.gov/api/census/area?lat=" + coordinateData[1] + "&lon=" + coordinateData[0] + "&format=json";
@@ -439,13 +454,42 @@ getCounty = async(city, coordinateData) => {
             fetch(url).then(response => {
                 if (response.ok) {
                     response.json().then(countyData => {
-                        setSessionStorage(city+"County",countyData.results[0].county_name + " County");
-                        resolve(countyData.results[0].county_name);
+                        setSessionStorage(city+"("+state+")County",countyData.results[0].county_name + " County");
+                        resolve(countyData.results[0].county_name + " County");
                     })
                 }
             })
         }
     })
+}
+
+function fixDuplicates(chartData) {
+    var states = [];
+
+    for (var city = 0; city < chartData.length; city++) {
+        if (!states.includes(chartData[city][2])) {
+            states.push(chartData[city][2]);
+        }
+    }
+
+    for (var city = 0; city < chartData.length; city++) {
+        for (var state = 0; state < states.length; state++) {
+            if (states[state] == chartData[city][0]) {
+                chartData[city][0] = chartData[city][0] + " (" + chartData[city][2] + ")";
+            }
+        }
+    }
+
+    for (var city = 0; city < chartData.length - 1; city++) {
+        for (var otherCity = city + 1; otherCity < chartData.length; otherCity++) {
+            if (chartData[city][0] == chartData[otherCity][0]) {
+                chartData[city][0] = chartData[city][0] + " (" + chartData[city][2] + ")";
+                chartData[otherCity][0] = chartData[otherCity][0] + " (" + chartData[otherCity][2] + ")";
+            }
+        }
+    }
+
+    return chartData;
 }
 
 /**
