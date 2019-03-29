@@ -2,8 +2,10 @@ body {
   font-family: 'IBM Plex Sans', sans-serif;
   margin: 0;
   padding: 0;
+  height: 100%;
+  color: #104D81;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* -moz-osx-font-smoothing: grayscale; */
 }
 
 a {
@@ -45,6 +47,7 @@ a {
   font-weight: medium;
   font-size: 16px;
   color: white;
+  width: 300px;
 }
 
 .menu {
@@ -73,26 +76,47 @@ a {
 #map {
   position: relative;
   display: flex;
-  width:60%;
-  height:850px;
+  width: 60%;
+  height: 100vh;
 }
 
 .other {
   width: 40%;
-  height:850px;
-  margin-left: 1em;
+  height: 100vh;
+  border-left: 1px solid #99DDE5;
+  display: flex;
+  flex-direction: column;
 }
 
 .settings {
-  margin-top: 1em;
   width: 100%;
   display: flex;
-  margin-bottom: 2em;
+  height: 50px;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  border-bottom: 1px solid #99DDE5;
 }
 
-#allergySelect {
-  margin-left: 8%;
+.valuetoggle {
+  margin: 10px;
+  width: 50%;
+  font-size: 14px;
 }
+
+.allergySelect {
+  border-left: 1px solid #99DDE5;
+  height: 100%;
+  display: flex;
+  background: #CCEEF2;
+  width: 50%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.allergyCombo {}
 
 .switch {
   position: relative;
@@ -101,10 +125,82 @@ a {
   height: 20px;
 }
 
-.switch input { 
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
+}
+
+.allergylist {
+  border: none;
+  height: 30px;
+  width: 90%;
+  font-size: 14px;
+  background: #CCEEF2;
+  color: #104D81;
+}
+
+.datasource{
+  width:100%;
+}
+
+select:focus {
+  outline: none;
+}
+
+.stats {
+  padding: 10px;
+  border-bottom: 1px solid #99DDE5;
+  font-size: 14px;
+}
+
+.maptchart {
+  /* margin: 10px; */
+  height: 50%;
+}
+
+.dataselection {
+  display: flex;
+  height: 50px;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  border-bottom: 1px solid #99DDE5;
+  outline: none;
+}
+
+.datalabel {
+  width: 100px;
+  min-width: 100px;
+  height: 100%;
+  margin: 10px;
+  border-right: 1px solid #99DDE5;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  border-bottom: 1px solid #99DDE5;
+  font-size: 14px;
+}
+
+#label {
+  font-size: 14px;
+}
+
+.datasourcelist {
+  width: 97%;
+  border: none;
+  font-size: 14px;
+  background: white;
+  color: #104D81;
+}
+
+.ageChart{
+  padding:10px;
+}
+
+.statTitle{
+  margin-bottom:5px;
 }
 
 .slider {
@@ -114,7 +210,7 @@ a {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #00ABC0;
+  background-color: #CCEEF2;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -126,12 +222,12 @@ a {
   width: 12px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: #00ABC0;
   -webkit-transition: .4s;
   transition: .4s;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);

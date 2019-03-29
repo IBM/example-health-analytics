@@ -4,10 +4,10 @@
 
 /**
  * Updates map with data based on parameters
- * 
- * @param {String} dataType 
- * @param {String} allergy 
- * @param {String} dataValueType 
+ *
+ * @param {String} dataType
+ * @param {String} allergy
+ * @param {String} dataValueType
  */
 function updateMap(dataType, allergy, dataValueType) {
 
@@ -17,11 +17,14 @@ function updateMap(dataType, allergy, dataValueType) {
 
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/dark-v9',
-            center: [-100.5467, 46.0731],
-            zoom: 2,
-            minZoom: 2
+            style: 'mapbox://styles/antonmc/cjr27i9iw0wbq2rnwtvkrbgog',
+            center: [-119.7871, 36.7378],
+            zoom: 5,
+            minZoom: 5
         });
+
+
+
 
         map.on('load', function () {
 
@@ -79,12 +82,12 @@ function updateMap(dataType, allergy, dataValueType) {
                 "interpolate",
                 ["linear"],
                 ["heatmap-density"],
-                0, "rgba(33,102,172,0)",
-                0.2, "rgb(103,169,207)",
-                0.4, "rgb(209,229,240)",
+                0, "rgba(149,214,198,0)",
+                0.2, "rgb(252,210,188)",
+                0.4, "rgb(253,237,228)",
                 0.6, "rgb(253,219,199)",
                 0.8, "rgb(239,138,98)",
-                1, "rgb(178,24,43)"
+                1, "rgb(249,143,88)"
                 ],
                 // Adjust the heatmap radius by zoom level
                 "heatmap-radius": [
