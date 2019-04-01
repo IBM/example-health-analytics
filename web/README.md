@@ -165,3 +165,27 @@ __Data Structure__
     * **developed**: A list of different allergies developed and their respective stats
 
 # Visuals
+
+* [Map](#map)
+* [Treemap](#treemap)
+* [Bar Chart](#bar-chart)
+
+![](../readme_images/screenshot.png)
+
+## Map
+
+![](../readme_images/map.png)
+
+The map is a [Mapbox](https://www.mapbox.com/) map that dsiplays the analytics data in the form of a [heatmap](https://docs.mapbox.com/mapbox-gl-js/example/heatmap-layer/). The number in parenthesis refers to the data for that city. The heat intensity when viewing `total` refers to the number of people for the selected data source. For `percentage`, the heat intensity refers to the percentage of people for the selected data source. For more information on the data you are viewing, hover over the information icons next to `total` and `percentage`.
+
+## Treemap
+
+![](../readme_images/treemap.png)
+
+The [treemap](https://developers.google.com/chart/interactive/docs/gallery/treemap) displays the analytics data broken down by the following layers: State, County, and City. The size and color of each element when viewing `total` refers to the number of people for the selected data source. For `percentage`, the size and color refers to the percentage of people for the selected data source. For more information on the data you are viewing, hover over the information icons next to `total` and `percentage`. In addition, hovering over each element on the treemap shows the data associated with that element.
+
+## Bar Chart
+
+![](../readme_images/bar_chart.png)
+
+The [bar chart](https://www.chartjs.org/docs/latest/charts/bar.html) is only viewable when the data source is developing/outgrowing allergies. The chart shows the frequency of the ages of people that developed/outgrew an allergy. The age ranges are broken down into 5 year periods.
