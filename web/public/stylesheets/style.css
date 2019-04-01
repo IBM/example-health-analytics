@@ -50,20 +50,6 @@ a {
   width: 300px;
 }
 
-.menu {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  float: right;
-}
-
-.menuItem {
-  display: flex;
-  flex-direction: row;
-  cursor: pointer;
-  margin-right: 10em;
-}
-
 .main {
   height: 100%;
   width: 100%;

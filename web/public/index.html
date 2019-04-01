@@ -19,18 +19,13 @@
     <link rel="icon" type="image/png" href="images/summitlogo@2x.png">
 </head>
 
-<body onload="updateDataType('population')">
+<body onload="updateDataType(null)">
 
   <div class="banner">
     <div class="control">
       <div class="brand">
         <img class="logo" src="/images/logo.svg" alt="summit health logo">
         <div class="summit"><b>Summit Health - Allergy Analytics Study</b></div>
-      </div>
-      <div class="menu" style="visibility:hidden;">
-        <div class="menuItem" id="population" style="font-weight:normal;" onclick="updateDataType('population')">Population</div>
-        <div class="menuItem" id="developed" style="font-weight:normal;" onclick="updateDataType('developed')">Developing Allergies</div>
-        <div class="menuItem" id="outgrown" style="font-weight:normal;" onclick="updateDataType('outgrown')">Outgrowing Allergies</div>
       </div>
     </div>
   </div>
@@ -42,7 +37,7 @@
         <div class='datalabel'>Data Source</div>
 
         <div class='datasource'>
-          <select class="datasourcelist" class="allergyCombo" onchange="changeDataSource(this)" id='datasource' name='allergy'>
+          <select class="datasourcelist" class="allergyCombo" onchange="updateDataType(this)" id='datasource' name='allergy'>
             <option value='Peanut'>General Population Density</option>
             <option value='Tree nut'>Patients Developing Allergies</option>
             <option value='Fish'>Patients Outgrowing Allergies</option>

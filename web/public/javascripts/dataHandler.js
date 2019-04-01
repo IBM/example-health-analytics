@@ -5,24 +5,20 @@
  /**
   * Updates data type in storage and reloads map/charts with data based on the data type
   *
-  * @param {String} newDataType
+  * @param {Object} dataSelection
   */
-function updateDataType(newDataType) {
-    if (getSessionStorage("dataType")) {
-        var previousSelectedMenuItem = document.getElementById(getSessionStorage("dataType"));
-        previousSelectedMenuItem.style.fontWeight = "normal";
+function updateDataType(dataSelection) {
+    var dataTypes = ["population", "developed", "outgrown"];
+
+    if(dataSelection) {
+        setSessionStorage("dataType", dataTypes[dataSelection.selectedIndex]);
+    } else {
+        if (!getSessionStorage("dataType")) {
+            setSessionStorage("dataType", dataTypes[0]);
+        }
     }
 
-    var newSelectedMenuItem = document.getElementById(newDataType);
-    newSelectedMenuItem.style.fontWeight = "bold";
-
-    setSessionStorage("dataType", newDataType);
     load();
-}
-
-function changeDataSource(dataSelection) {
-  var dataSources = ["population", "developed", "outgrown"]
-  updateDataType(dataSources[dataSelection.selectedIndex]);
 }
 
 /**

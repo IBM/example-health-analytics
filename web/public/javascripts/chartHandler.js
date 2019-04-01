@@ -204,8 +204,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
 
             switch (dataValueType) {
                 case "total":  
-                    minDiv.innerHTML = "Min: " + data.populationStats.min.population + " (" + data.populationStats.min.city + ")";
-                    maxDiv.innerHTML = "Max: " + data.populationStats.max.population + " (" + data.populationStats.max.city + ")";
+                    minDiv.innerHTML = "Min: " + data.populationStats.min.population + " (" + data.populationStats.min.city + ", " + data.populationStats.min.state + ")";
+                    maxDiv.innerHTML = "Max: " + data.populationStats.max.population + " (" + data.populationStats.max.city + ", " + data.populationStats.max.state + ")";
                     meanDiv.innerHTML = "Mean: " + Math.round(data.populationStats.mean * 100) / 100;
 
                     break;
@@ -214,8 +214,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
                     var max = data.populationStats.max.percentage*100;
                     var mean = (1/data.populationStats.cities.length)*100;
 
-                    minDiv.innerHTML = "Min: " + Math.round(min * 100) / 100 + "% (" + data.populationStats.min.city + ")";
-                    maxDiv.innerHTML = "Max: " + Math.round(max * 100) / 100 + "% (" + data.populationStats.max.city + ")";
+                    minDiv.innerHTML = "Min: " + Math.round(min * 100) / 100 + "% (" + data.populationStats.min.city + ", " + data.populationStats.min.state + ")";
+                    maxDiv.innerHTML = "Max: " + Math.round(max * 100) / 100 + "% (" + data.populationStats.max.city + ", " + data.populationStats.max.state + ")";
                     meanDiv.innerHTML = "Mean: " + Math.round(mean * 100) / 100 + "%";
 
                     break;
@@ -232,8 +232,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
                 case "total":
                     for (let i = 0; i < data.allergyStats.stats.developed.length; i++) {
                         if (allergy == data.allergyStats.stats.developed[i].allergy) {
-                            minDiv.innerHTML = "Min: " + data.allergyStats.stats.developed[i].min.total.min + " (" + data.allergyStats.stats.developed[i].min.total.city + ")";
-                            maxDiv.innerHTML = "Max: " + data.allergyStats.stats.developed[i].max.total.max + " (" + data.allergyStats.stats.developed[i].max.total.city + ")";
+                            minDiv.innerHTML = "Min: " + data.allergyStats.stats.developed[i].min.total.min + " (" + data.allergyStats.stats.developed[i].min.total.city + ", " + data.allergyStats.stats.developed[i].min.total.state + ")";
+                            maxDiv.innerHTML = "Max: " + data.allergyStats.stats.developed[i].max.total.max + " (" + data.allergyStats.stats.developed[i].max.total.city + ", " + data.allergyStats.stats.developed[i].max.total.state + ")";
                             meanDiv.innerHTML = "Mean: " + Math.round(data.allergyStats.stats.developed[i].mean.total * 100) / 100;
                         }
                     }
@@ -246,8 +246,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
                             var max = data.allergyStats.stats.developed[i].max.percentage.max*100;
                             var mean = data.allergyStats.stats.developed[i].mean.percentage*100;
 
-                            minDiv.innerHTML = "Min: " +  Math.round(min * 100) / 100 + "% (" + data.allergyStats.stats.developed[i].min.percentage.city + ")";
-                            maxDiv.innerHTML = "Max: " +  Math.round(max * 100) / 100 + "% (" + data.allergyStats.stats.developed[i].max.percentage.city + ")";
+                            minDiv.innerHTML = "Min: " +  Math.round(min * 100) / 100 + "% (" + data.allergyStats.stats.developed[i].min.percentage.city + ", " + data.allergyStats.stats.developed[i].min.percentage.state + ")";
+                            maxDiv.innerHTML = "Max: " +  Math.round(max * 100) / 100 + "% (" + data.allergyStats.stats.developed[i].max.percentage.city + ", " + data.allergyStats.stats.developed[i].max.percentage.state + ")";
                             meanDiv.innerHTML = "Mean: " +  Math.round(mean * 100) / 100 + "%";
                         }
                     }
@@ -266,8 +266,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
                 case "total":
                     for (let i = 0; i < data.allergyStats.stats.outgrown.length; i++) {
                         if (allergy == data.allergyStats.stats.outgrown[i].allergy) {
-                            minDiv.innerHTML = "Min: " + data.allergyStats.stats.outgrown[i].min.total.min + " (" + data.allergyStats.stats.outgrown[i].min.total.city + ")";
-                            maxDiv.innerHTML = "Max: " + data.allergyStats.stats.outgrown[i].max.total.max + " (" + data.allergyStats.stats.outgrown[i].max.total.city + ")";
+                            minDiv.innerHTML = "Min: " + data.allergyStats.stats.outgrown[i].min.total.min + " (" + data.allergyStats.stats.outgrown[i].min.total.city + ", " + data.allergyStats.stats.outgrown[i].min.total.state + ")";
+                            maxDiv.innerHTML = "Max: " + data.allergyStats.stats.outgrown[i].max.total.max + " (" + data.allergyStats.stats.outgrown[i].max.total.city + ", " + data.allergyStats.stats.outgrown[i].max.total.state + ")";
                             meanDiv.innerHTML = "Mean: " + Math.round(data.allergyStats.stats.outgrown[i].mean.total * 100) / 100;
                         }
                     }
@@ -280,8 +280,8 @@ function updateStats(dataType, data, allergy, dataValueType) {
                             var max = data.allergyStats.stats.outgrown[i].max.percentage.max*100;
                             var mean = data.allergyStats.stats.outgrown[i].mean.percentage*100;
 
-                            minDiv.innerHTML = "Min: " + Math.round(min * 100) / 100 + "% (" + data.allergyStats.stats.outgrown[i].min.percentage.city + ")";
-                            maxDiv.innerHTML = "Max: " + Math.round(max * 100) / 100 + "% (" + data.allergyStats.stats.outgrown[i].max.percentage.city + ")";
+                            minDiv.innerHTML = "Min: " + Math.round(min * 100) / 100 + "% (" + data.allergyStats.stats.outgrown[i].min.percentage.city + ", " + data.allergyStats.stats.outgrown[i].min.percentage.state + ")";
+                            maxDiv.innerHTML = "Max: " + Math.round(max * 100) / 100 + "% (" + data.allergyStats.stats.outgrown[i].max.percentage.city + ", " + data.allergyStats.stats.outgrown[i].max.percentage.state + ")";
                             meanDiv.innerHTML = "Mean: " + Math.round(mean * 100) / 100 + "%";
                         }
                     }
