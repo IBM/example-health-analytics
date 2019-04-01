@@ -2,7 +2,7 @@
 
 # Summit Health Analytics
 
-This project is a conceptual Node.JS analytics web application for a health records system, designed to showcase best in class integration of modern cloud technology, in collaboration with legacy mainframe code.
+This project is a conceptual Node.js analytics web application for a health records system, designed to showcase best in class integration of modern cloud technology, in collaboration with legacy mainframe code.
 
 ## Summit Health Context
 
@@ -36,8 +36,8 @@ Their CTO sees an architecture for Summit Health like this:
 2. API Connect APIs process relevant health records data from zOS Mainframe data warehouse and send the data through the data pipeline.
 3. The Data Service data pipeline processes zOS Mainframe data warehouse data and updates MongoDB data lake.
 4. User interacts with the UI to view and analyze analytics.
-5. The functionality of the App UI that the User interacts with is handled by Node.JS. Node.JS is where the API calls are initialized.
-6. The API calls are processed in the Node.JS data service and are handled accordingly.
+5. The functionality of the App UI that the User interacts with is handled by Node.js. Node.js is where the API calls are initialized.
+6. The API calls are processed in the Node.js data service and are handled accordingly.
 7. The data is gathered from the MongoDB data lake from API calls.
 8. The responses from the API calls are handled accordingly by the App UI.
 
@@ -45,13 +45,22 @@ Their CTO sees an architecture for Summit Health like this:
 
 Follow these steps to setup and run this code pattern locally and on the Cloud. The steps are described in detail below.
 
-1. [Prerequisites](#1-prerequisites)
-2. [Clone the repo](#2-clone-the-repo)
+1. [Clone the repo](#1-clone-the-repo)
+2. [Prerequisites](#2-prerequisites)
 3. [Get Mapbox Access Token](#3-get-mapbox-access-token)
 4. [Run the application](#4-run-the-application)
 5. [Deploy to IBM Cloud](#5-deploy-to-ibm-cloud)
 
-## 1. Prerequisites
+## 1. Clone the repo
+
+Clone the `summit-health-analytics` repo locally. In a terminal, run:
+
+```
+$ git clone https://github.com/IBM/summit-health-analytics
+$ cd summit-health-analytics
+```
+
+## 2. Prerequisites
 
 * [Docker](https://www.docker.com/products/docker-desktop)
 * [IBM Cloud account](https://cloud.ibm.com/registration)
@@ -64,26 +73,34 @@ For running these services locally without Docker containers, the following will
 * [NPM](https://www.npmjs.com/get-npm)
 * Relevant Node Components: Use `npm install` in `/data-service` and `/web`
 
-## 2. Clone the repo
-
-Clone the `summit-health-analytics` repo locally. In a terminal, run:
-
-```
-$ git clone https://github.com/IBM/summit-health-analytics
-$ cd summit-health-analytics
-```
-
 ## 3. Get Mapbox Access Token
 
 1. In order to make API calls to help in populating the Mapbox map used, a [Mapbox access token](https://www.mapbox.com/account/access-tokens) will be needed.
-2. Assign the access token to the `mapboxgl.accessToken` variable in `web/public/javascripts/mapHandler.js` and to the `accessToken` variable in `web/public/javascripts/dataHandler.js`.
+2. Assign the access token to `mapbox.accessToken` in `/data-service/properties.ini` and `mapboxAccessToken` in `/web/public/javascripts/properties.js`.
 
 ## 4. Run the application
 
+* [zOS Mainframe Data](#zos-mainframe-data)
+* [Generate Data](#generate-data)
+
+### zOS Mainframe Data
+
+If your data source for this application is on a zOS Mainframe, follow these steps for populating the datalake and running the application:
+
+1. Assign the API Connect URL to `zsystem.api` in `/data-service/properties.ini`
+2. Start the application by running `docker-compose up --build` in this repo's root directory.
+3. Once the containers are created and the application is running, use the Open API Doc (Swagger) at `http://localhost:3000` and [API.md](data-service/API.md) for instructions on how to use the APIs.
+4. Run `curl localhost:3000/api/v1/update -X PUT` to connect to the zOS Mainframe and populate the data lake. For information on the data lake and data service, read the data service [README.md](data-service/README.md).
+5. Once the data has been populated in the data lake, use `http://localhost:4000` to access the Summit Health Analytics UI. For information on the analytics data and UI, read the web [README.md](web/README.md).
+
+### Generate Data
+
+If you do not have a data source for this application and would like to generate mock data, follow these steps for populating the datalake and running the application:
+
 1. Start the application by running `docker-compose up --build` in this repo's root directory.
 2. Once the containers are created and the application is running, use the Open API Doc (Swagger) at `http://localhost:3000` and [API.md](data-service/API.md) for instructions on how to use the APIs.
-3. Use the provided `generate/generate.sh` script to generate and populate data. Use [README.md](generate/README.md) for instructions on how to use the script.
-4. Once the data has been populated in the data lake, use `http://localhost:4000` to access the Summit Health Analytics UI.
+3. Use the provided `generate/generate.sh` script to generate and populate data. Read [README.md](generate/README.md) for instructions on how to use the script. For information on the data lake and data service, read the data service [README.md](data-service/README.md).
+4. Once the data has been populated in the data lake, use `http://localhost:4000` to access the Summit Health Analytics UI. For information on the analytics data and UI, read the web [README.md](web/README.md).
 
 ## 5. Deploy to IBM Cloud
 
@@ -151,18 +168,37 @@ $ kubectl apply -f ingress-webapp.yml
 
 1. Provision two [SDK for Node.js](https://cloud.ibm.com/catalog/starters/sdk-for-nodejs) applications. One will be for `./data-service` and the other will be for `./web`.
 
-2. Provision [Compose for MongoDB](https://cloud.ibm.com/catalog/services/compose-for-mongodb).
+2. Provision a [Compose for MongoDB](https://cloud.ibm.com/catalog/services/compose-for-mongodb) database.
 
 3. Update the following in the [manifest.yml](manifest.yml) file:
 
+
 * `name` for both Cloud Foundry application names provisioned from Step 1.
+
+![](readme_images/cf_node_name.png)
+
+
 * `services` with the name of the MongoDB service provisioned from Step 2.
+
+![](readme_images/cf_mongo_name.png)
+
+
 * `HOST_IP` and `DATA_SERVER` with the host name and domain of the `data-service` from Step 1.
+
+![](readme_images/cf_node_host_domain.png)
+
+
 * `MONGODB` with the HTTPS Connection String of the MongoDB provisioned from Step 2. This can be found under *Manage > Overview* of the database dashboard.
 
-4. To deploy the services to IBM Cloud Foundry, go to one of the dashboards of the apps provisioned from Step 1 and follow the *Getting Started* instructions for connecting and logging in to IBM Cloud from the console. Once logged in, run `ibmcloud app push` from the root directory.
+![](readme_images/cf_mongo_url.png)
 
-5. Use `https://<WEB-HOST-NAME>.<WEB-DOMAIN>` to access the UI and the Open API Doc (Swagger) at `https://<DATA-SERVICE-HOST-NAME>.<DATA-SERVICE-DOMAIN>` for instructions on how to make API calls.
+4. Connect the Compose for MongoDB database with the data service Node.js app by going to *Connections* on the dashboard of the data service app provisioned and clicking *Create Connection*. Locate the Compose for MongoDB database you provisioned and press *connect*.
+
+![](readme_images/cf_node_connect_mongo.png)
+
+5. To deploy the services to IBM Cloud Foundry, go to one of the dashboards of the apps provisioned from Step 1 and follow the *Getting Started* instructions for connecting and logging in to IBM Cloud from the console (Step 3 of *Getting Started*). Once logged in, run `ibmcloud app push` from the root directory.
+
+6. Use `https://<WEB-HOST-NAME>.<WEB-DOMAIN>` to access the UI and the Open API Doc (Swagger) at `https://<DATA-SERVICE-HOST-NAME>.<DATA-SERVICE-DOMAIN>` for instructions on how to make API calls.
 
 # License
 
