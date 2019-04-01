@@ -28,11 +28,13 @@ __Data Structure__
     }],
     min: {
         city: String,
+        state: String,
         percentage: Float,
         population: Int
     },
     max: {
         city: String,
+        state: String,
         percentage: Float,
         population: Int
     },
@@ -51,7 +53,7 @@ __Data Structure__
 
 ## Allergy
 
-The allergy statistics are looked at from a city level. The statisitcs focus on total alelrgies for a city, types of allergies (food, outdoor, other), and specific allergies (developed and outgrown).
+The allergy statistics are looked at from a city level. The statisitcs focus on specific allergies (developed and outgrown).
 
 __Data Structure__
 
@@ -60,15 +62,6 @@ __Data Structure__
     cities: [{
         city: String,
         state: String,
-        total: {
-            total: Int,
-            percentage: Float
-        },
-        type: [{
-            type: String,
-            total: Int,
-            percentage: Float
-        }],
         allergies: [{
             allergy: String,
             type: String,
@@ -85,78 +78,29 @@ __Data Structure__
         }]
     }],
     stats: {
-        total: {
-            min: {
-                total: {
-                    city: String, 
-                    min: Int
-                },
-                percentage: {
-                    city: String, 
-                    min: Float
-                }
-            },
-            max: {
-                total: {
-                    city: String, 
-                    max: Int
-                },
-                percentage: {
-                    city: String, 
-                    max: Float
-                }
-            },
-            mean: {
-                total: Float,
-                percentage: Float
-            }
-        },
-        type: [{
-            type: String,
-            min: {
-                total: {
-                    city: String, 
-                    min: Int
-                },
-                percentage: {
-                    city: String, 
-                    min: Float
-                }
-            },
-            max: {
-                total: {
-                    city: String, 
-                    max: Int
-                },
-                percentage: {
-                    city: String, 
-                    max: Float
-                }
-            },
-            mean: {
-                total: Float,
-                percentage: Float
-            }
-        }],
         outgrown: [{
             allergy: String,
             min: {
                 total: {
-                    city: String, 
+                    city: String,
+                    state: String, 
                     min: Int
                 },
                 percentage: {
                     city: String, 
+                    state: String, 
                     min: Float
                 }
             },
             max: {
                 total: {
                     city: String, 
+                    state: String, 
                     max: Int
                 },
                 percentage: {
                     city: String, 
+                    state: String, 
                     max: Float
                 }
             },
@@ -170,20 +114,24 @@ __Data Structure__
             min: {
                 total: {
                     city: String, 
+                    state: String, 
                     min: Int
                 },
                 percentage: {
                     city: String, 
+                    state: String, 
                     min: Float
                 }
             },
             max: {
                 total: {
                     city: String, 
+                    state: String, 
                     max: Int
                 },
                 percentage: {
                     city: String, 
+                    state: String, 
                     max: Float
                 }
             },
@@ -199,15 +147,6 @@ __Data Structure__
 * **cities**: A list of cities where each city includes:
     * **city**: The name of a city
     * **state**: The name of a state a city is in
-    * **total**: Total allergies for a city that includes: 
-        > NOTE: Currently incorrect and will need more data to fix
-
-        * **total**: The total city population that has allergies
-        * **percentage**: The percentage of a city population that has allergies
-    * **type**: A list of allergy types (food, outdoor, other) for a city that includes:
-        * **type**: The name of the allergy type
-        * **total**: The total city population that has an allergy type
-        * **percentage**: The percentage of a city population that has an allergy type
     * **allergies**: A list of alleriges for a city that includes:
         * **allergy**: The name of the allergy
         * **type**: The type of the allergy
@@ -219,13 +158,9 @@ __Data Structure__
             * **total**: The total city population that has developed an allergy
             * **percentage**: The percentage of a city population that has developed an allergy
             * **ages**: A list of the ages of a city population that has developed an allergy
-* **stats**: Minimum, maximum, and Mean stats for the following:
+* **stats**: Minimum, maximum, and mean stats for the following:
     > NOTE: Stats are broken down by total and percentage, because they may not both refer to the same city
 
-    * **total**: Total allergies for a city
-        > NOTE: Currently incorrect and will need more data to fix
-
-    * **type**: A list of different allergy types and their respective stats
     * **outgrown**: A list of different allergies outgrown and their respective stats
     * **developed**: A list of different allergies developed and their respective stats
 
