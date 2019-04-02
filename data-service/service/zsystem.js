@@ -1,3 +1,7 @@
+/**
+ * Service for handling and processing data from zOS mainframe
+ */
+
 var request = require('request');
 const fetch = require("node-fetch");
 var PropertiesReader = require('properties-reader');
@@ -53,7 +57,7 @@ var allergyTypes = [
 ]
 
 /**
- * Gets the city population from zOS system API
+ * Gets the city population from zOS mainframe API
  */
 function getCityPopulation() {
 	return new Promise(function(resolve, reject) {
@@ -70,7 +74,7 @@ function getCityPopulation() {
 }
 
 /**
- * Gets the allergy data from zOS system API
+ * Gets the allergy data from zOS mainframe API
  */
 function getAllergies() {
 	return new Promise(function(resolve, reject) {
@@ -109,7 +113,7 @@ function getState(zipcode, city) {
 }
 
 /**
- * Processes and returns data from zOS system
+ * Processes and returns data from zOS mainframe
  */
 function getDataFromZSystem() {
 	
