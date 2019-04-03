@@ -9,7 +9,7 @@
 
 # Update
 
-This works as a data pipeline by handling and updating patient and allergy data from the Patient Records Database on the zOS System to the MongoDB Data Lake
+This works as a data pipeline by handling and updating patient and allergy data from the Patient Records Database on the zOS mainframe to the MongoDB Data Lake
 
 __Command__
 
@@ -23,9 +23,11 @@ Success: The response is a 200 status code.
 
 Data not transferred: When the data is not transferred and updated in the Data Lake (ex. can't access database), the response is a 500 status code.
 
+Mainframe error: When there is an error calling the APIs associated with the zOS mainframe, the response is a 502 status code.
+
 # Generate
 
-This is used as an alternative data pipeline to the zOS system by using locally generated Synthea data to populate the MongoDB Data Lake
+This is used as an alternative data pipeline to the zOS mainframe by using locally generated Synthea data to populate the MongoDB Data Lake
 
 __Command__
 

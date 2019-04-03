@@ -14,13 +14,18 @@ const util = require('util');
 router.put('/', function(req, res, next) {
 
 	zsystem.getDataFromZSystem().then(datalakeData => {
-		var updateAnalytics = datalake.updateAnalytics(datalakeData);
 
-		updateAnalytics.then(function(success) {
-			res.sendStatus(200);
-		}).catch(function (err) {
-			res.sendStatus(500);
-		});
+		if (!datalakeData) {
+			res.sendStatus(502);
+		} else {
+			var updateAnalytics = datalake.updateAnalytics(datalakeData);
+
+			updateAnalytics.then(function(success) {
+				res.sendStatus(200);
+			}).catch(function (err) {
+				res.sendStatus(500);
+			});
+		}
 	})
 	
 });
