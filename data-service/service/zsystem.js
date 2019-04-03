@@ -67,7 +67,7 @@ function getCityPopulation() {
 				var cities = body["ResultSet Output"];
 				return resolve(cities);
 	  		} else {
-	  			return resolve({});
+	  			return resolve(null);
 	  		}
 	  	});
 	})
@@ -84,7 +84,7 @@ function getAllergies() {
 				var allergies = body["ResultSet Output"];
 				return resolve(allergies);
 	  		} else {
-	  			return resolve({});
+	  			return resolve(null);
 	  		}
 	  	});
 	})
@@ -129,6 +129,10 @@ function getDataFromZSystem() {
 
 		getCityPopulation().then(cities => {
 			getAllergies().then(allergies => {
+
+				if (!cities || !allergies) {
+					resolve(null);
+				}
 
 				var nullCities = 0;
 				var duplicateCities = 0;
