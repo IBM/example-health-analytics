@@ -21,7 +21,7 @@ function updateMap(dataType, allergy, dataValueType) {
             center: [-110.5467, 46.0731],
             zoom: 2.5,
             minZoom: 2.5,
-            maxZoom: 12
+            maxZoom: 14
         });
 
 
