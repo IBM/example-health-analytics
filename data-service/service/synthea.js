@@ -109,12 +109,13 @@ function generateFromSynthea(syntheaData) {
 						}
 
 						var developedDate = new Date(syntheaData.allergies[allergy].START);
-						var today = new Date(Date.now());
-						datalakeData.cities[city].allergies[cityAllergy].developed.push(today.getFullYear()-developedDate.getFullYear());
+						var birthDate = new Date(syntheaData.patients[patient].BIRTHDATE);
+
+						datalakeData.cities[city].allergies[cityAllergy].developed.push(developedDate.getFullYear()-birthDate.getFullYear());
 
 						if (syntheaData.allergies[allergy].STOP != "") {
 							var outgrownDate = new Date(syntheaData.allergies[allergy].STOP);
-							datalakeData.cities[city].allergies[cityAllergy].outgrown.push(today.getFullYear()-outgrownDate.getFullYear());
+							datalakeData.cities[city].allergies[cityAllergy].outgrown.push(outgrownDate.getFullYear()-birthDate.getFullYear());
 						}
 					}
 				}
