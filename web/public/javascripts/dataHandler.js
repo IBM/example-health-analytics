@@ -514,6 +514,8 @@ function fixDuplicates(chartData) {
  */
 function load() {
 
+    document.getElementById("loader").style.visibility = "visible";
+
     if (!sessionStorage.getItem("dataType")) {
         sessionStorage.setItem("dataType", "population"); // Default
     }
@@ -536,5 +538,7 @@ function load() {
         allergySelectDiv.style.visibility = "visible";
     }
 
-    updateMap(dataType, allergy, dataValueType);
+    updateMap(dataType, allergy, dataValueType).then(isUpdated => {
+        document.getElementById("loader").style.visibility = "hidden";
+    })
 }
