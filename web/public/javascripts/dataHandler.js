@@ -471,6 +471,7 @@ getCounty = async(city, state, coordinateData) => {
  */
 function fixDuplicates(chartData) {
     var states = [];
+    var counties = [];
 
     for (var city = 0; city < chartData.length; city++) {
         if (!states.includes(chartData[city][2])) {
@@ -492,6 +493,16 @@ function fixDuplicates(chartData) {
                 chartData[city][0] = chartData[city][0] + " (" + chartData[city][2] + ")";
                 chartData[otherCity][0] = chartData[otherCity][0] + " (" + chartData[otherCity][2] + ")";
             }
+
+            if (chartData[city][1] == chartData[otherCity][1] && chartData[city][2] != chartData[otherCity][2]) {
+                counties.push(chartData[city][1]);
+            }
+        }
+    }
+
+    for (var city = 0; city < chartData.length; city++) {
+        if (counties.includes(chartData[city][1])) {
+            chartData[city][1] = chartData[city][1] + " (" + chartData[city][2] + ")";
         }
     }
 

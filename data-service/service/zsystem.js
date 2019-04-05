@@ -78,7 +78,7 @@ function getCityPopulation() {
  */
 function getAllergies() {
 	return new Promise(function(resolve, reject) {
-		request.post(API_URL + "showAllergies/", function (error, response, body) {
+		request(API_URL + "showAllergies/", function (error, response, body) {
 	 		if (!error && response.statusCode == 200) {
 	 			body = JSON.parse(body);
 				var allergies = body["ResultSet Output"];
@@ -170,7 +170,7 @@ function getDataFromZSystem() {
 							}
 
 							for (var allergy = 0; allergy < allergies.length; allergy++) {
-								if (allergies[allergy].CITY.trim() == currentCity.city) {
+								if (allergies[allergy].CITY.trim() == currentCity.city && allergies[allergy].POSTCODE.trim() == cities[city].POSTCODE.trim()) {
 									for (var allergyType = 0; allergyType < allergyTypes.length; allergyType++) {
 										if (allergyTypes[allergyType].zsystem == allergies[allergy].DESCRIPTION) {
 											if (datalakeData.allergies.indexOf(allergyTypes[allergyType].analytics) == -1) {
@@ -196,12 +196,13 @@ function getDataFromZSystem() {
 											}
 
 											var developedDate = new Date(allergies[allergy].ALLERGY_START);
-											var today = new Date(Date.now());
-											currentCity.allergies[cityAllergy].developed.push(today.getFullYear()-developedDate.getFullYear());
+											var birthDate = new Date(allergies[allergy].BIRTHDATE);
+
+											currentCity.allergies[cityAllergy].developed.push(developedDate.getFullYear()-birthDate.getFullYear());
 
 											if (allergies[allergy].ALLERGY_STOP != null) {
 												var outgrownDate = new Date(allergies[allergy].ALLERGY_STOP);
-												currentCity.allergies[cityAllergy].outgrown.push(today.getFullYear()-outgrownDate.getFullYear());
+												currentCity.allergies[cityAllergy].outgrown.push(outgrownDate.getFullYear()-birthDate.getFullYear());
 											}
 										}
 									}
