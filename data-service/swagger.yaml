@@ -24,7 +24,7 @@ tags:
   - name: Allergies
     description: Operations associated with allergies
 schemes:
-  - https
+  - http
 paths:
   /update:
     put:

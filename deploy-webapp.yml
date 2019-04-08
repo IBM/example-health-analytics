@@ -19,7 +19,7 @@ spec:
             - containerPort: 4000
           env:
             - name: DATA_SERVER
-              value: https://api.<INGRESS_SUBDOMAIN>
+              value: <SCHEME>://<IP_OR_SUBDOMAIN>
 ---
 apiVersion: v1
 kind: Service

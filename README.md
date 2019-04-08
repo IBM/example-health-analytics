@@ -128,7 +128,7 @@ $ docker push $DOCKERHUB_USERNAME/summithealthanalyticsweb:latest
 
 #### Lite Cluster Instructions
 
-3. Run `bx cs workers mycluster` and locate the `Public IP`. This IP is used to access the worklog API and UI (Flask Application). Update the `env` values in both [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml) to the `Public IP`.
+3. Run `bx cs workers mycluster` and locate the `Public IP`. This IP is used to access the Data Service and UI on the Cloud. Update the `env` values for `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to the `Public IP` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `http://<Public IP>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `http`.
 
 4. To deploy the services to the IBM Cloud Kubernetes Service, run:
 
@@ -141,11 +141,11 @@ $ kubectl apply -f deploy-webapp.yml
 $ kubectl get pods
 ```
 
-5. Use `https://PUBLIC_IP:32001` to access the UI and the Open API Doc (Swagger) at `https://PUBLIC_IP:32000` for instructions on how to make API calls.
+5. Use `http://PUBLIC_IP:32001` to access the UI and the Open API Doc (Swagger) at `http://PUBLIC_IP:32000` for instructions on how to make API calls.
 
 #### Standard Cluster Instructions
 
-3. Run `bx cs cluster-get <CLUSTER_NAME>` and locate the `Ingress Subdomain` and `Ingress Secret`. This is the domain of the URL that is to be used to access the Data Service and UI on the Cloud. Update the `env` values in both [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml) to the `Ingress Subdomain`. In addition, update the `host` and `secretName` in [ingress-dataservice.yml](ingress-dataservice.yml) and [ingress-webapp.yml](ingress-webapp.yml) to `Ingress Subdomain` and `Ingress Secret`.
+3. Run `bx cs cluster-get <CLUSTER_NAME>` and locate the `Ingress Subdomain` and `Ingress Secret`. This is the domain of the URL that is to be used to access the Data Service and UI on the Cloud. Update the `env` values for  `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to `api.<Ingress Subdomain>` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `https://api.<Ingress Subdomain>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `https`. In addition, update the `host` and `secretName` in [ingress-dataservice.yml](ingress-dataservice.yml) and [ingress-webapp.yml](ingress-webapp.yml) to `Ingress Subdomain` and `Ingress Secret`.
 
 4. To deploy the services to the IBM Cloud Kubernetes Service, run:
 

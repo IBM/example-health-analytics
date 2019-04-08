@@ -10,6 +10,8 @@ var swaggerUi = require('swagger-ui-express');
 var YAML = require('yamljs');
 var swaggerDocument = YAML.load('swagger.yaml');
 swaggerDocument.host = process.env.HOST_IP || "localhost:3000";
+var scheme = process.env.SCHEME || "http";
+swaggerDocument.schemes = [scheme];
 
 var updateRouter = require('./routes/update');
 var populationRouter = require('./routes/population');
