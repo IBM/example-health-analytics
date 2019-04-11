@@ -55,9 +55,9 @@ Follow these steps to setup and run this code pattern locally and on the Cloud. 
 
 Clone the `summit-health-analytics` repo locally. In a terminal, run:
 
-```
-$ git clone https://github.com/IBM/summit-health-analytics
-$ cd summit-health-analytics
+```bash
+git clone https://github.com/IBM/summit-health-analytics
+cd summit-health-analytics
 ```
 
 ## 2. Prerequisites
@@ -109,36 +109,60 @@ If you do not have a data source for this application and would like to generate
 
 ### Kubernetes
 
-1. To allow changes to the Data Service or the UI, create a repo on [Docker Cloud](https://cloud.docker.com/) where the new modified containers will be pushed to. 
+1. To allow changes to the Data Service or the UI, create a repo on [Docker Cloud](https://cloud.docker.com/) where the new modified containers will be pushed to.
 > NOTE: If a new repo is used for the Docker containers, the container `image` will need to be modified to the name of the new repo used in [deploy-dataservice.yml](deploy-dataservice.yml) and/or [deploy-webapp.yml](deploy-webapp.yml).
 
-```
-$ export DOCKERHUB_USERNAME=<your-dockerhub-username>
+```bash
+export DOCKERHUB_USERNAME=<your-dockerhub-username>
 
-$ docker build -t $DOCKERHUB_USERNAME/summithealthanalyticsdata:latest data-service/
-$ docker build -t $DOCKERHUB_USERNAME/summithealthanalyticsweb:latest web/
+docker build -t $DOCKERHUB_USERNAME/summithealthanalyticsdata:latest data-service/
+docker build -t $DOCKERHUB_USERNAME/summithealthanalyticsweb:latest web/
 
-$ docker login
+docker login
 
-$ docker push $DOCKERHUB_USERNAME/summithealthanalyticsdata:latest
-$ docker push $DOCKERHUB_USERNAME/summithealthanalyticsweb:latest
+docker push $DOCKERHUB_USERNAME/summithealthanalyticsdata:latest
+docker push $DOCKERHUB_USERNAME/summithealthanalyticsweb:latest
 ```
 
 2. Provision the [IBM Cloud Kubernetes Service](https://cloud.ibm.com/kubernetes/catalog/cluster) and follow the set of instructions for creating a Container and Cluster based on your cluster type, `Standard` vs `Lite`.
 
+* Login to the IBM Cloud using the [Developer Tools CLI](https://www.ibm.com/cloud/cli):
+> NOTE use `--sso` if you have a single sign on account, or delete for username/password login
+
+```bash
+ibmcloud login --sso
+```
+
+* Set the Kubernetes environment to work with your cluster:
+
+```bash
+ibmcloud cs cluster-config $CLUSTER_NAME
+```
+
+The output of this command will contain a KUBECONFIG environment variable that must be exported in order to set the context. Copy and paste the output in the terminal window. An example is:
+
+```bash
+export KUBECONFIG=/home/rak/.bluemix/plugins/container-service/clusters/Kate/kube-config-prod-dal10-<cluster_name>.yml
+```
+
 #### Lite Cluster Instructions
 
-3. Run `bx cs workers mycluster` and locate the `Public IP`. This IP is used to access the Data Service and UI on the Cloud. Update the `env` values for `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to the `Public IP` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `http://<Public IP>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `http`.
+3. Get the workers for your Kubernetes cluster:
+
+```bash
+ibmcloud cs workers <mycluster>
+```
+and locate the `Public IP`. This IP is used to access the Data Service and UI on the Cloud. Update the `env` values for `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to the `Public IP` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `http://<Public IP>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `http`.
 
 4. To deploy the services to the IBM Cloud Kubernetes Service, run:
 
-```
-$ kubectl apply -f deploy-mongodb.yml
-$ kubectl apply -f deploy-dataservice.yml
-$ kubectl apply -f deploy-webapp.yml
+```bash
+kubectl apply -f deploy-mongodb.yml
+kubectl apply -f deploy-dataservice.yml
+kubectl apply -f deploy-webapp.yml
 
 ## Confirm the services are running - this may take a minute
-$ kubectl get pods
+kubectl get pods
 ```
 
 5. Use `http://PUBLIC_IP:32001` to access the UI and the Open API Doc (Swagger) at `http://PUBLIC_IP:32000` for instructions on how to make API calls.
@@ -149,17 +173,17 @@ $ kubectl get pods
 
 4. To deploy the services to the IBM Cloud Kubernetes Service, run:
 
-```
-$ kubectl apply -f deploy-mongodb.yml
-$ kubectl apply -f deploy-dataservice.yml
-$ kubectl apply -f deploy-webapp.yml
+```bash
+kubectl apply -f deploy-mongodb.yml
+kubectl apply -f deploy-dataservice.yml
+kubectl apply -f deploy-webapp.yml
 
 ## Confirm the services are running - this may take a minute
-$ kubectl get pods
+kubectl get pods
 
 ## Update protocol being used to https
-$ kubectl apply -f ingress-dataservice.yml
-$ kubectl apply -f ingress-webapp.yml
+kubectl apply -f ingress-dataservice.yml
+kubectl apply -f ingress-webapp.yml
 ```
 
 5. Use `https://<INGRESS_SUBDOMAIN>` to access the UI and the Open API Doc (Swagger) at `https://api.<INGRESS_SUBDOMAIN>` for instructions on how to make API calls.
