@@ -169,7 +169,7 @@ kubectl get pods
 
 #### Standard Cluster Instructions
 
-3. Run `bx cs cluster-get <CLUSTER_NAME>` and locate the `Ingress Subdomain` and `Ingress Secret`. This is the domain of the URL that is to be used to access the Data Service and UI on the Cloud. Update the `env` values for  `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to `api.<Ingress Subdomain>` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `https://api.<Ingress Subdomain>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `https`. In addition, update the `host` and `secretName` in [ingress-dataservice.yml](ingress-dataservice.yml) and [ingress-webapp.yml](ingress-webapp.yml) to `Ingress Subdomain` and `Ingress Secret`.
+3. Run `ibmcloud cs cluster-get <CLUSTER_NAME>` and locate the `Ingress Subdomain` and `Ingress Secret`. This is the domain of the URL that is to be used to access the Data Service and UI on the Cloud. Update the `env` values for  `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to `api.<Ingress Subdomain>` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `https://api.<Ingress Subdomain>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `https`. In addition, update the `host` and `secretName` in [ingress-dataservice.yml](ingress-dataservice.yml) and [ingress-webapp.yml](ingress-webapp.yml) to `Ingress Subdomain` and `Ingress Secret`.
 
 4. To deploy the services to the IBM Cloud Kubernetes Service, run:
 
