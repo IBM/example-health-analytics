@@ -1,16 +1,15 @@
 ---
 dist: trusty
 cache: pip
-sudo: required
 language: java
 services:
   - docker
 before_install:
-  - sudo apt-get install shellcheck
-  - sudo pip install yamllint
+  - apt-get install shellcheck
+  - pip install yamllint
   - git clone https://github.com/IBM/pattern-ci
   - "./pattern-ci/scripts/install-nodejs.sh"
-  - sudo npm i -g csvtojson
+  - npm i -g csvtojson
 before_script:
   - "./pattern-ci/tests/shellcheck-lint.sh"
   - "./pattern-ci/tests/yaml-lint.sh 'data-service'"
