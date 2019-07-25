@@ -1,10 +1,10 @@
 swagger: '2.0'
 info:
   description: >-
-    This is a data service that handles analytics data for Summit Health
+    This is a data service that handles analytics data for Example Health
     Analytics
   version: 1.0.0
-  title: Summit Health Analytics Data Service
+  title: Example Health Analytics Data Service
   contact:
     email: maxshapiro32@ibm.com
   license:
@@ -14,7 +14,7 @@ host: 'localhost:3000'
 basePath: /api/v1
 tags:
   - name: Update
-    description: Operations associated with interacting with zOS mainframe
+    description: Operations associated with interacting with data source
   - name: Generate
     description: Operations associated with generated synthea data
   - name: Population
@@ -30,7 +30,7 @@ paths:
     put:
       tags:
         - Update
-      summary: Update data lake data from zOS mainframe
+      summary: Update data lake data from data source
       description: ''
       produces:
         - application/json
@@ -40,7 +40,7 @@ paths:
         '500':
           description: Internal Server Error
         '502':
-          description: Error connecting to zOS mainframe
+          description: Error connecting to data source
   /generate:
     put:
       tags:

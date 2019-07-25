@@ -1,63 +1,61 @@
 /**
- * Service for handling and processing data from zOS mainframe
+ * Service for handling and processing data from data source
  */
 
 var request = require('request');
 const fetch = require("node-fetch");
-var PropertiesReader = require('properties-reader');
-var properties = PropertiesReader('./properties.ini');
-var API_URL = properties.get('main.zsystem.api');
+var API_URL = process.env.DATA_SOURCE_API || "";
 
 var allergyTypes = [
-	{zsystem: "Allergy to peanuts",
+	{synthea: "Allergy to peanuts",
 		analytics: "Peanut",
 		type: "Food"},
-	{zsystem: "Allergy to nut",
+	{synthea: "Allergy to nut",
 		analytics: "Tree nut",
 		type: "Food"},
-	{zsystem: "Allergy to fish",
+	{synthea: "Allergy to fish",
 		analytics: "Fish",
 		type: "Food"},
-	{zsystem: "Shellfish allergy",
+	{synthea: "Shellfish allergy",
 		analytics: "Shellfish",
 		type: "Food"},
-	{zsystem: "Allergy to wheat",
+	{synthea: "Allergy to wheat",
 		analytics: "Wheat",
 		type: "Food"},
-	{zsystem: "Allergy to eggs",
+	{synthea: "Allergy to eggs",
 		analytics: "Egg",
 		type: "Food"},
-	{zsystem: "Allergy to soya",
+	{synthea: "Allergy to soya",
 		analytics: "Soy",
 		type: "Food"},
-	{zsystem: "Allergy to dairy product",
+	{synthea: "Allergy to dairy product",
 		analytics: "Dairy",
 		type: "Food"},
-	{zsystem: "Allergy to tree pollen",
+	{synthea: "Allergy to tree pollen",
 		analytics: "Tree Pollen",
 		type: "Outdoor"},
-	{zsystem: "Allergy to grass pollen",
+	{synthea: "Allergy to grass pollen",
 		analytics: "Grass Pollen",
 		type: "Outdoor"},
-	{zsystem: "Dander (animal) allergy",
+	{synthea: "Dander (animal) allergy",
 		analytics: "Pet Dander",
 		type: "Outdoor"},
-	{zsystem: "House dust mite allergy",
+	{synthea: "House dust mite allergy",
 		analytics: "Dust Mite",
 		type: "Outdoor"},
-	{zsystem: "Allergy to mould",
+	{synthea: "Allergy to mould",
 		analytics: "Mold",
 		type: "Outdoor"},
-	{zsystem: "Allergy to bee venom",
+	{synthea: "Allergy to bee venom",
 		analytics: "Bee Sting",
 		type: "Outdoor"},
-	{zsystem: "Latex allergy",
+	{synthea: "Latex allergy",
 		analytics: "Latex",
 		type: "Other"}
 ]
 
 /**
- * Gets the city population from zOS mainframe API
+ * Gets the city population from data source API
  */
 function getCityPopulation() {
 	return new Promise(function(resolve, reject) {
@@ -74,7 +72,7 @@ function getCityPopulation() {
 }
 
 /**
- * Gets the allergy data from zOS mainframe API
+ * Gets the allergy data from data source API
  */
 function getAllergies() {
 	return new Promise(function(resolve, reject) {
@@ -98,7 +96,7 @@ function getAllergies() {
  */
 function getState(zipcode, city) {
 	return new Promise(function(resolve, reject) {
-		var accessToken = properties.get('main.mapbox.accessToken');;
+		var accessToken = process.env.MAPBOX_ACCESS_TOKEN || "";
 		var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + zipcode + "%20United States.json?access_token=";
 
 		fetch(url+accessToken)
@@ -113,9 +111,9 @@ function getState(zipcode, city) {
 }
 
 /**
- * Processes and returns data from zOS mainframe
+ * Processes and returns data from data source
  */
-function getDataFromZSystem() {
+function getDataFromSource() {
 	
 	return new Promise(function(resolve, reject) {
 
@@ -172,7 +170,7 @@ function getDataFromZSystem() {
 							for (var allergy = 0; allergy < allergies.length; allergy++) {
 								if (allergies[allergy].CITY.trim() == currentCity.city && allergies[allergy].POSTCODE.trim() == cities[city].POSTCODE.trim()) {
 									for (var allergyType = 0; allergyType < allergyTypes.length; allergyType++) {
-										if (allergyTypes[allergyType].zsystem == allergies[allergy].DESCRIPTION) {
+										if (allergyTypes[allergyType].synthea == allergies[allergy].DESCRIPTION) {
 											if (datalakeData.allergies.indexOf(allergyTypes[allergyType].analytics) == -1) {
 												datalakeData.allergies.push(allergyTypes[allergyType].analytics);
 											}
@@ -200,7 +198,7 @@ function getDataFromZSystem() {
 
 											currentCity.allergies[cityAllergy].developed.push(developedDate.getFullYear()-birthDate.getFullYear());
 
-											if (allergies[allergy].ALLERGY_STOP != null) {
+											if (allergies[allergy].ALLERGY_STOP != null && allergies[allergy].ALLERGY_STOP.trim().length > 0) {
 												var outgrownDate = new Date(allergies[allergy].ALLERGY_STOP);
 												currentCity.allergies[cityAllergy].outgrown.push(outgrownDate.getFullYear()-birthDate.getFullYear());
 											}
@@ -228,4 +226,4 @@ function getDataFromZSystem() {
 	})
 }
 
-module.exports.getDataFromZSystem = getDataFromZSystem;
+module.exports.getDataFromSource = getDataFromSource;

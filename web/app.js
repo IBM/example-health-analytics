@@ -1,5 +1,5 @@
 /**
- * Main app.js file for web app of Summit Health Analytics
+ * Main app.js file for web app of Example Health Analytics
  */
 
 var createError = require('http-errors');

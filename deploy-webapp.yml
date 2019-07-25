@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: maxshapiro32/summithealthanalyticsweb
+          image: maxshapiro32/examplehealthanalyticsweb
           imagePullPolicy: Always
           ports:
             - containerPort: 4000

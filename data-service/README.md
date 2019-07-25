@@ -1,12 +1,12 @@
-# Summit Health Analytics Data Service
+# Example Health Analytics Data Service
 
 * [About](#about)
 * [Datalake](#datalake)
 
 # About
 
-This part of Summit Health Analytics is responsible for using APIs to:
-* Act as a data pipeline between the data warehouse (either zOS Mainframe or generated Synthea data) and the MongoDB data lake 
+This part of Example Health Analytics is responsible for using APIs to:
+* Act as a data pipeline between the data warehouse (either from a data source or generated Synthea data) and the MongoDB data lake 
 * Retrieve data from MongoDB data lake to be used for analytical analysis
 
 # Datalake

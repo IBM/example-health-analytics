@@ -1,4 +1,4 @@
-# Summit Health Analytics Front End
+# Example Health Analytics Front End
 
 * [About](#about)
 * [Analytics](#analytics)
@@ -6,7 +6,7 @@
 
 # About
 
-This part of Summit Health Analytics is responsible for calculating and displaying analytics on the paitent/allergy data stored in the MongoDB data lake.
+This part of Example Health Analytics is responsible for calculating and displaying analytics on the paitent/allergy data stored in the MongoDB data lake.
 
 # Analytics
 
