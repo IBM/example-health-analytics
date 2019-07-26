@@ -75,7 +75,7 @@ For running these services locally without Docker containers, the following will
 ## 3. Get Mapbox Access Token
 
 1. In order to make API calls to help in populating the Mapbox map used, a [Mapbox access token](https://www.mapbox.com/account/access-tokens) will be needed.
-2. Assign the access token to `MAPBOX_ACCESS_TOKEN` in [docker-compose.yml](docker-compose.yml) and `mapboxAccessToken` in `/web/public/javascripts/properties.js`.
+2. Assign the access token to `MAPBOX_ACCESS_TOKEN` in [docker-compose.yml](docker-compose.yml).
 
 ## 4. Run the application
 
@@ -155,7 +155,7 @@ ibmcloud cs workers <mycluster>
 ```
 and locate the `Public IP`. This IP is used to access the Data Service and UI on the Cloud. Update the `env` values for `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to `<Public IP>:32000` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `http://<Public IP>:32000`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `http`.
 
-4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml). If your data source for this application is on a zOS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
+4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml). If your data source for this application is on a zOS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
 > NOTE: If using the [Example Health JEE Application on Openshift](https://github.com/IBM/example-health-jee-openshift) as your data source, assign that API URL to `DATA_SOURCE_API`
 
 5. To deploy the services to the IBM Cloud Kubernetes Service, run:
@@ -175,7 +175,7 @@ kubectl get pods
 
 3. Run `ibmcloud cs cluster-get <CLUSTER_NAME>` and locate the `Ingress Subdomain` and `Ingress Secret`. This is the domain of the URL that is to be used to access the Data Service and UI on the Cloud. Update the `env` values for  `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to `api.<Ingress Subdomain>` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `https://api.<Ingress Subdomain>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `https`. In addition, update the `host` and `secretName` in [ingress-dataservice.yml](ingress-dataservice.yml) and [ingress-webapp.yml](ingress-webapp.yml) to `Ingress Subdomain` and `Ingress Secret`.
 
-4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml). If your data source for this application is on a zOS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
+4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml). If your data source for this application is on a zOS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
 > NOTE: If using the [Example Health JEE Application on Openshift](https://github.com/IBM/example-health-jee-openshift) as your data source, assign that API URL to `DATA_SOURCE_API`
 
 5. To deploy the services to the IBM Cloud Kubernetes Service, run:
