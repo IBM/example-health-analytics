@@ -14,3 +14,4 @@ applications:
     path: ./web
     env:
       DATA_SERVER: https://<DATA-SERVICE-HOST-NAME>.<DATA-SERVICE-DOMAIN>
+      MAPBOX_ACCESS_TOKEN: <MAPBOX_ACCESS_TOKEN>

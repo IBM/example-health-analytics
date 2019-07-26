@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 		getAllergyStats.then(function(allergyStats) {
 			//console.log(util.inspect({populationStats: populationStats, allergyStats: allergyStats}, false, null, true /* enable colors */));
 
-			res.send({populationStats: populationStats, allergyStats: allergyStats});
+			res.send({mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN, populationStats: populationStats, allergyStats: allergyStats});
 		})
 	})
 });

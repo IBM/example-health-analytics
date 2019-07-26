@@ -81,7 +81,7 @@ function setSessionStorage(key,value) {
   */
  processData = async(dataType, data, allergy, dataValueType) => {
 
-    mapData = [];
+    mapData = [data.mapboxAccessToken];
 
     var mapChartLabels = ['Location', 'Parent'];
     var mapChartData = [];

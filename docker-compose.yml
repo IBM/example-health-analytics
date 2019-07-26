@@ -35,3 +35,4 @@ services:
       - data
     environment:
       - DATA_SERVER=http://examplehealthdata:3000
+      - MAPBOX_ACCESS_TOKEN=<MAPBOX_ACCESS_TOKEN>

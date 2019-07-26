@@ -20,6 +20,8 @@ spec:
           env:
             - name: DATA_SERVER
               value: <SCHEME>://<IP_OR_SUBDOMAIN>
+            - name: MAPBOX_ACCESS_TOKEN
+              value: <MAPBOX_ACCESS_TOKEN>
 ---
 apiVersion: v1
 kind: Service
