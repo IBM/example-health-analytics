@@ -91,7 +91,7 @@ function setSessionStorage(key,value) {
         case "population":
             for (let city = 0; city < data.populationStats.cities.length; city++) {
 
-                getCoordinates(data.populationStats.cities[city].city, data.populationStats.cities[city].state).then(coordinateData => {
+                getCoordinates(data.mapboxAccessToken, data.populationStats.cities[city].city, data.populationStats.cities[city].state).then(coordinateData => {
                     getCounty(data.populationStats.cities[city].city, data.populationStats.cities[city].state, coordinateData).then(county => {
                         
                         switch (dataValueType) {
@@ -159,7 +159,7 @@ function setSessionStorage(key,value) {
         case "developed":
             for (let city = 0; city < data.allergyStats.cities.length; city++) {
 
-                getCoordinates(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
+                getCoordinates(data.mapboxAccessToken, data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
                     getCounty(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state, coordinateData).then(county => {
 
                         var hasAllergy = false;
@@ -281,7 +281,7 @@ function setSessionStorage(key,value) {
         case "outgrown":
             for (let city = 0; city < data.allergyStats.cities.length; city++) {
 
-                getCoordinates(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
+                getCoordinates(data.mapboxAccessToken, data.allergyStats.cities[city].city, data.allergyStats.cities[city].state).then(coordinateData => {
                     getCounty(data.allergyStats.cities[city].city, data.allergyStats.cities[city].state, coordinateData).then(county => {
 
                         var hasOutgrown = false;
@@ -415,7 +415,7 @@ function setSessionStorage(key,value) {
  * @param {Stirng} city
  * @param {Stirng} state
  */
-getCoordinates = async(city, state) => {
+getCoordinates = async(mapboxAccessToken, city, state) => {
     return new Promise(function(resolve, reject) {
         if (getSessionStorage(city+"("+state+")Coords")) {
             var coordinateArray = getSessionStorage(city+"("+state+")Coords").split(",");
@@ -423,7 +423,7 @@ getCoordinates = async(city, state) => {
         } else {
             var updatedCity = city + " " + state;
 
-            var accessToken = properties.mapboxAccessToken;
+            var accessToken = mapboxAccessToken;
             var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + updatedCity.replace(/ /g, "%20") + ".json?access_token=";
 
             fetch(url+accessToken).then(response => {
