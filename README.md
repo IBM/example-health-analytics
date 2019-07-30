@@ -7,15 +7,15 @@ This project is a conceptual Node.js analytics web application for a health reco
 
 ## Example Health Context
 
-Example Health is a conceptual healthcare/insurance type company. It has been around a long time, and has 100s of thousands of patient records in a SQL database connected to a zOS mainframe. Their health records look very similar to the health records of most insurance companies.
+Example Health is a conceptual healthcare/insurance type company. It has been around a long time, and has 100s of thousands of patient records in a SQL database connected to a z/OS mainframe. Their health records look very similar to the health records of most insurance companies.
 
 Here's a view a data analyst might see when they interact with the Example Health Analytics Application:
 
 ![](readme_images/screenshot.png)
 
-Example Health has recently started understanding how data science/analytics on some of the patient records, might surface interesting insights. There is lots of talk about this among some of the big data companies.
+Example Health has recently started understanding how data science/analytics on some of the patient records might surface interesting insights. There is lots of talk about this among some of the big data companies.
 
-Example Health has also heard a lot about cloud computing. There is a lot of legacy code in the mainframe, and it works well for now, but they think it may be a complimentary opportunity to explore some data science/analytics in the cloud.
+Example Health has also heard a great deal about cloud computing. There is a lot of legacy code in the mainframe, and it works well for now, but they think it may be a complimentary opportunity to explore some data science/analytics in the cloud.
 
 Their CTO sees an architecture for Example Health like this:
 
@@ -31,9 +31,9 @@ Their CTO sees an architecture for Example Health like this:
 
 ![](readme_images/cloudfoundry_architecture.png)
 
-1. Data Service API acts as a data pipeline and is triggered for updating data lake with updated health records data by calling API Connect APIs associated with the zOS Mainframe.
-2. API Connect APIs process relevant health records data from zOS Mainframe data warehouse and send the data through the data pipeline.
-3. The Data Service data pipeline processes zOS Mainframe data warehouse data and updates MongoDB data lake.
+1. Data Service API acts as a data pipeline and is triggered for updating data lake with updated health records data by calling API Connect APIs associated with the z/OS Mainframe.
+2. API Connect APIs process relevant health records data from z/OS Mainframe data warehouse and send the data through the data pipeline.
+3. The Data Service data pipeline processes z/OS Mainframe data warehouse data and updates MongoDB data lake.
 4. User interacts with the UI to view and analyze analytics.
 5. The functionality of the App UI that the User interacts with is handled by Node.js. Node.js is where the API calls are initialized.
 6. The API calls are processed in the Node.js data service and are handled accordingly.
@@ -79,19 +79,19 @@ For running these services locally without Docker containers, the following will
 
 ## 4. Run the application
 
-* [zOS Mainframe Data](#zos-mainframe-data)
+* [z/OS Mainframe Data](#z/os-mainframe-data)
 * [Generate Data](#generate-data)
 
-### zOS Mainframe Data
+### z/OS Mainframe Data
 > NOTE: If using the [Example Health JEE Application on Openshift](https://github.com/IBM/example-health-jee-openshift) as your data source, follow these steps.
 
-If your data source for this application is on a zOS Mainframe, follow these steps for populating the datalake and running the application:
+If your data source for this application is on a z/OS Mainframe, follow these steps for populating the datalake and running the application:
 
 1. Assign the API Connect URL to `DATA_SOURCE_API` in [docker-compose.yml](docker-compose.yml)
 > NOTE: If using the [Example Health JEE Application on Openshift](https://github.com/IBM/example-health-jee-openshift) as your data source, assign that API URL to `DATA_SOURCE_API`
 2. Start the application by running `docker-compose up --build` in this repo's root directory.
 3. Once the containers are created and the application is running, use the Open API Doc (Swagger) at `http://localhost:3000` and [API.md](data-service/API.md) for instructions on how to use the APIs.
-4. Run `curl localhost:3000/api/v1/update -X PUT` to connect to the zOS Mainframe and populate the data lake. For information on the data lake and data service, read the data service [README.md](data-service/README.md).
+4. Run `curl localhost:3000/api/v1/update -X PUT` to connect to the z/OS Mainframe and populate the data lake. For information on the data lake and data service, read the data service [README.md](data-service/README.md).
 5. Once the data has been populated in the data lake, use `http://localhost:4000` to access the Example Health Analytics UI. For information on the analytics data and UI, read the web [README.md](web/README.md).
 
 ### Generate Data
@@ -155,7 +155,7 @@ ibmcloud cs workers <mycluster>
 ```
 and locate the `Public IP`. This IP is used to access the Data Service and UI on the Cloud. Update the `env` values for `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to `<Public IP>:32000` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `http://<Public IP>:32000`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `http`.
 
-4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml). If your data source for this application is on a zOS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
+4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml). If your data source for this application is on a z/OS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
 > NOTE: If using the [Example Health JEE Application on Openshift](https://github.com/IBM/example-health-jee-openshift) as your data source, assign that API URL to `DATA_SOURCE_API`
 
 5. To deploy the services to the IBM Cloud Kubernetes Service, run:
@@ -175,7 +175,7 @@ kubectl get pods
 
 3. Run `ibmcloud cs cluster-get <CLUSTER_NAME>` and locate the `Ingress Subdomain` and `Ingress Secret`. This is the domain of the URL that is to be used to access the Data Service and UI on the Cloud. Update the `env` values for  `HOST_IP` in [deploy-dataservice.yml](deploy-dataservice.yml) to `api.<Ingress Subdomain>` and `DATA_SERVER` in [deploy-webapp.yml](deploy-webapp.yml) to `https://api.<Ingress Subdomain>`. Also in [deploy-dataservice.yml](deploy-dataservice.yml), update the `env` value for `SCHEME` to `https`. In addition, update the `host` and `secretName` in [ingress-dataservice.yml](ingress-dataservice.yml) and [ingress-webapp.yml](ingress-webapp.yml) to `Ingress Subdomain` and `Ingress Secret`.
 
-4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml). If your data source for this application is on a zOS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
+4. Assign the Mapbox access token to `MAPBOX_ACCESS_TOKEN` in [deploy-dataservice.yml](deploy-dataservice.yml) and [deploy-webapp.yml](deploy-webapp.yml). If your data source for this application is on a z/OS Mainframe, assign the API Connect URL to `DATA_SOURCE_API` in [deploy-dataservice.yml](deploy-dataservice.yml).
 > NOTE: If using the [Example Health JEE Application on Openshift](https://github.com/IBM/example-health-jee-openshift) as your data source, assign that API URL to `DATA_SOURCE_API`
 
 5. To deploy the services to the IBM Cloud Kubernetes Service, run:
@@ -225,7 +225,7 @@ kubectl apply -f ingress-webapp.yml
 
 * `MAPBOX_ACCESS_TOKEN` with the Mapbox access token.
 
-* `DATA_SOURCE_API` with the API Connect URL if your data source for this application is on a zOS Mainframe.
+* `DATA_SOURCE_API` with the API Connect URL if your data source for this application is on a z/OS Mainframe.
 > NOTE: If using the [Example Health JEE Application on Openshift](https://github.com/IBM/example-health-jee-openshift) as your data source, assign that API URL to `DATA_SOURCE_API`
 
 4. Connect the Compose for MongoDB database with the data service Node.js app by going to *Connections* on the dashboard of the data service app provisioned and clicking *Create Connection*. Locate the Compose for MongoDB database you provisioned and press *connect*.
