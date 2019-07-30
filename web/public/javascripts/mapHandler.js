@@ -13,9 +13,9 @@ function updateMap(dataType, allergy, dataValueType) {
 
     return new Promise(function(resolve,reject) {
 
-        mapboxgl.accessToken = properties.mapboxAccessToken;
-
         getData(dataType, allergy, dataValueType).then(mapData => {
+
+            mapboxgl.accessToken = mapData[0];
 
             var map = new mapboxgl.Map({
                 container: 'map',
@@ -33,7 +33,7 @@ function updateMap(dataType, allergy, dataValueType) {
 
                 switch (dataValueType) {
                     case "total":
-                        for (var data = 0; data < mapData.length; data++) {
+                        for (var data = 1; data < mapData.length; data++) {
                             if (heatmapMax < mapData[data].properties.data) {
                                 heatmapMax = mapData[data].properties.data;
                             }
@@ -53,7 +53,7 @@ function updateMap(dataType, allergy, dataValueType) {
                         "type": "geojson",
                         "data": {
                             "type": "FeatureCollection",
-                            "features": mapData
+                            "features": mapData.slice(1)
                         }
                     },
                     "paint": {
@@ -106,7 +106,7 @@ function updateMap(dataType, allergy, dataValueType) {
                         "type": "geojson",
                         "data": {
                             "type": "FeatureCollection",
-                            "features": mapData
+                            "features": mapData.slice(1)
                         }
                     },
                     "layout": {

@@ -16,19 +16,23 @@ services:
       - "8081:8081"
 
   data:
-    container_name: summithealthdata
+    container_name: examplehealthdata
     build: data-service
     ports:
       - "3000:3000"
     depends_on:
       - mongo
+    environment:
+      - MAPBOX_ACCESS_TOKEN=<MAPBOX_ACCESS_TOKEN>
+      - DATA_SOURCE_API=<DATA_SOURCE_API>
 
   web:
-    container_name: summithealthweb
+    container_name: examplehealthweb
     build: web
     ports:
       - "4000:4000"
     depends_on:
       - data
     environment:
-      - DATA_SERVER=http://summithealthdata:3000
+      - DATA_SERVER=http://examplehealthdata:3000
+      - MAPBOX_ACCESS_TOKEN=<MAPBOX_ACCESS_TOKEN>

@@ -5,7 +5,7 @@
 var mongo = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 
-var url = process.env.MONGODB || "mongodb://mongo:27017/summithealth";
+var url = process.env.MONGODB || "mongodb://mongo:27017/examplehealth";
 
 /**
  * Updates and replaces analytics data in data lake
@@ -16,7 +16,7 @@ var url = process.env.MONGODB || "mongodb://mongo:27017/summithealth";
 function updateAnalytics(newAnalytics) {
 	return new Promise(function(resolve, reject) {
 		MongoClient.connect(url).then(function(db) {
-		    var dbo = db.db("summithealth");
+		    var dbo = db.db("examplehealth");
 		    dbo.collection("analytics").deleteOne({}, function(err, obj){
 		    	if (err) reject(err);
 		    	dbo.collection("analytics").insertOne(newAnalytics, {upsert: true}, function(err, res) {
@@ -37,7 +37,7 @@ function updateAnalytics(newAnalytics) {
 function getTotalPopulation() {
 	return new Promise(function(resolve, reject) {
 		MongoClient.connect(url).then(function(db) {
-			var dbo = db.db("summithealth");
+			var dbo = db.db("examplehealth");
 			dbo.collection("analytics").findOne({}, function(e, result) {
 			    if (e) reject(e);
 			    db.close();
@@ -55,7 +55,7 @@ function getTotalPopulation() {
 function getCityList() {
 	return new Promise(function(resolve, reject) {
 		MongoClient.connect(url).then(function(db) {
-			var dbo = db.db("summithealth");
+			var dbo = db.db("examplehealth");
 			dbo.collection("analytics").findOne({}, function(e, result) {
 			    if (e) reject(e);
 			    db.close();
@@ -73,7 +73,7 @@ function getCityList() {
 function getAllergyList() {
 	return new Promise(function(resolve, reject) {
 		MongoClient.connect(url).then(function(db) {
-			var dbo = db.db("summithealth");
+			var dbo = db.db("examplehealth");
 			dbo.collection("analytics").findOne({}, function(e, result) {
 				if (e) reject(e);
 				db.close();

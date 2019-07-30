@@ -1,7 +1,7 @@
 {
-  "name": "syntheia-generate",
+  "name": "synthea-generate",
   "version": "1.0.0",
-  "description": "Generate mock data with Syntheia",
+  "description": "Generate mock data with Synthea",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IBM/summit-health-analytics.git"

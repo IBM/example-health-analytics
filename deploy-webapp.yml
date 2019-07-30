@@ -13,13 +13,15 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: maxshapiro32/summithealthanalyticsweb
+          image: maxshapiro32/examplehealthanalyticsweb
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
           env:
             - name: DATA_SERVER
               value: <SCHEME>://<IP_OR_SUBDOMAIN>
+            - name: MAPBOX_ACCESS_TOKEN
+              value: <MAPBOX_ACCESS_TOKEN>
 ---
 apiVersion: v1
 kind: Service

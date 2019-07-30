@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: dataservice
-          image: maxshapiro32/summithealthanalyticsdata
+          image: maxshapiro32/examplehealthanalyticsdata
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -22,6 +22,10 @@ spec:
               value: <IP_OR_SUBDOMAIN>
             - name: SCHEME
               value: <SCHEME>
+            - name: MAPBOX_ACCESS_TOKEN
+              value: <MAPBOX_ACCESS_TOKEN>
+            - name: DATA_SOURCE_API
+              value: <DATA_SOURCE_API>
 ---
 apiVersion: v1
 kind: Service
