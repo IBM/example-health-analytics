@@ -9,7 +9,7 @@ info:
     email: maxshapiro32@ibm.com
   license:
     name: Apache 2.0
-    url: 'https://github.com/IBM/summit-health-analytics/blob/master/LICENSE'
+    url: 'https://github.com/IBM/example-health-analytics/blob/master/LICENSE'
 host: 'localhost:3000'
 basePath: /api/v1
 tags:

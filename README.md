@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/IBM/summit-health-analytics.svg?branch=master)](https://travis-ci.com/IBM/summit-health-analytics)
+[![Build Status](https://travis-ci.com/IBM/example-health-analytics.svg?branch=master)](https://travis-ci.com/IBM/example-health-analytics)
 
 # Example Health Analytics
 
@@ -52,11 +52,11 @@ Follow these steps to setup and run this code pattern locally and on the Cloud. 
 
 ## 1. Clone the repo
 
-Clone the `summit-health-analytics` repo locally. In a terminal, run:
+Clone the `example-health-analytics` repo locally. In a terminal, run:
 
 ```bash
-git clone https://github.com/IBM/summit-health-analytics
-cd summit-health-analytics
+git clone https://github.com/IBM/example-health-analytics
+cd example-health-analytics
 ```
 
 ## 2. Prerequisites
