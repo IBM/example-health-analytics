@@ -9,6 +9,7 @@ while getopts p:s:u: option
 			p) population=${OPTARG};;
 			s) state=${OPTARG};;
 			u) url=${OPTARG};;
+			*) continue;;
 		esac
 done
 git clone https://github.com/synthetichealth/synthea.git
