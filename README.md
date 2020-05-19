@@ -7,7 +7,7 @@ This project is a conceptual Node.js analytics web application for a health reco
 
 ## Example Health Context
 
-Example Health is a conceptual healthcare/insurance type company. It has been around a long time, and has 100s of thousands of patient records in a SQL database connected to a z/OS mainframe. Their health records look very similar to the health records of most insurance companies.
+Example Health is a conceptual healthcare/insurance type company. It has been around a long time, and has 100s of thousands of patient records in a SQL database on a mainframe running z/OS. Their health records look very similar to the health records of most insurance companies.
 
 Here's a view a data analyst might see when they interact with the Example Health Analytics Application:
 
