@@ -14,11 +14,15 @@
 #   limitations under the License.
 ##############################################################################
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongo
 spec:
+  selector:
+      matchLabels:
+          name: mongo
+          version: v1
   replicas: 1
   template:
     metadata:
@@ -29,6 +33,13 @@ spec:
       containers:
         - image: mongo
           name: mongo
+          resources:
+                limits:
+                  cpu: 200m
+                  memory: 500Mi
+                requests:
+                  cpu: 100m
+                  memory: 200Mi
           ports:
             - containerPort: 27017
 ---
