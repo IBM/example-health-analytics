@@ -71,6 +71,7 @@ For running these services locally without Docker containers, the following will
 * [NodeJS](https://nodejs.org/en/download/)
 * [NPM](https://www.npmjs.com/get-npm)
 * Relevant Node Components: Use `npm install` in `/data-service` and `/web`
+> NOTE: Run the command `csvtojson` in `/generate`, if there is an error `csvtojson command not found`, run `sudo npm install -g csvtojson@latest`. If the error still persists, uninstall Node and reinstall [Node.js LTS](https://nodejs.org/en/), run the command `sudo npm install -g npm` and run `sudo npm install -g csvtojson@latest` & `csvtojson`.
 
 ## 3. Get Mapbox Access Token
 
