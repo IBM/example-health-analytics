@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: fawazsiddiqi/examplehealthanalyticsweb
+          image: maxshapiro32/examplehealthanalyticsweb
           imagePullPolicy: Always
           resources:
                 limits:

@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: dataservice
-          image: fawazsiddiqi/examplehealthanalyticsdata
+          image: maxshapiro32/examplehealthanalyticsdata
           imagePullPolicy: Always
           resources:
                 limits:
