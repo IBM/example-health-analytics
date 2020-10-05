@@ -20,9 +20,9 @@ metadata:
   name: mongo
 spec:
   selector:
-      matchLabels:
-          name: mongo
-          version: v1
+    matchLabels:
+      name: mongo
+      version: v1
   replicas: 1
   template:
     metadata:
