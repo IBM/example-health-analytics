@@ -62,4 +62,3 @@ spec:
   type: NodePort
   selector:
     name: webapp-deployment
-    
